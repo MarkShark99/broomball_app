@@ -113,22 +113,21 @@ class MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text(widget.drawerItems[_drawerIndex].text),
         actions: <Widget>[
+          DropdownButtonHideUnderline(
+            child: DropdownButton(
+              value: _yearList.length > 0 ? _currentYear : null,
+              items: _yearList.map((String year) => DropdownMenuItem(
+                child: Text(year),
+                value: year,
+              )).toList(),
+              onChanged: (String year) => this.setState(() => this._currentYear = year),
+            )
+          ),
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: () {},
-          ),
-          PopupMenuButton<String>(
-            onSelected: null,
-            itemBuilder: (BuildContext context) {
-              return _yearList.map((String choice) {
-                return CheckedPopupMenuItem<String>(
-                  checked: false,
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
+            onPressed: () {
+              broomballData.fetch().whenComplete(() => _onJsonDataLoaded());
             },
-
           ),
         ],
       ),
