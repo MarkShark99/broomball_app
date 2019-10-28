@@ -20,7 +20,8 @@ class BroomballApp extends StatelessWidget {
        return new MaterialApp(
          title: appTitle,
          theme: theme,
-         home: new MainPage()
+         home: new MainPage(),
+         debugShowCheckedModeBanner: false,
        );
      },
    );
