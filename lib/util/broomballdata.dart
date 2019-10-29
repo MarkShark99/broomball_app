@@ -8,6 +8,15 @@ class BroomballData {
 
   Map jsonData;
 
+  static final BroomballData _instance = BroomballData._internal();
+
+  factory BroomballData()
+  {
+    return _instance;
+  }
+
+  BroomballData._internal();
+
   Future<void> fetch() async {
     final Response response = await get(url);
 

@@ -20,19 +20,17 @@ class MainPage extends StatefulWidget {
   ];
 
   @override
-  State<StatefulWidget> createState() {
-    return new MainPageState();
-  }
+  State<StatefulWidget> createState() => _MainPageState();
 }
 
-class MainPageState extends State<MainPage> {
-  int _drawerIndex = 0;
+class _MainPageState extends State<MainPage> {
+  int _currentDrawerIndex = 0;
   String _currentYear;
 
   List<String> _yearList = <String>[];
 
   BroomballData broomballData = BroomballData();
-  Map jsonData;
+  Map<String, dynamic> jsonData;
 
   @override
   void initState() {
@@ -56,7 +54,7 @@ class MainPageState extends State<MainPage> {
   }
 
   void _onSelectDrawerItem(int index) {
-    setState(() => _drawerIndex = index);
+    setState(() => _currentDrawerIndex = index);
     Navigator.of(context).pop();
   }
 
@@ -85,7 +83,7 @@ class MainPageState extends State<MainPage> {
       drawerListTiles.add(ListTile(
         leading: Icon(drawerItem.icon),
         title: Text(drawerItem.text),
-        selected: i == _drawerIndex,
+        selected: i == _currentDrawerIndex,
         onTap: () => _onSelectDrawerItem(i),
       ));
     }
@@ -109,34 +107,44 @@ class MainPageState extends State<MainPage> {
               builder: (BuildContext context) => AboutPage()));
         }));
 
+    List<Widget> scaffoldActions = [];
+
+    if (_currentDrawerIndex == 0) {
+      scaffoldActions.add(DropdownButtonHideUnderline(
+          child: DropdownButton(
+        value: _yearList.length > 0 ? _currentYear : null,
+        items: _yearList
+            .map((String year) => DropdownMenuItem(
+                  child: Text(year, style: TextStyle(color: Colors.black)),
+                  value: year,
+                ))
+            .toList(),
+        onChanged: (String year) =>
+            this.setState(() => this._currentYear = year),
+        iconEnabledColor: Colors.black,
+      )));
+    }
+
+    scaffoldActions.add(IconButton(
+      icon: Icon(Icons.refresh),
+      onPressed: () {
+        broomballData.fetch().whenComplete(() => _onJsonDataLoaded());
+        this.setState(() {
+          _currentYear = null;
+        });
+      },
+    ));
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.drawerItems[_drawerIndex].text),
-        actions: <Widget>[
-          DropdownButtonHideUnderline(
-            child: DropdownButton(
-              value: _yearList.length > 0 ? _currentYear : null,
-              items: _yearList.map((String year) => DropdownMenuItem(
-                child: Text(year),
-                value: year,
-              )).toList(),
-              onChanged: (String year) => this.setState(() => this._currentYear = year),
-            )
-          ),
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {
-              broomballData.fetch().whenComplete(() => _onJsonDataLoaded());
-            },
-          ),
-        ],
-      ),
+          title: Text(widget.drawerItems[_currentDrawerIndex].text),
+          actions: scaffoldActions),
       drawer: Drawer(
         child: ListView(
           children: drawerListTiles,
         ),
       ),
-      body: _getDrawerItemFragment(_drawerIndex),
+      body: _getDrawerItemFragment(_currentDrawerIndex),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/material.dart';
 
 class ConferenceFragment extends StatefulWidget {
@@ -12,12 +13,27 @@ class ConferenceFragment extends StatefulWidget {
 }
 
 class ConferenceFragmentState extends State<ConferenceFragment> {
-  
+  final BroomballData broomballData = BroomballData();
+
   @override
   Widget build(BuildContext context) {
     print(widget.year);
     return Center(
-      child: widget.year == null ? CircularProgressIndicator() : Text(widget.year),
+      child: widget.year == null
+          ? CircularProgressIndicator()
+          : ListView.builder(
+              itemCount: broomballData
+                  .jsonData["years"][widget.year]["conferences"].keys
+                  .toList()
+                  .length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(broomballData
+                  .jsonData["years"][widget.year]["conferences"].keys.toList()[index]),
+                  onTap: () {},
+                );
+              },
+            ),
     );
   }
 }
