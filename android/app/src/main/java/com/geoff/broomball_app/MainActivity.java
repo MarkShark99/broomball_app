@@ -1,4 +1,4 @@
-package com.example.broomball_app;
+package com.geoff.broomball_app;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
