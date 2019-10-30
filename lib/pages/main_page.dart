@@ -42,9 +42,9 @@ class _MainPageState extends State<MainPage> {
   Widget _getDrawerItemFragment(int index) {
     switch (index) {
       case 0:
-        return new ConferenceFragment(year: _currentYear,);
+        return new ConferenceFragment(year: _currentYear);
       case 1:
-        return new TeamsFragment();
+        return new TeamsFragment(year: _currentYear,);
       case 2:
         return new PlayersFragment();
       default:
@@ -108,7 +108,7 @@ class _MainPageState extends State<MainPage> {
 
     List<Widget> scaffoldActions = [];
 
-    if (_currentDrawerIndex == 0) {
+    if (_currentDrawerIndex == 0 || _currentDrawerIndex == 1) {
       scaffoldActions.add(DropdownButtonHideUnderline(
           child: DropdownButton(
         value: _yearList.length > 0 ? _currentYear : null,
