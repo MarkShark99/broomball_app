@@ -18,7 +18,7 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.year);
+    //print(widget.year);
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
@@ -34,7 +34,7 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
                       .toList()[index]),
                   onTap: () {
                     String selection = broomballData.jsonData["years"][widget.year]["conferences"].keys.toList()[index];
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => DivisionPage(selection, widget.year)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DivisionPage(widget.year, selection)));
                   },
                 );
               },

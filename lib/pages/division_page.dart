@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:broomball_app/util/broomballdata.dart';
+import 'package:broomball_app/pages/team_page.dart';
 
 class DivisionPage extends StatelessWidget {
-  String selectedConference;
   String year;
+  String selectedConference;
 
-  DivisionPage(selectedConference, year) : this.selectedConference = selectedConference, this.year = year;
+  DivisionPage(year, selectedConference) : this.year = year, this.selectedConference = selectedConference;
 
   final BroomballData broomballData = BroomballData();
 
@@ -28,7 +29,7 @@ class DivisionPage extends StatelessWidget {
                       .toList()[index]),
                   onTap: () {
                     String selection = broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"].keys.toList()[index];
-                    print("Tapped on " + selection);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => TeamPage(year, selectedConference, selection)));
                   },
                 );
               },
