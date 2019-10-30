@@ -10,8 +10,7 @@ class BroomballData {
 
   static final BroomballData _instance = BroomballData._internal();
 
-  factory BroomballData()
-  {
+  factory BroomballData() {
     return _instance;
   }
 

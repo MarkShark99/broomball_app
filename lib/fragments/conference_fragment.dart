@@ -29,7 +29,8 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(broomballData
-                  .jsonData["years"][widget.year]["conferences"].keys.toList()[index]),
+                      .jsonData["years"][widget.year]["conferences"].keys
+                      .toList()[index]),
                   onTap: () {},
                 );
               },
