@@ -1,3 +1,4 @@
+import 'package:broomball_app/pages/division_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
-          : ListView.builder(
+          : ListView.separated(
               itemCount: broomballData
                   .jsonData["years"][widget.year]["conferences"].keys
                   .toList()
@@ -31,8 +32,14 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
                   title: Text(broomballData
                       .jsonData["years"][widget.year]["conferences"].keys
                       .toList()[index]),
-                  onTap: () {},
+                  onTap: () {
+                    String selection = broomballData.jsonData["years"][widget.year]["conferences"].keys.toList()[index];
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DivisionPage(selection, widget.year)));
+                  },
                 );
+              },
+              separatorBuilder: (context, index) {
+                return Divider();
               },
             ),
     );
