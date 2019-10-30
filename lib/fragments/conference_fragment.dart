@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ConferenceFragment extends StatefulWidget {
   final String year;
 
-  ConferenceFragment(year) : this.year = year;
+  ConferenceFragment({this.year});
 
   @override
   State<StatefulWidget> createState() {
@@ -33,8 +33,15 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
                       .jsonData["years"][widget.year]["conferences"].keys
                       .toList()[index]),
                   onTap: () {
-                    String selection = broomballData.jsonData["years"][widget.year]["conferences"].keys.toList()[index];
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => DivisionPage(selection, widget.year)));
+                    String selectedConference = broomballData
+                        .jsonData["years"][widget.year]["conferences"].keys
+                        .toList()[index];
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DivisionPage(
+                                selectedConference: selectedConference,
+                                year: widget.year)));
                   },
                 );
               },

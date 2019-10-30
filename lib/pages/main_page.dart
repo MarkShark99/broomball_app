@@ -5,6 +5,7 @@ import 'package:broomball_app/pages/about_page.dart';
 import 'package:broomball_app/pages/settings_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/util.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Class that contains fragments for Conferences, Teams, and Players
@@ -33,7 +34,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    broomballData.fetch().whenComplete(() {
+    broomballData.fetchJsonData().whenComplete(() {
       _onJsonDataLoaded();
     });
   }
@@ -41,7 +42,7 @@ class _MainPageState extends State<MainPage> {
   Widget _getDrawerItemFragment(int index) {
     switch (index) {
       case 0:
-        return new ConferenceFragment(_currentYear);
+        return new ConferenceFragment(year: _currentYear,);
       case 1:
         return new TeamsFragment();
       case 2:
@@ -113,7 +114,7 @@ class _MainPageState extends State<MainPage> {
         value: _yearList.length > 0 ? _currentYear : null,
         items: _yearList
             .map((String year) => DropdownMenuItem(
-                  child: Text(year, style: TextStyle(color: Colors.black)),
+                  child: Text(year, style: TextStyle(color: DynamicTheme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)),
                   value: year,
                 ))
             .toList(),
@@ -126,7 +127,7 @@ class _MainPageState extends State<MainPage> {
     scaffoldActions.add(IconButton(
       icon: Icon(Icons.refresh),
       onPressed: () {
-        broomballData.fetch().whenComplete(() => _onJsonDataLoaded());
+        broomballData.fetchJsonData().whenComplete(() => _onJsonDataLoaded());
         this.setState(() {
           _currentYear = null;
         });

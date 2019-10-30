@@ -1,3 +1,4 @@
+import 'package:broomball_app/pages/player_page.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
@@ -21,6 +22,9 @@ class AboutPage extends StatelessWidget {
           ListTile(
             title: Text("Julien Thrum"),
             subtitle: Text("Developer"),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayerPage(id: "1009366",)));
+            },
           ),
           ListTile(
             title: Text("Mark Washington"),
