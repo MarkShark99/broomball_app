@@ -70,3 +70,5 @@ class Player {
 }
 
 class PlayerMatch {}
+
+class Team{}

@@ -1,4 +1,4 @@
-package api;
+package com.geoff.broomball_app.api;
 
 public class APIPlayerInfo
 {

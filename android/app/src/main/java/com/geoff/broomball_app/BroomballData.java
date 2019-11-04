@@ -1,4 +1,4 @@
-import api.APITeam;
+package com.geoff.broomball_app;
 
 import java.util.HashMap;
 
@@ -7,30 +7,26 @@ import java.util.HashMap;
  */
 public class BroomballData
 {
-    private HashMap<String, Year> years;
-    private HashMap<String, APITeam> teams;
-    private HashMap<String, Player> players;
+    private String year;
+    private HashMap<String, Conference> conferences;
 
     public BroomballData()
     {
-        years = new HashMap<>();
-        teams = new HashMap<>();
-        players = new HashMap<>();
+        conferences = new HashMap<>();
     }
 
-    public void addYear(String id, Year year)
+    public void addConference(String id, Conference conference)
     {
-        this.years.put(id, year);
+        this.conferences.put(id, conference);
     }
 
-    public void addTeam(String id, Team team)
+    public String getYear()
     {
-        this.teams.put(id, team);
+        return year;
     }
 
-    public void addPlayer(String id, Player player)
+    public void setYear(String year)
     {
-        this.players.put(id, player);
+        this.year = year;
     }
-
 }

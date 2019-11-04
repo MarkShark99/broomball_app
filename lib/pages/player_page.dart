@@ -14,34 +14,46 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  Future<Player> player;
+  Player _player;
 
   @override
   void initState() {
-    player = BroomballData().fetchPlayer(widget.id);
+    super.initState();
+    _refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          automaticallyImplyLeading: true,
-          backgroundColor: Color(0xFFFFCD00),
-          title: Text(widget.id)),
-      body: Center(
-        child: FutureBuilder<Player>(
-            future: player,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data.firstName);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-
-              // Unless data has loaded, display a progress indicator
-              return CircularProgressIndicator();
-            }),
+        automaticallyImplyLeading: true,
+        backgroundColor: Color(0xFFFFCD00),
+        title: Text(_player == null ? "" : _player.displayName),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () => _refresh(),
+          )
+        ],
       ),
+      body: Center(
+          child: _player == null
+              ? CircularProgressIndicator()
+              : ListView(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.person),
+                      title: Text(_player.displayName),
+                    )
+                  ],
+                )),
     );
+  }
+
+  void _refresh() {
+    this.setState(() => _player = null);
+    BroomballData()
+        .fetchPlayer(widget.id)
+        .then((Player player) => this.setState(() => _player = player));
   }
 }

@@ -18,7 +18,6 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
 
   @override
   Widget build(BuildContext context) {
-    //print(widget.year);
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()

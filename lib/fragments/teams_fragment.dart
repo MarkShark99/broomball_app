@@ -25,11 +25,12 @@ class TeamsFragmentState extends State<TeamsFragment> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    broomballData.jsonData["teams"][broomballData.jsonData["teams"].keys.toList()[index].toString()]["teamName"],
+                    broomballData.jsonData["teams"][broomballData
+                        .jsonData["teams"].keys
+                        .toList()[index]
+                        .toString()]["teamName"],
                   ),
-                  onTap: () {
-
-                  },
+                  onTap: () {},
                 );
               },
               separatorBuilder: (context, index) {

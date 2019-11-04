@@ -1,3 +1,5 @@
+package com.geoff.broomball_app;
+
 import java.util.HashMap;
 
 public class Conference

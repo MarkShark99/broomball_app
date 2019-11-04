@@ -7,6 +7,7 @@ import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Class that contains fragments for Conferences, Teams, and Players
 /// as well as a navigation drawer
@@ -23,6 +24,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  static const platform = const MethodChannel('broomball_app.geoff.com/conferences');
+  
   int _currentDrawerIndex = 0;
   String _currentYear;
 

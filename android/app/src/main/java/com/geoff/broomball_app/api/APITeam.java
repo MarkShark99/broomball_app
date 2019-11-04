@@ -1,4 +1,4 @@
-package api;
+package com.geoff.broomball_app.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;

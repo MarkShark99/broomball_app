@@ -1,4 +1,4 @@
-package api;
+package com.geoff.broomball_app.api;
 
 import com.google.gson.Gson;
 import org.jsoup.Connection;

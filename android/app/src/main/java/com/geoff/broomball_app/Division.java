@@ -1,3 +1,5 @@
+package com.geoff.broomball_app;
+
 import java.util.HashSet;
 
 public class Division

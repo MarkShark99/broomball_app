@@ -1,5 +1,9 @@
+package com.geoff.broomball_app;
+
+import com.geoff.broomball_app.api.APITeam;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,94 +23,77 @@ public class BroomballWebScraper
         data = new BroomballData();
     }
 
+    public ArrayList<String> getYears() throws IOException
+    {
+        ArrayList<String> years = new ArrayList<>();
+        Document page = Jsoup.connect("https://broomball.mtu.edu/teams/view").get();
+        for (Element e : page.select("[name=season] > option"))
+        {
+            years.add(e.text());
+        }
+
+        return years;
+    }
+
     /**
      * Method that runs through the process of scraping the entire broomball site
+     *
      * @return A BroomballData instance containing all the data
      * @throws IOException If the scraper cannot connect to the site at any time
      */
-    public void run() throws IOException
+    public void run(String year) throws IOException
     {
-        System.out.println("Starting scrape.");
+        Document currentWebPage = Jsoup.connect("https://broomball.mtu.edu/teams/view/" + year).get();
 
-        Document divisionWebPage = Jsoup.connect("https://broomball.mtu.edu/teams/view").get(); // Load main webpage
-        Elements yearsElements = divisionWebPage.select("[name=season] > option"); // Read list of years
+        this.data.setYear(year);
 
-        for (Element yearElement : yearsElements)
+        // Select names of conferences and blocks containing division data
+        Elements conferenceElements = currentWebPage.select("#main_content_container > h1");
+        Elements divisionElements = currentWebPage.select("#main_content_container > blockquote");
+
+        // Iterate through list of conferences
+        for (int i = 0; i < conferenceElements.size(); i++)
         {
-            Year year = new Year();
-            String yearText = yearElement.text();
-            System.out.println("Year: " + yearText);
+            Conference conference = new Conference();
+            String conferenceName = conferenceElements.get(i).text();
+//            System.out.println("Conference: " + conferenceName);
 
-            Document currentWebPage = Jsoup.connect("https://broomball.mtu.edu/teams/view/" + yearText).get();
+            Elements divisionHeaders = divisionElements.get(i).select("h1");
+            Elements divisionTables = divisionElements.get(i).select("table > tbody");
 
-            // Select names of conferences and blocks containing division data
-            Elements conferenceElements = currentWebPage.select("#main_content_container > h1");
-            Elements divisionElements = currentWebPage.select("#main_content_container > blockquote");
-
-            // Iterate through list of conferences
-            for (int i = 0; i < conferenceElements.size(); i++)
+            // Iterate through divisions (their headers and tables) within the conference
+            for (int j = 0; j < divisionHeaders.size(); j++)
             {
-                Conference conference = new Conference();
-                String conferenceName = conferenceElements.get(i).text();
-                System.out.println("Conference: " + conferenceName);
+                Division division = new Division();
 
-                Elements divisionHeaders = divisionElements.get(i).select("h1");
-                Elements divisionTables = divisionElements.get(i).select("table > tbody");
+                String divisionName = divisionHeaders.get(j).text();
+//                System.out.println("\t" + divisionName);
 
-                // Iterate through divisions (their headers and tables) within the conference
-                for (int j = 0; j < divisionHeaders.size(); j++)
+                Elements tableRows = divisionTables.get(j).select("tr");
+                int teamCount = tableRows.size() - 1;
+
+                for (int k = 1; k < tableRows.size(); k++)
                 {
-                    Division division = new Division();
+                    APITeam team = new APITeam();
+                    String teamID;
+                    String teamName;
 
-                    String divisionName = divisionHeaders.get(j).text();
-                    System.out.println("\t" + divisionName);
+                    Elements cells = tableRows.get(k).select("td");
 
-                    Elements tableRows = divisionTables.get(j).select("tr");
-                    int teamCount = tableRows.size() - 1;
+                    String[] splitURL = cells.get(0).select("a").attr("href").split("/");
+                    teamID = splitURL[splitURL.length - 1];
 
-                    TeamScraperCoordinator coordinator = TeamScraperCoordinator.getInstance();
-                    for (int k = 1; k < tableRows.size(); k++)
-                    {
-                        Team team = new Team();
-                        String teamID;
-                        String teamName;
+                    division.addTeamID(teamID);
 
-                        Elements cells = tableRows.get(k).select("td");
-
-                        String[] splitURL = cells.get(0).select("a").attr("href").split("/");
-                        teamID = splitURL[splitURL.length - 1];
-
-                        division.addTeamID(teamID);
-
-                        teamName = cells.get(0).select("a").text();
-
-                        if (teamName.endsWith("..."))
-                        {
-                            teamName =
-                        }
-
-                        team.setTeamName(teamName);
-                        team.setWins(Integer.parseInt(cells.get(1).text()));
-                        team.setLosses(Integer.parseInt(cells.get(2).text()));
-                        team.setOvertimeLosses(Integer.parseInt(cells.get(3).text()));
-                        team.setPoints(Integer.parseInt(cells.get(4).text()));
-                        team.setGoalsFor(Integer.parseInt(cells.get(5).text()));
-                        team.setGoalsAgainst(Integer.parseInt(cells.get(6).text()));
-                        data.addTeam(teamID, team);
-                    }
-
-                    conference.addDivision(divisionName, division);
+                    teamName = cells.get(0).select("a").text();
                 }
 
-                year.addConference(conferenceName, conference);
+                conference.addDivision(divisionName, division);
             }
 
-            this.data.addYear(yearText, year);
-
-            System.out.println();
+            data.addConference(conferenceName, conference);
         }
-        // this.teamScraperCoordinator.finish();
-        System.out.println("Scrape finished.");
+
     }
 
     public BroomballData getData()
