@@ -1,4 +1,3 @@
-import 'package:broomball_app/pages/player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:broomball_app/pages/contributors_page.dart';

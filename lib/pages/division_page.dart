@@ -1,4 +1,3 @@
-import 'package:broomball_app/pages/team_page.dart';
 import 'package:broomball_app/pages/teams_page.dart';
 import 'package:flutter/material.dart';
 import 'package:broomball_app/util/broomballdata.dart';
