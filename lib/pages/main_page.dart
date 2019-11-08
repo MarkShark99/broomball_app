@@ -20,12 +20,15 @@ class MainPage extends StatefulWidget {
   ];
 
   @override
-  State<StatefulWidget> createState() => _MainPageState();
+  State<StatefulWidget> createState() {
+    return MainPageState();
+  }
 }
 
-class _MainPageState extends State<MainPage> {
-  static const platform = const MethodChannel('broomball_app.geoff.com/conferences');
-  
+class MainPageState extends State<MainPage> {
+  static const platform =
+      const MethodChannel('broomball_app.geoff.com/conferences');
+
   int _currentDrawerIndex = 0;
   String _currentYear;
 
@@ -38,16 +41,20 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     broomballData.fetchJsonData().whenComplete(() {
-      _onJsonDataLoaded();
+      _refresh();
     });
   }
 
   Widget _getDrawerItemFragment(int index) {
     switch (index) {
       case 0:
-        return new ConferenceFragment(year: _currentYear);
+        return new ConferenceFragment(
+          year: _currentYear
+        );
       case 1:
-        return new TeamsFragment(year: _currentYear,);
+        return new TeamsFragment(
+          year: _currentYear,
+        );
       case 2:
         return new PlayersFragment();
       default:
@@ -60,14 +67,13 @@ class _MainPageState extends State<MainPage> {
     Navigator.of(context).pop();
   }
 
-  void _onJsonDataLoaded() {
-    // Set current year and add items to dropdown
+  void _refresh() {
+    // Set current year and add items to dropdown list
     jsonData = broomballData.jsonData;
 
     List<String> yearList = jsonData["years"].keys.toList();
     yearList.sort((a, b) => a.compareTo(b));
     yearList = yearList.reversed.toList();
-    print(yearList);
 
     setState(() {
       _currentYear = DateTime.now().year.toString();
@@ -117,7 +123,12 @@ class _MainPageState extends State<MainPage> {
         value: _yearList.length > 0 ? _currentYear : null,
         items: _yearList
             .map((String year) => DropdownMenuItem(
-                  child: Text(year, style: TextStyle(color: DynamicTheme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)),
+                  child: Text(year,
+                      style: TextStyle(
+                          color: DynamicTheme.of(context).brightness ==
+                                  Brightness.dark
+                              ? Colors.white
+                              : Colors.black)),
                   value: year,
                 ))
             .toList(),
@@ -130,7 +141,7 @@ class _MainPageState extends State<MainPage> {
     scaffoldActions.add(IconButton(
       icon: Icon(Icons.refresh),
       onPressed: () {
-        broomballData.fetchJsonData().whenComplete(() => _onJsonDataLoaded());
+        broomballData.fetchJsonData().whenComplete(() => _refresh());
         this.setState(() {
           _currentYear = null;
         });

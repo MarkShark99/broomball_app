@@ -14,60 +14,26 @@ class TeamsFragment extends StatefulWidget {
 
 class TeamsFragmentState extends State<TeamsFragment> {
   final BroomballData broomballData = BroomballData();
+  List<String> _teamList;
+
+  @override
+  void initState()
+  {
+    super.initState();
+    _teamList = _getTeamList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Build list of all teams in current year
-    int conferencesAmount = broomballData
-        .jsonData["years"][widget.year]["conferences"].keys
-        .toList()
-        .length;
-    String currentConference;
-    int divisionsAmount;
-    String currentDivision;
-    int teamsAmount;
-
-    List<String> teamsList = <String>[];
-
-    for (int i = 0; i < conferencesAmount; i++) {
-      currentConference = broomballData
-          .jsonData["years"][widget.year]["conferences"].keys
-          .toList()[i];
-      divisionsAmount = broomballData
-          .jsonData["years"][widget.year]["conferences"][currentConference]
-              ["divisions"]
-          .keys
-          .toList()
-          .length;
-      for (int j = 0; j < divisionsAmount; j++) {
-        currentDivision = broomballData
-            .jsonData["years"][widget.year]["conferences"][currentConference]
-                ["divisions"]
-            .keys
-            .toList()[j];
-        teamsAmount = broomballData
-            .jsonData["years"][widget.year]["conferences"][currentConference]
-                ["divisions"][currentDivision]["teamIDs"]
-            .length;
-        for (int k = 0; k < teamsAmount; k++) {
-          String team = broomballData.jsonData["teams"][
-              broomballData.jsonData["years"][widget.year]["conferences"]
-                      [currentConference]["divisions"][currentDivision]
-                  ["teamIDs"][k]]["teamName"];
-          teamsList.add(team);
-        }
-      }
-    }
-
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
           : ListView.separated(
-              itemCount: teamsList.length,
+              itemCount: _teamList.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    teamsList[index],
+                    _teamList[index],
                   ),
                   onTap: () {},
                 );
@@ -77,5 +43,52 @@ class TeamsFragmentState extends State<TeamsFragment> {
               },
             ),
     );
+  }
+
+  List<String> _getTeamList()
+  {
+    // Build list of all teams in current year
+    int conferenceCount = broomballData
+        .jsonData["years"][widget.year]["conferences"].keys
+        .toList()
+        .length;
+    String currentConference;
+    int divisionCount;
+    String currentDivision;
+    int teamCount;
+
+    List<String> teamList = <String>[];
+
+    for (int i = 0; i < conferenceCount; i++) {
+      currentConference = broomballData
+          .jsonData["years"][widget.year]["conferences"].keys
+          .toList()[i];
+      divisionCount = broomballData
+          .jsonData["years"][widget.year]["conferences"][currentConference]
+              ["divisions"]
+          .keys
+          .toList()
+          .length;
+      for (int j = 0; j < divisionCount; j++) {
+        currentDivision = broomballData
+            .jsonData["years"][widget.year]["conferences"][currentConference]
+                ["divisions"]
+            .keys
+            .toList()[j];
+        teamCount = broomballData
+            .jsonData["years"][widget.year]["conferences"][currentConference]
+                ["divisions"][currentDivision]["teamIDs"]
+            .length;
+        for (int k = 0; k < teamCount; k++) {
+          String team = broomballData.jsonData["teams"][
+              broomballData.jsonData["years"][widget.year]["conferences"]
+                      [currentConference]["divisions"][currentDivision]
+                  ["teamIDs"][k]]["teamName"];
+          teamList.add(team);
+        }
+      }
+    }
+
+    return teamList;
   }
 }
