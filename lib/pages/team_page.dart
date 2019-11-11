@@ -1,3 +1,4 @@
+import 'package:broomball_app/pages/player_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,8 @@ class TeamPage extends StatefulWidget {
 class TeamPageState extends State<TeamPage> {
   Team _team;
   String _captainDisplayName = "";
+  int _wins = 0;
+  int _losses = 0;
 
   @override
   void initState() {
@@ -66,13 +69,34 @@ class TeamPageState extends State<TeamPage> {
                             ListTile(
                               leading: Icon(Icons.calendar_today),
                               title: Text(_team.seasonId),
-                              subtitle: Text("Year"),
+                              subtitle: Text("Year Played"),
                             ),
                             Divider(),
                             ListTile(
                                 leading: Icon(Icons.person),
                                 title: Text(this._captainDisplayName),
                                 subtitle: Text("Captain")),
+                            Divider(),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              title: Text("Statistics"),
+                            ),
+                            Divider(),
+                            ListTile(
+                              leading: Text("Wins"),
+                              title: Text(_wins.toString()),
+                            ),
+                            Divider(),
+                            ListTile(
+                              leading: Text("Losses"),
+                              title: Text(_losses.toString()),
+                            )
                           ],
                         ),
                       ),
@@ -83,11 +107,17 @@ class TeamPageState extends State<TeamPage> {
                       itemCount: _team.roster.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                            title: Text(_team.roster[index].displayName),
-                            subtitle:
-                                _team.roster[index].id == _team.captainPlayerId
-                                    ? Text("Captain")
-                                    : null);
+                          title: Text(_team.roster[index].displayName),
+                          subtitle:
+                              _team.roster[index].id == _team.captainPlayerId
+                                  ? Text("Captain")
+                                  : null,
+                          onTap: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => PlayerPage(
+                                        id: _team.roster[index].id,
+                                      ))),
+                        );
                       },
                       separatorBuilder: (context, index) {
                         return Divider();
@@ -95,7 +125,24 @@ class TeamPageState extends State<TeamPage> {
                     ),
                   ),
                   Center(
-                    child: Text("Schedule"),
+                    child: ListView.separated(
+                      itemCount: _team.schedule.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_team.schedule[index].homeTeamName +
+                              " vs. " +
+                              _team.schedule[index].awayTeamName),
+                          subtitle: Text(_team.schedule[index].startTime + " - " + _team.schedule[index].rinkName),
+                          trailing: Text(
+                              _team.schedule[index].homeGoals.toString() +
+                                  " - " +
+                                  _team.schedule[index].awayGoals.toString()),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider();
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -106,16 +153,38 @@ class TeamPageState extends State<TeamPage> {
   void _refresh() {
     // this.setState(() => _team = null);
     BroomballData().fetchTeam(widget.id).then((Team team) => this.setState(() {
-          for (TeamRosterPlayer teamRosterPlayer in team.roster)
-          {
-            if (teamRosterPlayer.id == team.captainPlayerId)
-            {
+          _wins = 0;
+          _losses = 0;
+          
+          for (TeamRosterPlayer teamRosterPlayer in team.roster) {
+            if (teamRosterPlayer.id == team.captainPlayerId) {
               this._captainDisplayName = teamRosterPlayer.displayName;
               break;
             }
           }
-      
-          _team = team;    
+
+          for (TeamScheduleMatch teamScheduleMatch in team.schedule) {
+            if (teamScheduleMatch.homeGoals == teamScheduleMatch.awayGoals) {
+              // Increment ties
+            } else if (widget.id == teamScheduleMatch.homeTeamId) {
+              if (int.parse(teamScheduleMatch.homeGoals) >
+                  int.parse(teamScheduleMatch.awayGoals)) {
+                // One of the two teams must have a win
+                _wins++;
+              } else {
+                _losses++;
+              }
+            } else if (widget.id == teamScheduleMatch.awayTeamId) {
+              if (int.parse(teamScheduleMatch.awayGoals) >
+                  int.parse(teamScheduleMatch.homeGoals)) {
+                _wins++;
+              } else {
+                _losses++;
+              }
+            }
+          }
+
+          _team = team;
         }));
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 class BroomballData {
   final String scraperDataURL =
@@ -100,32 +101,40 @@ class Team {
   final String validRoster;
 
   final List<TeamRosterPlayer> roster;
+  final List<TeamScheduleMatch> schedule;
 
-  Team(
-      {@required this.id,
-      @required this.seasonId,
-      @required this.registrationLeagueId,
-      @required this.seasonLeagueId,
-      @required this.conferenceNumber,
-      @required this.name,
-      @required this.rejectedRound1Name,
-      @required this.rejectedRound2Name,
-      @required this.captainPlayerId,
-      @required this.nameApproved,
-      @required this.freePlayers,
-      @required this.ballsOrdered,
-      @required this.registrationTime,
-      @required this.validRoster,
-      @required this.roster});
+  Team({
+    @required this.id,
+    @required this.seasonId,
+    @required this.registrationLeagueId,
+    @required this.seasonLeagueId,
+    @required this.conferenceNumber,
+    @required this.name,
+    @required this.rejectedRound1Name,
+    @required this.rejectedRound2Name,
+    @required this.captainPlayerId,
+    @required this.nameApproved,
+    @required this.freePlayers,
+    @required this.ballsOrdered,
+    @required this.registrationTime,
+    @required this.validRoster,
+    @required this.roster,
+    @required this.schedule,
+  });
 
   factory Team.fromJson(Map<String, dynamic> json) {
     List<TeamRosterPlayer> roster = <TeamRosterPlayer>[];
-    
-    print(json.values.toList());
-    
+    List<TeamScheduleMatch> schedule = <TeamScheduleMatch>[];
+
+    // print(json.values.toList());
+
     for (Map<String, dynamic> teamRosterPlayer
         in json["roster"].values.toList()) {
       roster.add(TeamRosterPlayer.fromJson(teamRosterPlayer));
+    }
+
+    for (Map<String, dynamic> teamScheduleMatch in json["schedule"]) {
+      schedule.add(TeamScheduleMatch.fromJson(teamScheduleMatch));
     }
 
     return Team(
@@ -144,6 +153,7 @@ class Team {
       registrationTime: json["info"]["registration_time"],
       validRoster: json["info"]["valid_roster"],
       roster: roster,
+      schedule: schedule,
     );
   }
 }
@@ -199,6 +209,64 @@ class TeamRosterPlayer {
       isAdmin: json["residency"],
       active: json["active"],
       meetingRep: json["meeting_rep"],
+    );
+  }
+}
+
+class TeamScheduleMatch {
+  final String gameId;
+  final String played;
+  final String otl;
+  final String videoUrl;
+  final String rinkName;
+  final String canceled;
+  final String homeTeamId;
+  final String homeTeamName;
+  final String homeGoals;
+  final String awayTeamId;
+  final String awayTeamName;
+  final String awayGoals;
+  final String rinkId;
+  final String forfeited;
+  final String startTime;
+
+  TeamScheduleMatch({
+    @required this.gameId,
+    @required this.played,
+    @required this.otl,
+    @required this.videoUrl,
+    @required this.rinkName,
+    @required this.canceled,
+    @required this.homeTeamId,
+    @required this.homeTeamName,
+    @required this.homeGoals,
+    @required this.awayTeamId,
+    @required this.awayTeamName,
+    @required this.awayGoals,
+    @required this.rinkId,
+    @required this.forfeited,
+    @required this.startTime,
+  });
+
+  factory TeamScheduleMatch.fromJson(Map<String, dynamic> json) {
+    DateFormat dateFormat = new DateFormat("EEE. MMM d, yyyy");
+
+    return TeamScheduleMatch(
+      gameId: json["game_id"],
+      played: json["played"],
+      otl: json["otl"],
+      videoUrl: json["video_url"],
+      rinkName: json["rink_name"],
+      canceled: json["canceled"],
+      homeTeamId: json["home_team_id"],
+      homeTeamName: json["home_team_name"],
+      homeGoals: json["home_goals"],
+      awayTeamId: json["away_team_id"],
+      awayTeamName: json["away_team_name"],
+      awayGoals: json["away_goals"],
+      rinkId: json["rink_id"],
+      forfeited: json["forfeited"],
+      startTime: dateFormat.format(DateTime.parse(json["start_time"])),
     );
   }
 }
