@@ -29,7 +29,7 @@ class TeamsPage extends StatelessWidget {
               broomballData.jsonData["teams"][broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"][index]]["teamName"]
               ),
             onTap: () {
-              String selectedTeam = broomballData.jsonData["teams"][broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"][index]]["teamName"];
+              String selectedTeam = broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"][index];
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamPage(id: selectedTeam)));
             },
           );

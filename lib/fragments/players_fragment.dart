@@ -17,6 +17,8 @@ class PlayersFragment extends StatefulWidget {
 class PlayersFragmentState extends State<PlayersFragment> {
 
   final BroomballData broomballData = BroomballData();
+  
+  /*
   final PlayersFragmentState playerState = PlayersFragmentState();
   Map playerJSONData;
 
@@ -32,17 +34,19 @@ class PlayersFragmentState extends State<PlayersFragment> {
 
   playerState.readPlayerFile();
 
+  */
+
   @override
    Widget build(BuildContext context) {
     return Center(
       child: widget.id == null
           ? CircularProgressIndicator()
           : ListView.separated(
-              itemCount: playerJSONData["teams"].keys.toList().length,
+              itemCount: broomballData.playerJSONData["teams"].keys.toList().length,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    playerJSONData["teams"][playerJSONData["teams"].keys
+                    broomballData.playerJSONData["teams"][broomballData.playerJSONData["teams"].keys
                         .toList()[index]
                         .toString()]["teamName"],
                   ),
