@@ -1,7 +1,7 @@
 import 'package:broomball_app/fragments/conference_fragment.dart';
-import 'package:broomball_app/fragments/players_fragment.dart';
 import 'package:broomball_app/fragments/teams_fragment.dart';
 import 'package:broomball_app/pages/about_page.dart';
+import 'package:broomball_app/pages/favorites_page.dart';
 import 'package:broomball_app/pages/settings_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/util.dart';
@@ -16,7 +16,6 @@ class MainPage extends StatefulWidget {
   final drawerItems = <DrawerItem>[
     new DrawerItem("Conferences", Icons.assignment),
     new DrawerItem("Teams", Icons.people),
-    new DrawerItem("Players", Icons.person),
   ];
 
   @override
@@ -55,8 +54,6 @@ class MainPageState extends State<MainPage> {
         return new TeamsFragment(
           year: _currentYear,
         );
-      case 2:
-        return new PlayersFragment();
       default:
         return new Text("Error");
     }
@@ -95,6 +92,17 @@ class MainPageState extends State<MainPage> {
         onTap: () => _onSelectDrawerItem(i),
       ));
     }
+
+    drawerListTiles.add(ListTile(
+      leading: Icon(Icons.star_border),
+      title: Text("Favorites"),
+      onTap: () {
+        Navigator.of(context).pop();
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => FavoritesPage()
+        ));
+      }
+    ));
 
     drawerListTiles.add(Divider());
     drawerListTiles.add(ListTile(

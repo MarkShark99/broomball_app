@@ -18,6 +18,8 @@ class TeamPageState extends State<TeamPage> {
   String _captainDisplayName = "";
   int _wins = 0;
   int _losses = 0;
+  int _ties = 0;
+  int _goals = 0;
 
   @override
   void initState() {
@@ -40,7 +42,9 @@ class TeamPageState extends State<TeamPage> {
               Tab(
                 text: "Players",
               ),
-              Tab(text: "Schedule"),
+              Tab(
+                text: "Schedule",
+              ),
             ],
           ),
           actions: <Widget>[
@@ -89,13 +93,17 @@ class TeamPageState extends State<TeamPage> {
                             ),
                             Divider(),
                             ListTile(
-                              leading: Text("Wins"),
-                              title: Text(_wins.toString()),
+                              leading: Text("Record"),
+                              title: Text(_wins.toString() +
+                                  "-" +
+                                  _losses.toString() +
+                                  "-" +
+                                  _ties.toString()),
                             ),
                             Divider(),
                             ListTile(
-                              leading: Text("Losses"),
-                              title: Text(_losses.toString()),
+                              leading: Text("Goals"),
+                              title: Text(_goals.toString()),
                             )
                           ],
                         ),
@@ -132,7 +140,9 @@ class TeamPageState extends State<TeamPage> {
                           title: Text(_team.schedule[index].homeTeamName +
                               " vs. " +
                               _team.schedule[index].awayTeamName),
-                          subtitle: Text(_team.schedule[index].startTime + " - " + _team.schedule[index].rinkName),
+                          subtitle: Text(_team.schedule[index].startTime +
+                              " - " +
+                              _team.schedule[index].rinkName),
                           trailing: Text(
                               _team.schedule[index].homeGoals.toString() +
                                   " - " +
@@ -155,7 +165,9 @@ class TeamPageState extends State<TeamPage> {
     BroomballData().fetchTeam(widget.id).then((Team team) => this.setState(() {
           _wins = 0;
           _losses = 0;
-          
+          _ties = 0;
+          _goals = 0;
+
           for (TeamRosterPlayer teamRosterPlayer in team.roster) {
             if (teamRosterPlayer.id == team.captainPlayerId) {
               this._captainDisplayName = teamRosterPlayer.displayName;
@@ -165,8 +177,11 @@ class TeamPageState extends State<TeamPage> {
 
           for (TeamScheduleMatch teamScheduleMatch in team.schedule) {
             if (teamScheduleMatch.homeGoals == teamScheduleMatch.awayGoals) {
-              // Increment ties
+              _goals += int.parse(teamScheduleMatch.homeGoals);
+              _ties++;
             } else if (widget.id == teamScheduleMatch.homeTeamId) {
+              _goals += int.parse(teamScheduleMatch.homeGoals);
+
               if (int.parse(teamScheduleMatch.homeGoals) >
                   int.parse(teamScheduleMatch.awayGoals)) {
                 // One of the two teams must have a win
@@ -175,6 +190,8 @@ class TeamPageState extends State<TeamPage> {
                 _losses++;
               }
             } else if (widget.id == teamScheduleMatch.awayTeamId) {
+              _goals += int.parse(teamScheduleMatch.awayGoals);
+
               if (int.parse(teamScheduleMatch.awayGoals) >
                   int.parse(teamScheduleMatch.homeGoals)) {
                 _wins++;

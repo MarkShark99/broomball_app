@@ -6,27 +6,21 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<String> get _localPath async {
-
   final directory = await getApplicationDocumentsDirectory();
 
   return directory.path;
-
 }
 
 Future<File> get _localFile async {
-
   final path = await _localPath;
-  
-  return File ('$path/playerData.json');
 
+  return File('$path/favorites.json');
 }
 
 Future<File> writePlayerData(Player playerData) async {
-
   final file = await _localFile;
 
   return file.writeAsString('$playerData');
-
 }
 
 class BroomballData {
@@ -43,14 +37,7 @@ class BroomballData {
 
   BroomballData._internal();
 
-  File localFilePath;
-
-  Future<void> getFilePath() async {
-    localFilePath = await _localFile;
-  }
-
-  BroomballData.getFilePath();
-
+  /// Fetches data for conferences, divisions, and a list of teams from our database.
   Future<void> fetchJsonData() async {
     final Response response = await get(scraperDataURL);
 
@@ -61,17 +48,18 @@ class BroomballData {
     }
   }
 
-  Future<void> fetchPlayer(String id) async {
+  /// Fetches a player's data from broomball.mtu.edu/api/player/id/$id/key/0
+  Future<Player> fetchPlayer(String id) async {
     final Response response = await get(
         "https://www.broomball.mtu.edu/api/player/id/" + id + "/key/0");
     if (response.statusCode == 200) {
-      writePlayerData(Player.fromJson(json.decode(response.body)));
-      // return Player.fromJson(json.decode(response.body));
+      return Player.fromJson(json.decode(response.body));
     } else {
       throw Exception("Unable to load player data");
     }
   }
 
+  /// Fetches a team's data from broomball.mtu.edu/api/team/id/$id/key/0
   Future<Team> fetchTeam(String id) async {
     final Response response =
         await get("https://www.broomball.mtu.edu/api/team/id/" + id + "/key/0");
@@ -84,6 +72,7 @@ class BroomballData {
   }
 }
 
+/// Class representing a player fetched from the API.
 class Player {
   final String id;
   final String firstName;
