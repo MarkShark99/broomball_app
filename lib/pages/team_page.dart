@@ -20,6 +20,7 @@ class TeamPageState extends State<TeamPage> {
   int _losses = 0;
   int _ties = 0;
   int _goals = 0;
+  bool isFavorite = true;
 
   @override
   void initState() {
@@ -29,6 +30,8 @@ class TeamPageState extends State<TeamPage> {
 
   @override
   Widget build(BuildContext context) {
+    IconData iconData = Icons.star_border;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -54,6 +57,7 @@ class TeamPageState extends State<TeamPage> {
             ),
           ],
         ),
+        floatingActionButton: isFavorite ? setToIsNotFavorite() : setToIsFavorite(),
         body: _team == null
             ? Center(child: CircularProgressIndicator())
             : TabBarView(
@@ -157,6 +161,30 @@ class TeamPageState extends State<TeamPage> {
                 ],
               ),
       ),
+    );
+  }
+
+  Widget setToIsFavorite(){
+    return FloatingActionButton(
+      onPressed: (){
+        setState(() {
+          isFavorite = !isFavorite;
+        });
+      },
+      child: Icon(Icons.star, size: 35,),
+      splashColor: Colors.grey,
+    );
+  }
+
+  Widget setToIsNotFavorite(){
+    return FloatingActionButton(
+      onPressed: (){
+        setState(() {
+          isFavorite = !isFavorite;
+        });
+      },
+      child: Icon(Icons.star_border, size: 35,),
+      splashColor: Colors.grey,
     );
   }
 

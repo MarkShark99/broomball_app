@@ -25,6 +25,8 @@ class TeamsFragmentState extends State<TeamsFragment> {
 
   @override
   Widget build(BuildContext context) {
+    IconData iconData = Icons.star_border;
+    bool isFavorite = false;
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
