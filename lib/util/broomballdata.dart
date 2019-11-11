@@ -1,6 +1,31 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<String> get _localPath async {
+
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
+
+}
+
+Future<File> get _localFile async {
+
+  final path = await _localPath;
+  
+  return File ('$path/playerData.json');
+
+}
+
+Future<File> writePlayerData(Player playerData) async {
+
+  final file = await _localFile;
+
+  return file.writeAsString('$playerData');
+
+}
 
 class BroomballData {
   final String scraperDataURL =
@@ -16,6 +41,14 @@ class BroomballData {
 
   BroomballData._internal();
 
+  File localFilePath;
+
+  Future<void> getFilePath() async {
+    localFilePath = await _localFile;
+  }
+
+  BroomballData.getFilePath();
+
   Future<void> fetchJsonData() async {
     final Response response = await get(scraperDataURL);
 
@@ -26,12 +59,12 @@ class BroomballData {
     }
   }
 
-  Future<Player> fetchPlayer(String id) async {
+  Future<void> fetchPlayer(String id) async {
     final Response response = await get(
         "https://www.broomball.mtu.edu/api/player/id/" + id + "/key/0");
-
     if (response.statusCode == 200) {
-      return Player.fromJson(json.decode(response.body));
+      writePlayerData(Player.fromJson(json.decode(response.body)));
+      // return Player.fromJson(json.decode(response.body));
     } else {
       throw Exception("Unable to load player data");
     }
