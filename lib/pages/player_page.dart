@@ -24,30 +24,75 @@ class _PlayerPageState extends State<PlayerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: Color(0xFFFFCD00),
-        title: Text(_player == null ? "" : _player.displayName),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => _refresh(),
-          )
-        ],
-      ),
-      body: Center(
-          child: _player == null
-              ? CircularProgressIndicator()
-              : ListView(
+    return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: true,
+            backgroundColor: Color(0xFFFFCD00),
+            title: Text(_player == null ? "" : _player.displayName),
+            bottom: TabBar(
+              tabs: <Widget>[
+                Tab(
+                  text: "Info",
+                ),
+                Tab(text: "Matches"),
+              ],
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () => _refresh(),
+              )
+            ],
+          ),
+          body: _player == null
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : TabBarView(
                   children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text(_player.displayName),
-                    )
+                    Column(
+                      children: <Widget>[
+                        Card(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: Icon(Icons.person),
+                                title: Text(_player.displayName),
+                                subtitle: Text("Name"),
+                              ),
+                              Divider(),
+                              ListTile(
+                                leading: Icon(Icons.mail),
+                                title: Text(_player.email),
+                                subtitle: Text("Email"),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Card(
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  title: Text("Statistics"),
+                                ),
+                                Divider(),
+                                ListTile(
+                                  leading: Text("Goals"),
+                                  title: Text("<Insert goals here>")
+                                ),
+                                Divider(),
+                              ]),
+                        )
+                      ],
+                    ),
+                    Column(),
                   ],
-                )),
-    );
+                ),
+        ));
   }
 
   void _refresh() {
