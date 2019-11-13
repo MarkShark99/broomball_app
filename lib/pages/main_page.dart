@@ -15,8 +15,8 @@ import 'package:flutter/services.dart';
 
 class MainPage extends StatefulWidget {
   final drawerItems = <DrawerItem>[
-    new DrawerItem("Conferences", Icons.assignment),
-    new DrawerItem("Teams", Icons.people),
+    new DrawerItem(title: "Conferences", icon: Icons.assignment),
+    new DrawerItem(title: "Teams", icon: Icons.people),
   ];
 
   @override
@@ -88,7 +88,7 @@ class MainPageState extends State<MainPage> {
 
       drawerListTiles.add(ListTile(
         leading: Icon(drawerItem.icon),
-        title: Text(drawerItem.text),
+        title: Text(drawerItem.title),
         selected: i == _currentDrawerIndex,
         onTap: () => _onSelectDrawerItem(i),
       ));
@@ -165,7 +165,7 @@ class MainPageState extends State<MainPage> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(widget.drawerItems[_currentDrawerIndex].text),
+          title: Text(widget.drawerItems[_currentDrawerIndex].title),
           actions: scaffoldActions),
       drawer: Drawer(
         child: ListView(

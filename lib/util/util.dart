@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 
 class DrawerItem
 {
-  String text;
-  IconData icon;
+  final String title;
+  final IconData icon;
 
-  DrawerItem(this.text, this.icon);
+  DrawerItem({this.title, this.icon});
+}
+
+class TeamIDPair
+{
+  final String teamName;
+  final String teamID;
+
+  TeamIDPair({this.teamName, this.teamID});
 }

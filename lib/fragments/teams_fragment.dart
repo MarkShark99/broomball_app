@@ -1,5 +1,6 @@
 import 'package:broomball_app/pages/team_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
+import 'package:broomball_app/util/util.dart';
 import 'package:flutter/material.dart';
 
 class TeamsFragment extends StatefulWidget {
@@ -16,6 +17,8 @@ class TeamsFragment extends StatefulWidget {
 class TeamsFragmentState extends State<TeamsFragment> {
   final BroomballData broomballData = BroomballData();
   List<String> _teamList;
+  List<TeamIDPair> _teamIDPairList = <TeamIDPair> [];
+
 
   @override
   void initState() {
@@ -91,7 +94,7 @@ class TeamsFragmentState extends State<TeamsFragment> {
       }
     }
 
-    // teamList.sort((a, b) => a.compareTo(b));
+    //teamList.sort();
 
     return teamList;
   }
