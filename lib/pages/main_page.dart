@@ -152,7 +152,7 @@ class MainPageState extends State<MainPage> {
       onPressed: () {
         broomballData.fetchJsonData().whenComplete(() => _refresh());
         this.setState(() {
-          _currentYear = null;
+          this._currentYear = null;
         });
       },
     ));

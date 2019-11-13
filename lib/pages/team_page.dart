@@ -31,7 +31,6 @@ class TeamPageState extends State<TeamPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -61,7 +60,7 @@ class TeamPageState extends State<TeamPage> {
           onPressed: () => this.setState(() {
             this._isFavorite = !this._isFavorite;
           }),
-          child: Icon(this._isFavorite ? Icons.star: Icons.star_border),
+          child: Icon(this._isFavorite ? Icons.star : Icons.star_border),
           splashColor: Colors.grey,
         ),
         body: _team == null

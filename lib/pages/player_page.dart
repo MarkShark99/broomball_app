@@ -15,6 +15,9 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
   Player _player;
+  int _goals = 0;
+  int _saves = 0;
+
   bool _isFavorite = false;
 
   @override
@@ -46,13 +49,13 @@ class _PlayerPageState extends State<PlayerPage> {
               )
             ],
           ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => this.setState(() {
-            this._isFavorite = !this._isFavorite;
-          }),
-          child: Icon(this._isFavorite ? Icons.star: Icons.star_border),
-          splashColor: Colors.grey,
-        ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => this.setState(() {
+              this._isFavorite = !this._isFavorite;
+            }),
+            child: Icon(this._isFavorite ? Icons.star : Icons.star_border),
+            splashColor: Colors.grey,
+          ),
           body: _player == null
               ? Center(
                   child: CircularProgressIndicator(),
@@ -88,9 +91,8 @@ class _PlayerPageState extends State<PlayerPage> {
                                 ),
                                 Divider(),
                                 ListTile(
-                                  leading: Text("Goals"),
-                                  title: Text("<Insert goals here>")
-                                ),
+                                    leading: Text("Goals"),
+                                    title: Text("<Insert goals here>")),
                                 Divider(),
                               ]),
                         )
@@ -103,9 +105,10 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   void _refresh() {
-    this.setState(() => _player = null);
     BroomballData()
         .fetchPlayer(widget.id)
-        .then((Player player) => this.setState(() => _player = player));
+        .then((Player player) => this.setState(() {
+              _player = player;
+            }));
   }
 }

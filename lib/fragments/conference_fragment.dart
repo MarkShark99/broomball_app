@@ -16,16 +16,14 @@ class ConferenceFragment extends StatefulWidget {
 class ConferenceFragmentState extends State<ConferenceFragment> {
   final BroomballData broomballData = BroomballData();
 
-  List<String> _conferenceList;
-
-  @override
-  void initState() {
-    super.initState();
-    _conferenceList = _getConferenceList();
-  }
+  List<String> _conferenceList = <String>[];
 
   @override
   Widget build(BuildContext context) {
+    if (widget.year != null) {
+      _conferenceList = _getConferenceList();
+    }
+    
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
@@ -60,7 +58,7 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
       conferenceList.add(conference);
     }
 
-    conferenceList.sort((a, b) => a.compareTo(b));
+    conferenceList.sort();
 
     return conferenceList;
   }
