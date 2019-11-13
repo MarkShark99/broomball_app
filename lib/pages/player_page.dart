@@ -15,6 +15,7 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
   Player _player;
+  bool _isFavorite = false;
 
   @override
   void initState() {
@@ -45,6 +46,13 @@ class _PlayerPageState extends State<PlayerPage> {
               )
             ],
           ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => this.setState(() {
+            this._isFavorite = !this._isFavorite;
+          }),
+          child: Icon(this._isFavorite ? Icons.star: Icons.star_border),
+          splashColor: Colors.grey,
+        ),
           body: _player == null
               ? Center(
                   child: CircularProgressIndicator(),
