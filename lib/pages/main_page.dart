@@ -156,6 +156,13 @@ class MainPageState extends State<MainPage> {
       },
     ));
 
+    scaffoldActions.add(IconButton(
+      icon: Icon(Icons.search),
+      onPressed: () {
+      },
+      )
+    );
+
     return Scaffold(
       appBar: AppBar(
           title: Text(widget.drawerItems[_currentDrawerIndex].text),
