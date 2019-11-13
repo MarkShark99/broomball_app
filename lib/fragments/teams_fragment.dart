@@ -23,11 +23,14 @@ class TeamsFragmentState extends State<TeamsFragment> {
   @override
   void initState() {
     super.initState();
-    _teamList = _getTeamList();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.year != null) {
+      _teamList = _getTeamList();
+    }
+
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
