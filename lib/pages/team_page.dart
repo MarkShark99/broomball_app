@@ -83,7 +83,7 @@ class TeamPageState extends State<TeamPage> {
                             ListTile(
                               leading: Icon(Icons.calendar_today),
                               title: Text(_team.seasonId),
-                              subtitle: Text("Year Played"),
+                              subtitle: Text("Year played"),
                             ),
                             Divider(),
                             ListTile(

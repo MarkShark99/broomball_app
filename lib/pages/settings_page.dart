@@ -16,7 +16,6 @@ class SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: Color(0xFFFFCD00),
         title: Text("Settings"),
       ),
       body: ListView(

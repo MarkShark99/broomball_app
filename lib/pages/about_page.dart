@@ -8,7 +8,6 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: true,
-            backgroundColor: Color(0xFFFFCD00),
             title: Text("About")),
         body: Container(
             padding: EdgeInsets.all(8.0),

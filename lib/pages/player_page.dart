@@ -29,7 +29,6 @@ class _PlayerPageState extends State<PlayerPage> {
         child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: true,
-            backgroundColor: Color(0xFFFFCD00),
             title: Text(_player == null ? "" : _player.displayName),
             bottom: TabBar(
               tabs: <Widget>[
@@ -65,9 +64,9 @@ class _PlayerPageState extends State<PlayerPage> {
                               ),
                               Divider(),
                               ListTile(
-                                leading: Icon(Icons.mail),
-                                title: Text(_player.email),
-                                subtitle: Text("Email"),
+                                leading: Icon(Icons.calendar_today),
+                                title: Text("<Insert years active>"),
+                                subtitle: Text("Years active"),
                               ),
                             ],
                           ),

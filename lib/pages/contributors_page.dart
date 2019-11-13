@@ -7,8 +7,7 @@ class ContributorsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: true,
-          backgroundColor: Color(0xFFFFCD00),
-          title: Text("Development Team")),
+          title: Text("Contributors")),
       body: ListView(
         children: <Widget>[
           ListTile(

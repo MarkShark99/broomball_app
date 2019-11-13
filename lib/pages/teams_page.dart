@@ -16,7 +16,6 @@ class TeamsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: true,
-          backgroundColor: Color(0xFFFFCD00),
           title: Text("Teams")),
       body: ListView.separated(
         itemCount: broomballData

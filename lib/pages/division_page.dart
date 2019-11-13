@@ -15,7 +15,6 @@ class DivisionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: true,
-          backgroundColor: Color(0xFFFFCD00),
           title: Text("Divisions")),
       body: ListView.separated(
         itemCount: broomballData
