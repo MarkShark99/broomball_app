@@ -1,3 +1,4 @@
+import 'package:broomball_app/pages/team_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/material.dart';
 
@@ -17,16 +18,13 @@ class TeamsFragmentState extends State<TeamsFragment> {
   List<String> _teamList;
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
     _teamList = _getTeamList();
   }
 
   @override
   Widget build(BuildContext context) {
-    IconData iconData = Icons.star_border;
-    bool isFavorite = false;
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
@@ -37,7 +35,10 @@ class TeamsFragmentState extends State<TeamsFragment> {
                   title: Text(
                     _teamList[index],
                   ),
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TeamPage(
+                            id: _teamList[index],
+                          ))),
                 );
               },
               separatorBuilder: (context, index) {
@@ -47,9 +48,8 @@ class TeamsFragmentState extends State<TeamsFragment> {
     );
   }
 
-  List<String> _getTeamList()
-  {
-    // Build list of all teams in current year
+  /// Builds a list of all teams for the current year
+  List<String> _getTeamList() {
     int conferenceCount = broomballData
         .jsonData["years"][widget.year]["conferences"].keys
         .toList()
@@ -90,6 +90,8 @@ class TeamsFragmentState extends State<TeamsFragment> {
         }
       }
     }
+
+    // teamList.sort((a, b) => a.compareTo(b));
 
     return teamList;
   }

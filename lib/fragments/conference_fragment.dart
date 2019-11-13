@@ -16,30 +16,30 @@ class ConferenceFragment extends StatefulWidget {
 class ConferenceFragmentState extends State<ConferenceFragment> {
   final BroomballData broomballData = BroomballData();
 
+  List<String> _conferenceList;
+
+  @override
+  void initState() {
+    super.initState();
+    _conferenceList = _getConferenceList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
           : ListView.separated(
-              itemCount: broomballData
-                  .jsonData["years"][widget.year]["conferences"].keys
-                  .toList()
-                  .length,
+              itemCount: _conferenceList.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(broomballData
-                      .jsonData["years"][widget.year]["conferences"].keys
-                      .toList()[index]),
+                  title: Text(_conferenceList[index]),
                   onTap: () {
-                    String selectedConference = broomballData
-                        .jsonData["years"][widget.year]["conferences"].keys
-                        .toList()[index];
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => DivisionPage(
-                                selectedConference: selectedConference,
+                                selectedConference: _conferenceList[index],
                                 year: widget.year)));
                   },
                 );
@@ -49,5 +49,19 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
               },
             ),
     );
+  }
+
+  List<String> _getConferenceList() {
+    List<String> conferenceList = <String>[];
+
+    for (String conference in broomballData
+        .jsonData["years"][widget.year]["conferences"].keys
+        .toList()) {
+      conferenceList.add(conference);
+    }
+
+    conferenceList.sort((a, b) => a.compareTo(b));
+
+    return conferenceList;
   }
 }

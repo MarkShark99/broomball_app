@@ -1,27 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-
-  return directory.path;
-}
-
-Future<File> get _localFile async {
-  final path = await _localPath;
-
-  return File('$path/favorites.json');
-}
-
-Future<File> writePlayerData(Player playerData) async {
-  final file = await _localFile;
-
-  return file.writeAsString('$playerData');
-}
 
 class BroomballData {
   final String scraperDataURL =
@@ -104,8 +84,10 @@ class Player {
   }
 }
 
+/// Class representing a match in a player's schedule.
 class PlayerMatch {}
 
+/// Class representing a team fetched from the API.
 class Team {
   final String id;
   final String seasonId;
@@ -145,10 +127,9 @@ class Team {
   });
 
   factory Team.fromJson(Map<String, dynamic> json) {
+
     List<TeamRosterPlayer> roster = <TeamRosterPlayer>[];
     List<TeamScheduleMatch> schedule = <TeamScheduleMatch>[];
-
-    // print(json.values.toList());
 
     for (Map<String, dynamic> teamRosterPlayer
         in json["roster"].values.toList()) {
@@ -180,6 +161,8 @@ class Team {
   }
 }
 
+/// Class representing a player in a team's roster. Data for a player on a team
+/// is different from that of a player's data fetched straight from the API.
 class TeamRosterPlayer {
   final String teamId;
   final String playerId;
@@ -235,6 +218,7 @@ class TeamRosterPlayer {
   }
 }
 
+/// Class representing a match in a team's schedule.
 class TeamScheduleMatch {
   final String gameId;
   final String played;

@@ -2,6 +2,7 @@ import 'package:broomball_app/fragments/conference_fragment.dart';
 import 'package:broomball_app/fragments/teams_fragment.dart';
 import 'package:broomball_app/pages/about_page.dart';
 import 'package:broomball_app/pages/favorites_page.dart';
+import 'package:broomball_app/pages/search_page.dart';
 import 'package:broomball_app/pages/settings_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/util.dart';
@@ -158,8 +159,7 @@ class MainPageState extends State<MainPage> {
 
     scaffoldActions.add(IconButton(
       icon: Icon(Icons.search),
-      onPressed: () {
-      },
+      onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchPage())),
       )
     );
 
