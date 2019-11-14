@@ -9,6 +9,7 @@ public class BroomballData
 {
     private String year;
     private HashMap<String, Conference> conferences;
+    private HashMap<String, String> teams;
 
     public BroomballData()
     {
@@ -29,4 +30,11 @@ public class BroomballData
     {
         this.year = year;
     }
+
+    public void addTeam(String id, String name)
+    {
+        this.teams.put(id, name);
+    }
+
+
 }

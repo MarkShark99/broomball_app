@@ -1,6 +1,5 @@
 package com.geoff.broomball_app;
 
-import com.geoff.broomball_app.api.APITeam;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -38,7 +37,6 @@ public class BroomballWebScraper
     /**
      * Method that runs through the process of scraping the entire broomball site
      *
-     * @return A BroomballData instance containing all the data
      * @throws IOException If the scraper cannot connect to the site at any time
      */
     public void run(String year) throws IOException
@@ -74,7 +72,6 @@ public class BroomballWebScraper
 
                 for (int k = 1; k < tableRows.size(); k++)
                 {
-                    APITeam team = new APITeam();
                     String teamID;
                     String teamName;
 
@@ -86,6 +83,8 @@ public class BroomballWebScraper
                     division.addTeamID(teamID);
 
                     teamName = cells.get(0).select("a").text();
+
+                    data.addTeam(teamID, teamName);
                 }
 
                 conference.addDivision(divisionName, division);

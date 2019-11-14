@@ -26,9 +26,6 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
-  static const platform =
-      const MethodChannel('broomball_app.geoff.com/conferences');
-
   int _currentDrawerIndex = 0;
   String _currentYear;
 
