@@ -2,6 +2,7 @@ import 'package:broomball_app/pages/team_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/util.dart';
 import 'package:flutter/material.dart';
+import 'dart:collection';
 
 class TeamsFragment extends StatefulWidget {
   final String year;
@@ -16,9 +17,7 @@ class TeamsFragment extends StatefulWidget {
 
 class TeamsFragmentState extends State<TeamsFragment> {
   final BroomballData broomballData = BroomballData();
-  List<String> _teamList;
-  List<TeamIDPair> _teamIDPairList = <TeamIDPair> [];
-
+  Map<String, String> _teamIDPairMap = Map<String, String>();
 
   @override
   void initState() {
@@ -28,22 +27,25 @@ class TeamsFragmentState extends State<TeamsFragment> {
   @override
   Widget build(BuildContext context) {
     if (widget.year != null) {
-      _teamList = _getTeamList();
+      _teamIDPairMap = _getTeamIDPairMap();
     }
+
+    List<String> teamNameList = _teamIDPairMap.keys.toList();
+    teamNameList.sort();
 
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
           : ListView.separated(
-              itemCount: _teamList.length,
+              itemCount: teamNameList.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    _teamList[index],
+                    teamNameList[index],
                   ),
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => TeamPage(
-                            id: _teamList[index],
+                            id: _teamIDPairMap[teamNameList[index]],
                           ))),
                 );
               },
@@ -55,7 +57,7 @@ class TeamsFragmentState extends State<TeamsFragment> {
   }
 
   /// Builds a list of all teams for the current year
-  List<String> _getTeamList() {
+  Map<String, String> _getTeamIDPairMap() {
     int conferenceCount = broomballData
         .jsonData["years"][widget.year]["conferences"].keys
         .toList()
@@ -65,7 +67,8 @@ class TeamsFragmentState extends State<TeamsFragment> {
     String currentDivision;
     int teamCount;
 
-    List<String> teamList = <String>[];
+    Map<String, String> teamIDPairMap = Map<String, String>();
+
 
     for (int i = 0; i < conferenceCount; i++) {
       currentConference = broomballData
@@ -88,17 +91,15 @@ class TeamsFragmentState extends State<TeamsFragment> {
                 ["divisions"][currentDivision]["teamIDs"]
             .length;
         for (int k = 0; k < teamCount; k++) {
-          String team = broomballData.jsonData["teams"][
-              broomballData.jsonData["years"][widget.year]["conferences"]
-                      [currentConference]["divisions"][currentDivision]
-                  ["teamIDs"][k]]["teamName"];
-          teamList.add(team);
+          String ID = broomballData.jsonData["years"][widget.year]["conferences"]
+                  [currentConference]["divisions"][currentDivision]["teamIDs"][k];
+          String team = broomballData.jsonData["teams"][ID]["teamName"];
+
+          teamIDPairMap[team] = ID;
         }
       }
     }
 
-    //teamList.sort();
-
-    return teamList;
+    return teamIDPairMap;
   }
 }
