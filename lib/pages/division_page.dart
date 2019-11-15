@@ -7,35 +7,26 @@ class DivisionPage extends StatelessWidget {
   final String year;
 
   final BroomballData broomballData = BroomballData();
+  List<String> _divisionList = <String>[];
 
   DivisionPage({this.selectedConference, this.year});
 
   @override
   Widget build(BuildContext context) {
+
+  _divisionList = _getDivisionList();
+
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: true,
           title: Text("Divisions")),
       body: ListView.separated(
-        itemCount: broomballData
-            .jsonData["years"][year]["conferences"][selectedConference]
-                ["divisions"]
-            .keys
-            .toList()
-            .length,
+        itemCount: _divisionList.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(broomballData
-                .jsonData["years"][year]["conferences"][selectedConference]
-                    ["divisions"]
-                .keys
-                .toList()[index]),
+            title: Text(_divisionList[index]),
             onTap: () {
-              String selectedDivision = broomballData
-                  .jsonData["years"][year]["conferences"][selectedConference]
-                      ["divisions"]
-                  .keys
-                  .toList()[index];
+              String selectedDivision = _divisionList[index];
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => TeamsPage(
                         year: this.year,
@@ -50,5 +41,19 @@ class DivisionPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  List<String> _getDivisionList() {
+    List<String> divisionList = <String>[];
+
+    for (String division in broomballData
+        .jsonData["years"][this.year]["conferences"][this.selectedConference]["divisions"].keys
+        .toList()) {
+      divisionList.add(division);
+    }
+
+    divisionList.sort();
+
+    return divisionList;
   }
 }

@@ -10,26 +10,33 @@ class TeamsPage extends StatelessWidget {
   TeamsPage({@required this.year, @required this.selectedConference, @required this.selectedDivision});
 
   final BroomballData broomballData = BroomballData();
+  
+  Map<String, String> _teamIDMap = Map<String, String>();
 
   @override
   Widget build(BuildContext context) {
+    _fillIDTeamMap();
+    List<String> teamNameList = _teamIDMap.keys.toList();
+    teamNameList.sort();
+
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: true,
           title: Text("Teams")),
       body: ListView.separated(
-        itemCount: broomballData
-            .jsonData["years"][year]["conferences"][selectedConference]
-                ["divisions"][selectedDivision]["teamIDs"]
-            .length,
+        itemCount: teamNameList.length,
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(
-              broomballData.jsonData["teams"][broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"][index]]["teamName"]
+              teamNameList[index],
               ),
             onTap: () {
-              String selectedTeam = broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"][index];
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamPage(id: selectedTeam)));
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => TeamPage(
+                  id: _teamIDMap[teamNameList[index]]
+                  )
+                )
+              );
             },
           );
         },
@@ -38,5 +45,14 @@ class TeamsPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _fillIDTeamMap() {
+    List<String> teamList = <String>[];
+
+    for(String id in broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"])
+    {
+      _teamIDMap[broomballData.jsonData["teams"][id]["teamName"]] = id;
+    }
   }
 }
