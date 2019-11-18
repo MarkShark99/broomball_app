@@ -43,18 +43,17 @@ class _PlayerPageState extends State<PlayerPage> {
               ],
             ),
             actions: <Widget>[
+            IconButton(
+              icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
+              onPressed: () => this.setState(() {
+                this._isFavorite = !this._isFavorite;
+              }),
+            ),
               IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () => _refresh(),
               )
             ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => this.setState(() {
-              this._isFavorite = !this._isFavorite;
-            }),
-            child: Icon(this._isFavorite ? Icons.star : Icons.star_border),
-            splashColor: Colors.grey,
           ),
           body: _player == null
               ? Center(
@@ -76,7 +75,7 @@ class _PlayerPageState extends State<PlayerPage> {
                               Divider(),
                               ListTile(
                                 leading: Icon(Icons.calendar_today),
-                                title: Text("<Insert years active>"),
+                                title: Text(""),
                                 subtitle: Text("Years active"),
                               ),
                             ],
@@ -92,7 +91,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                 Divider(),
                                 ListTile(
                                     leading: Text("Goals"),
-                                    title: Text("<Insert goals here>")),
+                                    title: Text("")),
                                 Divider(),
                               ]),
                         )

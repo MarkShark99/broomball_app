@@ -51,17 +51,16 @@ class TeamPageState extends State<TeamPage> {
           ),
           actions: <Widget>[
             IconButton(
+              icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
+              onPressed: () => this.setState(() {
+                this._isFavorite = !this._isFavorite;
+              }),
+            ),
+            IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () => _refresh(),
             ),
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => this.setState(() {
-            this._isFavorite = !this._isFavorite;
-          }),
-          child: Icon(this._isFavorite ? Icons.star : Icons.star_border),
-          splashColor: Colors.grey,
         ),
         body: _team == null
             ? Center(child: CircularProgressIndicator())
@@ -89,7 +88,7 @@ class TeamPageState extends State<TeamPage> {
                                 leading: Icon(Icons.person),
                                 title: Text(this._captainDisplayName),
                                 subtitle: Text("Captain")),
-                            Divider(),
+                            // Divider(),
                           ],
                         ),
                       ),
