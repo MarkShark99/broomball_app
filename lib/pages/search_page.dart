@@ -36,7 +36,7 @@ class SearchPageState extends State<SearchPage> {
         actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () => _executeSearch(searchController.text),
+                onPressed: () => _executeSearch(searchController.text.replaceAll(" ", "+")),
               )
             ],
       ),

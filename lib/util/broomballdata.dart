@@ -107,7 +107,7 @@ class Search {
 
   factory Search.fromJson(Map<String, dynamic> json) {
     return Search(
-      id: json["info"]["id"],
+      id: json["id"],
     );
   }
 }
