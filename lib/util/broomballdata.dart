@@ -39,6 +39,19 @@ class BroomballData {
     }
   }
 
+  /// Fetches search data from broomball.mtu.edu/api/player/search/$query/key/0
+  Future<Player> fetchSearch(String query) async {
+    final Response searchResponse = await get(
+        "https://www.broomball.mtu.edu/api/player/search/" + query + "/key/0");
+    //final Response response = await get("https://www.broomball.mtu.edu/api/player/id/" + json.decode(searchResponse.body).id + "/key/0");
+    if (searchResponse.statusCode == 200) {
+      String id = Search.fromJson(json.decode(searchResponse.body)).id;
+      return fetchPlayer(id);
+    } else {
+      throw Exception("Unable to load search data");
+    }
+  }
+
   /// Fetches a team's data from broomball.mtu.edu/api/team/id/$id/key/0
   Future<Team> fetchTeam(String id) async {
     final Response response =
@@ -83,6 +96,22 @@ class Player {
     );
   }
 }
+
+/// Class representing a search fetched from the API.
+class Search {
+  final String id;
+
+  Search({
+        @required this.id,
+      });
+
+  factory Search.fromJson(Map<String, dynamic> json) {
+    return Search(
+      id: json["info"]["id"],
+    );
+  }
+}
+
 
 /// Class representing a match in a player's schedule.
 class PlayerMatch {}
