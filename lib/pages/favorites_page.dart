@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:broomball_app/util/broomballdata.dart';
+import 'package:broomball_app/util/app_data.dart';
 
 class FavoritesPage extends StatefulWidget {
+
+  final String id;
+
+  FavoritesPage({@required this.id});
+
   @override
   State<StatefulWidget> createState() {
     return FavoritesPageState();
@@ -8,6 +16,15 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class FavoritesPageState extends State<FavoritesPage> {
+
+  Map _playerData;
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -30,4 +47,13 @@ class FavoritesPageState extends State<FavoritesPage> {
       )
     );
   }
+
+  void _refresh() {
+    AppData()
+        .readPlayerData();
+
+    _playerData = AppData().favoritesData;
+
+  }
+
 }
