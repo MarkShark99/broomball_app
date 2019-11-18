@@ -1,3 +1,4 @@
+import 'package:broomball_app/pages/player_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -36,12 +37,27 @@ class SearchPageState extends State<SearchPage> {
         actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () => _executeSearch(searchController.text),
+                onPressed: () => _executeSearch(searchController.text.replaceAll(" ", "+")),
               )
             ],
       ),
-      body: Center(
-        child: Text(_player == null ? "" : _player.displayName),
+      body: MaterialButton(
+        onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PlayerPage(
+                  id: _player.id
+              )
+            )
+          );
+        },
+        child: SizedBox.expand(
+            child: Text(
+              (_player != null) ? ("\n" + _player.displayName) : (""),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22)
+              ),
+          )
       ),
     );
   }
