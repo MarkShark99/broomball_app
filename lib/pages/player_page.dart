@@ -76,7 +76,7 @@ class _PlayerPageState extends State<PlayerPage> {
                               Divider(),
                               ListTile(
                                 leading: Icon(Icons.calendar_today),
-                                title: Text("<Insert years active>"),
+                                title: Text(""),
                                 subtitle: Text("Years active"),
                               ),
                             ],
@@ -92,7 +92,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                 Divider(),
                                 ListTile(
                                     leading: Text("Goals"),
-                                    title: Text("<Insert goals here>")),
+                                    title: Text("")),
                                 Divider(),
                               ]),
                         )

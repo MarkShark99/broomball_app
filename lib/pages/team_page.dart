@@ -89,7 +89,7 @@ class TeamPageState extends State<TeamPage> {
                                 leading: Icon(Icons.person),
                                 title: Text(this._captainDisplayName),
                                 subtitle: Text("Captain")),
-                            Divider(),
+                            // Divider(),
                           ],
                         ),
                       ),
