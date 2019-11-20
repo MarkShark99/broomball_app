@@ -52,12 +52,20 @@ class TeamPageState extends State<TeamPage> {
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
-              onPressed: () => this.setState(() {
-                
-                this._isFavorite = !this._isFavorite;
-              }),
-            ),
+                icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
+                onPressed: () {
+                  this.setState(() {
+                    this._isFavorite = !this._isFavorite;
+                  });
+                  AppData().loadFavoritesData().then((favoritesData) {
+                      if (this._isFavorite) {
+                        favoritesData.teams[_team.id] = _team.name;
+                      } else {
+                        favoritesData.teams.remove(_team.id);
+                      }
+                      AppData().writeFavoritesData(favoritesData);
+                    });
+                }),
             IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () => _refresh(),
