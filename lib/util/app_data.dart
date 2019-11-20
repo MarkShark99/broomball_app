@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 // TODO: Create handler for when there is not favorites file
 
 class AppData {
-  Map favoritesData;
+  FavoritesData favoritesData;
 
   static final AppData _instance = AppData._internal();
 
@@ -61,7 +61,7 @@ class FavoritesData {
   }
 
   Map<String, Map<String, String>> toJson() {
-    Map<String, Map<String, String>> json;
+    Map<String, Map<String, String>> json = Map<String, Map<String, String>>();
     json["teams"] = teams;
     json["players"] = players;
 
