@@ -1,5 +1,6 @@
 import 'package:broomball_app/pages/player_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
+import 'package:broomball_app/util/app_data.dart';
 import 'package:flutter/material.dart';
 
 class TeamPage extends StatefulWidget {
@@ -53,6 +54,7 @@ class TeamPageState extends State<TeamPage> {
             IconButton(
               icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
               onPressed: () => this.setState(() {
+                
                 this._isFavorite = !this._isFavorite;
               }),
             ),

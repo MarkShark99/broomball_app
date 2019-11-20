@@ -1,5 +1,6 @@
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/material.dart';
+import 'package:broomball_app/util/app_data.dart';
 import 'package:flutter/widgets.dart';
 
 class PlayerPage extends StatefulWidget {
@@ -44,11 +45,20 @@ class _PlayerPageState extends State<PlayerPage> {
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
-                onPressed: () => this.setState(() {
-                  this._isFavorite = !this._isFavorite;
-                }),
-              ),
+                  icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
+                  onPressed: () {
+                    this.setState(() {
+                      this._isFavorite = !this._isFavorite;
+                    });
+                    AppData().loadFavoritesData().then((favoritesData) {
+                      if (this._isFavorite) {
+                        favoritesData.players[_player.id] = _player.displayName;
+                      } else {
+                        favoritesData.players.remove(_player.id);
+                      }
+                      AppData().writeFavoritesData(favoritesData);
+                    });
+                  }),
               IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () => _refresh(),
