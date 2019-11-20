@@ -45,9 +45,7 @@ class MainPageState extends State<MainPage> {
   Widget _getDrawerItemFragment(int index) {
     switch (index) {
       case 0:
-        return new ConferenceFragment(
-          year: _currentYear
-        );
+        return new ConferenceFragment(year: _currentYear);
       case 1:
         return new TeamsFragment(
           year: _currentYear,
@@ -92,15 +90,12 @@ class MainPageState extends State<MainPage> {
     }
 
     drawerListTiles.add(ListTile(
-      leading: Icon(Icons.star_border),
-      title: Text("Favorites"),
-      onTap: () {
-        Navigator.of(context).pop();
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FavoritesPage()
-        ));
-      }
-    ));
+        leading: Icon(Icons.star_border),
+        title: Text("Favorites"),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => FavoritesPage()));
+        }));
 
     drawerListTiles.add(Divider());
     drawerListTiles.add(ListTile(
@@ -108,8 +103,7 @@ class MainPageState extends State<MainPage> {
         title: Text("Settings"),
         onTap: () {
           Navigator.of(context).pop();
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => SettingsPage()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SettingsPage()));
         }));
 
     drawerListTiles.add(ListTile(
@@ -117,8 +111,7 @@ class MainPageState extends State<MainPage> {
         title: Text("About"),
         onTap: () {
           Navigator.of(context).pop();
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => AboutPage()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => AboutPage()));
         }));
 
     List<Widget> scaffoldActions = [];
@@ -129,17 +122,11 @@ class MainPageState extends State<MainPage> {
         value: _yearList.length > 0 ? _currentYear : null,
         items: _yearList
             .map((String year) => DropdownMenuItem(
-                  child: Text(year,
-                      style: TextStyle(
-                          color: DynamicTheme.of(context).brightness ==
-                                  Brightness.dark
-                              ? Colors.white
-                              : Colors.black)),
+                  child: Text(year, style: TextStyle(color: DynamicTheme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)),
                   value: year,
                 ))
             .toList(),
-        onChanged: (String year) =>
-            this.setState(() => this._currentYear = year),
+        onChanged: (String year) => this.setState(() => this._currentYear = year),
         iconEnabledColor: Colors.black,
       )));
     }
@@ -157,13 +144,10 @@ class MainPageState extends State<MainPage> {
     scaffoldActions.add(IconButton(
       icon: Icon(Icons.search),
       onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchPage())),
-      )
-    );
+    ));
 
     return Scaffold(
-      appBar: AppBar(
-          title: Text(widget.drawerItems[_currentDrawerIndex].title),
-          actions: scaffoldActions),
+      appBar: AppBar(title: Text(widget.drawerItems[_currentDrawerIndex].title), actions: scaffoldActions),
       drawer: Drawer(
         child: ListView(
           children: drawerListTiles,

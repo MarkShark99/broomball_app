@@ -6,9 +6,7 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            automaticallyImplyLeading: true,
-            title: Text("About")),
+        appBar: AppBar(automaticallyImplyLeading: true, title: Text("About")),
         body: Container(
             padding: EdgeInsets.all(8.0),
             margin: const EdgeInsets.all(5),
@@ -16,8 +14,7 @@ class AboutPage extends StatelessWidget {
                 children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
                   title: Text("About"),
-                  subtitle: Text(
-                      "Mobile application to view broomball info and stats based off the pre-existing MTU website."),
+                  subtitle: Text("Mobile application to view broomball info and stats based off the pre-existing MTU website."),
                   onTap: () {
                     launch("https://www.broomball.mtu.edu/news");
                   }),

@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:broomball_app/util/broomballdata.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-class AppData {
+// TODO: Create handler for when there is not favorites file
 
+class AppData {
   Map favoritesData;
 
   static final AppData _instance = AppData._internal();
@@ -14,7 +15,8 @@ class AppData {
   }
 
   AppData._internal();
-  
+
+  /// Gets the local path where the JSON file gets stored
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -24,21 +26,45 @@ class AppData {
   Future<File> get _localFile async {
     final path = await _localPath;
 
-    return File('$path/favorites.json');
+    return File("$path/favorites.json");
   }
 
-  Future<void> writePlayerData(Player playerData) async {
-    final file = await _localFile;
+  Future<FavoritesData> loadFavoritesData() async {
+    try {
+      final File file = await _localFile;
+      String contents = await file.readAsString();
 
-    file.writeAsString(jsonEncode('$playerData'));
+      return FavoritesData.fromJson(json.decode(contents));
+    } catch (e) {
+      writeFavoritesData(FavoritesData(players: {}, teams: {}));
+      return FavoritesData(players: {}, teams: {});
+    }
   }
 
-  Future<void> readPlayerData() async {
-    final file = await _localFile;
+  Future<File> writeFavoritesData(FavoritesData favoritesData) async {
+    final File file = await _localFile;
+    return file.writeAsString(json.encode(favoritesData.toJson()));
+  }
+}
 
-    String response = await file.readAsString();
+class FavoritesData {
+  Map<String, String> teams;
+  Map<String, String> players;
 
-    favoritesData = jsonDecode(response);
+  FavoritesData({@required this.teams, @required this.players});
 
+  factory FavoritesData.fromJson(Map<String, dynamic> json) {
+    return FavoritesData(
+      teams: json["teams"],
+      players: json["players"],
+    );
+  }
+
+  Map<String, Map<String, String>> toJson() {
+    Map<String, Map<String, String>> json;
+    json["teams"] = teams;
+    json["players"] = players;
+
+    return json;
   }
 }

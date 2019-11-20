@@ -10,7 +10,7 @@ class TeamsPage extends StatelessWidget {
   TeamsPage({@required this.year, @required this.selectedConference, @required this.selectedDivision});
 
   final BroomballData broomballData = BroomballData();
-  
+
   Map<String, String> _teamIDMap = Map<String, String>();
 
   @override
@@ -20,23 +20,16 @@ class TeamsPage extends StatelessWidget {
     teamNameList.sort();
 
     return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: true,
-          title: Text("Teams")),
+      appBar: AppBar(automaticallyImplyLeading: true, title: Text("Teams")),
       body: ListView.separated(
         itemCount: teamNameList.length,
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(
               teamNameList[index],
-              ),
+            ),
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => TeamPage(
-                  id: _teamIDMap[teamNameList[index]]
-                  )
-                )
-              );
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamPage(id: _teamIDMap[teamNameList[index]])));
             },
           );
         },
@@ -50,8 +43,7 @@ class TeamsPage extends StatelessWidget {
   void _fillIDTeamMap() {
     List<String> teamList = <String>[];
 
-    for(String id in broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"])
-    {
+    for (String id in broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"]) {
       _teamIDMap[broomballData.jsonData["teams"][id]["teamName"]] = id;
     }
   }

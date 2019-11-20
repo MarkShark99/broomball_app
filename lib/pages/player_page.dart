@@ -43,12 +43,12 @@ class _PlayerPageState extends State<PlayerPage> {
               ],
             ),
             actions: <Widget>[
-            IconButton(
-              icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
-              onPressed: () => this.setState(() {
-                this._isFavorite = !this._isFavorite;
-              }),
-            ),
+              IconButton(
+                icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
+                onPressed: () => this.setState(() {
+                  this._isFavorite = !this._isFavorite;
+                }),
+              ),
               IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () => _refresh(),
@@ -82,18 +82,14 @@ class _PlayerPageState extends State<PlayerPage> {
                           ),
                         ),
                         Card(
-                          child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                  title: Text("Statistics"),
-                                ),
-                                Divider(),
-                                ListTile(
-                                    leading: Text("Goals"),
-                                    title: Text("")),
-                                Divider(),
-                              ]),
+                          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                            ListTile(
+                              title: Text("Statistics"),
+                            ),
+                            Divider(),
+                            ListTile(leading: Text("Goals"), title: Text("")),
+                            Divider(),
+                          ]),
                         )
                       ],
                     ),
@@ -104,10 +100,8 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   void _refresh() {
-    BroomballData()
-        .fetchPlayer(widget.id)
-        .then((Player player) => this.setState(() {
-              _player = player;
-            }));
+    BroomballData().fetchPlayer(widget.id).then((Player player) => this.setState(() {
+          _player = player;
+        }));
   }
 }

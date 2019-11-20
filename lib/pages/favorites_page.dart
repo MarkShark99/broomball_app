@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/app_data.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -50,7 +48,7 @@ class FavoritesPageState extends State<FavoritesPage> {
 
   void _refresh() {
     AppData()
-        .readPlayerData();
+        .loadFavoritesData();
 
     _playerData = AppData().favoritesData;
 

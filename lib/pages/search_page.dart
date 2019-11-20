@@ -20,7 +20,7 @@ class SearchPageState extends State<SearchPage> {
     // Clean up the controller when the widget is disposed.
     searchController.dispose();
     super.dispose();
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,38 +35,25 @@ class SearchPageState extends State<SearchPage> {
           ),
         ),
         actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () => _executeSearch(searchController.text.replaceAll(" ", "+")),
-              )
-            ],
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => _executeSearch(searchController.text.replaceAll(" ", "+")),
+          )
+        ],
       ),
       body: MaterialButton(
-        onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PlayerPage(
-                  id: _player.id
-              )
-            )
-          );
-        },
-        child: SizedBox.expand(
-            child: Text(
-              (_player != null) ? ("\n" + _player.displayName) : (""),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22)
-              ),
-          )
-      ),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayerPage(id: _player.id)));
+          },
+          child: SizedBox.expand(
+            child: Text((_player != null) ? ("\n" + _player.displayName) : (""), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+          )),
     );
   }
 
   void _executeSearch(String search) {
-    BroomballData()
-       .fetchSearch(search)
-       .then((Player player) => this.setState(() {
-              _player = player;
-            }));
+    BroomballData().fetchSearch(search).then((Player player) => this.setState(() {
+          _player = player;
+        }));
   }
 }

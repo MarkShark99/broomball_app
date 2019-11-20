@@ -4,8 +4,7 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
 class BroomballData {
-  final String scraperDataURL =
-      "https://classdb.it.mtu.edu/cs3141/BroomballApp/output.json";
+  final String scraperDataURL = "https://classdb.it.mtu.edu/cs3141/BroomballApp/output.json";
 
   Map jsonData;
 
@@ -30,8 +29,7 @@ class BroomballData {
 
   /// Fetches a player's data from broomball.mtu.edu/api/player/id/$id/key/0
   Future<Player> fetchPlayer(String id) async {
-    final Response response = await get(
-        "https://www.broomball.mtu.edu/api/player/id/" + id + "/key/0");
+    final Response response = await get("https://www.broomball.mtu.edu/api/player/id/" + id + "/key/0");
     if (response.statusCode == 200) {
       return Player.fromJson(json.decode(response.body));
     } else {
@@ -41,8 +39,7 @@ class BroomballData {
 
   /// Fetches search data from broomball.mtu.edu/api/player/search/$query/key/0
   Future<Player> fetchSearch(String query) async {
-    final Response searchResponse = await get(
-        "https://www.broomball.mtu.edu/api/player/search/" + query + "/key/0");
+    final Response searchResponse = await get("https://www.broomball.mtu.edu/api/player/search/" + query + "/key/0");
     //final Response response = await get("https://www.broomball.mtu.edu/api/player/id/" + json.decode(searchResponse.body).id + "/key/0");
     if (searchResponse.statusCode == 200) {
       String id = Search.fromJson(json.decode(searchResponse.body)).id;
@@ -54,8 +51,7 @@ class BroomballData {
 
   /// Fetches a team's data from broomball.mtu.edu/api/team/id/$id/key/0
   Future<Team> fetchTeam(String id) async {
-    final Response response =
-        await get("https://www.broomball.mtu.edu/api/team/id/" + id + "/key/0");
+    final Response response = await get("https://www.broomball.mtu.edu/api/team/id/" + id + "/key/0");
 
     if (response.statusCode == 200) {
       return Team.fromJson(json.decode(response.body));
@@ -75,14 +71,18 @@ class Player {
   final String displayAlias;
   final String email;
 
-  Player(
-      {@required this.id,
-      @required this.firstName,
-      @required this.lastName,
-      @required this.displayName,
-      @required this.mtuId,
-      @required this.displayAlias,
-      @required this.email});
+  final List<PlayerMatch> stats;
+
+  Player({
+    @required this.id,
+    @required this.firstName,
+    @required this.lastName,
+    @required this.displayName,
+    @required this.mtuId,
+    @required this.displayAlias,
+    @required this.email,
+    @required this.stats,
+  });
 
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
@@ -97,13 +97,16 @@ class Player {
   }
 }
 
+/// Class representing a match in a player's schedule.
+class PlayerMatch {}
+
 /// Class representing a search fetched from the API.
 class Search {
   final String id;
 
   Search({
-        @required this.id,
-      });
+    @required this.id,
+  });
 
   factory Search.fromJson(Map<String, dynamic> json) {
     return Search(
@@ -111,10 +114,6 @@ class Search {
     );
   }
 }
-
-
-/// Class representing a match in a player's schedule.
-class PlayerMatch {}
 
 /// Class representing a team fetched from the API.
 class Team {
@@ -156,12 +155,10 @@ class Team {
   });
 
   factory Team.fromJson(Map<String, dynamic> json) {
-
     List<TeamRosterPlayer> roster = <TeamRosterPlayer>[];
     List<TeamScheduleMatch> schedule = <TeamScheduleMatch>[];
 
-    for (Map<String, dynamic> teamRosterPlayer
-        in json["roster"].values.toList()) {
+    for (Map<String, dynamic> teamRosterPlayer in json["roster"].values.toList()) {
       roster.add(TeamRosterPlayer.fromJson(teamRosterPlayer));
     }
 
@@ -209,22 +206,7 @@ class TeamRosterPlayer {
   final String active;
   final String meetingRep;
 
-  TeamRosterPlayer(
-      {@required this.teamId,
-      @required this.playerId,
-      @required this.id,
-      @required this.firstName,
-      @required this.lastName,
-      @required this.displayName,
-      @required this.mtuId,
-      @required this.displayAlias,
-      @required this.email,
-      @required this.seasonId,
-      @required this.classCrn,
-      @required this.residency,
-      @required this.isAdmin,
-      @required this.active,
-      @required this.meetingRep});
+  TeamRosterPlayer({@required this.teamId, @required this.playerId, @required this.id, @required this.firstName, @required this.lastName, @required this.displayName, @required this.mtuId, @required this.displayAlias, @required this.email, @required this.seasonId, @required this.classCrn, @required this.residency, @required this.isAdmin, @required this.active, @required this.meetingRep});
 
   factory TeamRosterPlayer.fromJson(Map<String, dynamic> json) {
     return TeamRosterPlayer(

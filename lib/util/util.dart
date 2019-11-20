@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-class DrawerItem
-{
+class DrawerItem {
   final String title;
   final IconData icon;
 

@@ -84,10 +84,7 @@ class TeamPageState extends State<TeamPage> {
                               subtitle: Text("Year played"),
                             ),
                             Divider(),
-                            ListTile(
-                                leading: Icon(Icons.person),
-                                title: Text(this._captainDisplayName),
-                                subtitle: Text("Captain")),
+                            ListTile(leading: Icon(Icons.person), title: Text(this._captainDisplayName), subtitle: Text("Captain")),
                             // Divider(),
                           ],
                         ),
@@ -102,11 +99,7 @@ class TeamPageState extends State<TeamPage> {
                             Divider(),
                             ListTile(
                               leading: Text("Record"),
-                              title: Text(_wins.toString() +
-                                  "-" +
-                                  _losses.toString() +
-                                  "-" +
-                                  _ties.toString()),
+                              title: Text(_wins.toString() + "-" + _losses.toString() + "-" + _ties.toString()),
                             ),
                             Divider(),
                             ListTile(
@@ -124,15 +117,11 @@ class TeamPageState extends State<TeamPage> {
                       itemBuilder: (context, index) {
                         return ListTile(
                           title: Text(_team.roster[index].displayName),
-                          subtitle:
-                              _team.roster[index].id == _team.captainPlayerId
-                                  ? Text("Captain")
-                                  : null,
-                          onTap: () =>
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PlayerPage(
-                                        id: _team.roster[index].id,
-                                      ))),
+                          subtitle: _team.roster[index].id == _team.captainPlayerId ? Text("Captain") : null,
+                          onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => PlayerPage(
+                                    id: _team.roster[index].id,
+                                  ))),
                         );
                       },
                       separatorBuilder: (context, index) {
@@ -145,16 +134,9 @@ class TeamPageState extends State<TeamPage> {
                       itemCount: _team.schedule.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(_team.schedule[index].homeTeamName +
-                              " vs. " +
-                              _team.schedule[index].awayTeamName),
-                          subtitle: Text(_team.schedule[index].startTime +
-                              " - " +
-                              _team.schedule[index].rinkName),
-                          trailing: Text(
-                              _team.schedule[index].homeGoals.toString() +
-                                  " - " +
-                                  _team.schedule[index].awayGoals.toString()),
+                          title: Text(_team.schedule[index].homeTeamName + " vs. " + _team.schedule[index].awayTeamName),
+                          subtitle: Text(_team.schedule[index].startTime + " - " + _team.schedule[index].rinkName),
+                          trailing: Text(_team.schedule[index].homeGoals.toString() + " - " + _team.schedule[index].awayGoals.toString()),
                         );
                       },
                       separatorBuilder: (context, index) {
@@ -190,8 +172,7 @@ class TeamPageState extends State<TeamPage> {
             } else if (widget.id == teamScheduleMatch.homeTeamId) {
               _goals += int.parse(teamScheduleMatch.homeGoals);
 
-              if (int.parse(teamScheduleMatch.homeGoals) >
-                  int.parse(teamScheduleMatch.awayGoals)) {
+              if (int.parse(teamScheduleMatch.homeGoals) > int.parse(teamScheduleMatch.awayGoals)) {
                 // One of the two teams must have a win
                 _wins++;
               } else {
@@ -200,8 +181,7 @@ class TeamPageState extends State<TeamPage> {
             } else if (widget.id == teamScheduleMatch.awayTeamId) {
               _goals += int.parse(teamScheduleMatch.awayGoals);
 
-              if (int.parse(teamScheduleMatch.awayGoals) >
-                  int.parse(teamScheduleMatch.homeGoals)) {
+              if (int.parse(teamScheduleMatch.awayGoals) > int.parse(teamScheduleMatch.homeGoals)) {
                 _wins++;
               } else {
                 _losses++;

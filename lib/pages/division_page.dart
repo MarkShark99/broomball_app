@@ -13,13 +13,10 @@ class DivisionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-  _divisionList = _getDivisionList();
+    _divisionList = _getDivisionList();
 
     return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: true,
-          title: Text("Divisions")),
+      appBar: AppBar(automaticallyImplyLeading: true, title: Text("Divisions")),
       body: ListView.separated(
         itemCount: _divisionList.length,
         itemBuilder: (context, index) {
@@ -46,9 +43,7 @@ class DivisionPage extends StatelessWidget {
   List<String> _getDivisionList() {
     List<String> divisionList = <String>[];
 
-    for (String division in broomballData
-        .jsonData["years"][this.year]["conferences"][this.selectedConference]["divisions"].keys
-        .toList()) {
+    for (String division in broomballData.jsonData["years"][this.year]["conferences"][this.selectedConference]["divisions"].keys.toList()) {
       divisionList.add(division);
     }
 

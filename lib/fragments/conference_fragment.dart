@@ -23,7 +23,7 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
     if (widget.year != null) {
       _conferenceList = _getConferenceList();
     }
-    
+
     return Center(
       child: widget.year == null
           ? CircularProgressIndicator()
@@ -33,12 +33,7 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
                 return ListTile(
                   title: Text(_conferenceList[index]),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DivisionPage(
-                                selectedConference: _conferenceList[index],
-                                year: widget.year)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DivisionPage(selectedConference: _conferenceList[index], year: widget.year)));
                   },
                 );
               },
@@ -52,9 +47,7 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
   List<String> _getConferenceList() {
     List<String> conferenceList = <String>[];
 
-    for (String conference in broomballData
-        .jsonData["years"][widget.year]["conferences"].keys
-        .toList()) {
+    for (String conference in broomballData.jsonData["years"][widget.year]["conferences"].keys.toList()) {
       conferenceList.add(conference);
     }
 

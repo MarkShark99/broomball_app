@@ -28,10 +28,7 @@ class SettingsPageState extends State<SettingsPage> {
                 onChanged: (bool value) {
                   setState(() {
                     darkModeSwitchChecked = value;
-                    DynamicTheme.of(context).setBrightness(
-                        Theme.of(context).brightness == Brightness.dark
-                            ? Brightness.light
-                            : Brightness.dark);
+                    DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark ? Brightness.light : Brightness.dark);
                   });
                 },
               ))

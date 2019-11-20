@@ -5,9 +5,7 @@ class ContributorsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: true,
-          title: Text("Contributors")),
+      appBar: AppBar(automaticallyImplyLeading: true, title: Text("Contributors")),
       body: ListView(
         children: <Widget>[
           ListTile(
@@ -22,7 +20,10 @@ class ContributorsPage extends StatelessWidget {
             title: Text("Julien Thrum"),
             subtitle: Text("Developer"),
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayerPage(id: "1009366",)));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PlayerPage(
+                        id: "1009366",
+                      )));
             },
           ),
           ListTile(
