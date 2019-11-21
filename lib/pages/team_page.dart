@@ -26,6 +26,9 @@ class TeamPageState extends State<TeamPage> {
 
   @override
   void initState() {
+    AppData().loadFavoritesData().then((favoritesData) {
+      _isFavorite = favoritesData.teams.containsKey(widget.id);
+    });
     super.initState();
     _refresh();
   }
@@ -58,17 +61,19 @@ class TeamPageState extends State<TeamPage> {
                     this._isFavorite = !this._isFavorite;
                   });
                   AppData().loadFavoritesData().then((favoritesData) {
-                      if (this._isFavorite) {
-                        favoritesData.teams[_team.id] = _team.name;
-                      } else {
-                        favoritesData.teams.remove(_team.id);
-                      }
-                      AppData().writeFavoritesData(favoritesData);
-                    });
+                    if (this._isFavorite) {
+                      favoritesData.teams[_team.id] = _team.name;
+                    } else {
+                      favoritesData.teams.remove(_team.id);
+                    }
+                    AppData().writeFavoritesData(favoritesData);
+                  });
                 }),
             IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: () => _refresh(),
+              onPressed: () {
+                _refresh();
+              },
             ),
           ],
         ),
@@ -109,7 +114,7 @@ class TeamPageState extends State<TeamPage> {
                             Divider(),
                             ListTile(
                               leading: Text("Record"),
-                              title: Text(_wins.toString() + "-" + _losses.toString() + "-" + _ties.toString()),
+                              title: Text(_wins.toString() + " - " + _losses.toString() + " - " + _ties.toString()),
                             ),
                             Divider(),
                             ListTile(
@@ -128,10 +133,13 @@ class TeamPageState extends State<TeamPage> {
                         return ListTile(
                           title: Text(_team.roster[index].displayName),
                           subtitle: _team.roster[index].id == _team.captainPlayerId ? Text("Captain") : null,
-                          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => PlayerPage(
-                                    id: _team.roster[index].id,
-                                  ))),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                              return PlayerPage(
+                                id: _team.roster[index].id,
+                              );
+                            }));
+                          },
                         );
                       },
                       separatorBuilder: (context, index) {
@@ -161,45 +169,46 @@ class TeamPageState extends State<TeamPage> {
   }
 
   void _refresh() {
-    // this.setState(() => _team = null);
-    BroomballData().fetchTeam(widget.id).then((Team team) => this.setState(() {
-          _wins = 0;
-          _losses = 0;
-          _ties = 0;
-          _goals = 0;
+    BroomballData().fetchTeam(widget.id).then((Team team) {
+      _wins = 0;
+      _losses = 0;
+      _ties = 0;
+      _goals = 0;
 
-          for (TeamRosterPlayer teamRosterPlayer in team.roster) {
-            if (teamRosterPlayer.id == team.captainPlayerId) {
-              this._captainDisplayName = teamRosterPlayer.displayName;
-              break;
-            }
+      for (TeamRosterPlayer teamRosterPlayer in team.roster) {
+        if (teamRosterPlayer.id == team.captainPlayerId) {
+          this._captainDisplayName = teamRosterPlayer.displayName;
+          break;
+        }
+      }
+
+      for (TeamScheduleMatch teamScheduleMatch in team.schedule) {
+        if (teamScheduleMatch.homeGoals == teamScheduleMatch.awayGoals) {
+          _goals += int.parse(teamScheduleMatch.homeGoals);
+          _ties++;
+        } else if (widget.id == teamScheduleMatch.homeTeamId) {
+          _goals += int.parse(teamScheduleMatch.homeGoals);
+
+          if (int.parse(teamScheduleMatch.homeGoals) > int.parse(teamScheduleMatch.awayGoals)) {
+            // One of the two teams must have a win
+            _wins++;
+          } else {
+            _losses++;
           }
+        } else if (widget.id == teamScheduleMatch.awayTeamId) {
+          _goals += int.parse(teamScheduleMatch.awayGoals);
 
-          for (TeamScheduleMatch teamScheduleMatch in team.schedule) {
-            if (teamScheduleMatch.homeGoals == teamScheduleMatch.awayGoals) {
-              _goals += int.parse(teamScheduleMatch.homeGoals);
-              _ties++;
-            } else if (widget.id == teamScheduleMatch.homeTeamId) {
-              _goals += int.parse(teamScheduleMatch.homeGoals);
-
-              if (int.parse(teamScheduleMatch.homeGoals) > int.parse(teamScheduleMatch.awayGoals)) {
-                // One of the two teams must have a win
-                _wins++;
-              } else {
-                _losses++;
-              }
-            } else if (widget.id == teamScheduleMatch.awayTeamId) {
-              _goals += int.parse(teamScheduleMatch.awayGoals);
-
-              if (int.parse(teamScheduleMatch.awayGoals) > int.parse(teamScheduleMatch.homeGoals)) {
-                _wins++;
-              } else {
-                _losses++;
-              }
-            }
+          if (int.parse(teamScheduleMatch.awayGoals) > int.parse(teamScheduleMatch.homeGoals)) {
+            _wins++;
+          } else {
+            _losses++;
           }
+        }
+      }
 
-          _team = team;
-        }));
+      this.setState(() {
+        _team = team;
+      });
+    });
   }
 }

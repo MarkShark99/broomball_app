@@ -11,11 +11,13 @@ class BroomballApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicTheme(
       defaultBrightness: Brightness.light,
-      data: (brightness) => ThemeData(
-        primaryColor: Color(0xFFFFCD00),
-        accentColor: Color(0xFFFFCD00),
-        brightness: brightness,
-      ),
+      data: (brightness) {
+        return ThemeData(
+          primaryColor: Color(0xFFFFCD00),
+          accentColor: Color(0xFFFFCD00),
+          brightness: brightness,
+        );
+      },
       themedWidgetBuilder: (context, theme) {
         return new MaterialApp(
           title: appTitle,

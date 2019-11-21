@@ -3,20 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 
 class TeamsPage extends StatelessWidget {
+  final BroomballData broomballData = BroomballData();
+
   final String year;
   final String selectedConference;
   final String selectedDivision;
 
-  TeamsPage({@required this.year, @required this.selectedConference, @required this.selectedDivision});
-
-  final BroomballData broomballData = BroomballData();
-
-  Map<String, String> _teamIDMap = Map<String, String>();
+  TeamsPage({
+    @required this.year,
+    @required this.selectedConference,
+    @required this.selectedDivision,
+  });
 
   @override
   Widget build(BuildContext context) {
-    _fillIDTeamMap();
-    List<String> teamNameList = _teamIDMap.keys.toList();
+    Map<String, String> teamIDMap = _fillIDTeamMap();
+    List<String> teamNameList = teamIDMap.keys.toList();
     teamNameList.sort();
 
     return Scaffold(
@@ -29,7 +31,9 @@ class TeamsPage extends StatelessWidget {
               teamNameList[index],
             ),
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeamPage(id: _teamIDMap[teamNameList[index]])));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return TeamPage(id: teamIDMap[teamNameList[index]]);
+              }));
             },
           );
         },
@@ -40,11 +44,13 @@ class TeamsPage extends StatelessWidget {
     );
   }
 
-  void _fillIDTeamMap() {
-    List<String> teamList = <String>[];
+  Map<String, String> _fillIDTeamMap() {
+    Map<String, String> teamIDMap = Map<String, String>();
 
     for (String id in broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"]) {
-      _teamIDMap[broomballData.jsonData["teams"][id]["teamName"]] = id;
+      teamIDMap[broomballData.jsonData["teams"][id]["teamName"]] = id;
     }
+
+    return teamIDMap;
   }
 }

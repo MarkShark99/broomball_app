@@ -21,9 +21,12 @@ class ContributorsPage extends StatelessWidget {
             subtitle: Text("Developer"),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PlayerPage(
-                        id: "1009366",
-                      )));
+                builder: (context) {
+                  return PlayerPage(
+                    id: "1009366",
+                  );
+                },
+              ));
             },
           ),
           ListTile(

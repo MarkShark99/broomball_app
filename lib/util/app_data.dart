@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-// TODO: Create handler for when there is not favorites file
-
 class AppData {
   FavoritesData favoritesData;
 
@@ -33,7 +31,7 @@ class AppData {
     try {
       final File file = await _localFile;
       String contents = await file.readAsString();
-
+      print("Loaded data: $contents");
       return FavoritesData.fromJson(json.decode(contents));
     } catch (e) {
       writeFavoritesData(FavoritesData(players: {}, teams: {}));
@@ -43,7 +41,9 @@ class AppData {
 
   Future<File> writeFavoritesData(FavoritesData favoritesData) async {
     final File file = await _localFile;
-    return file.writeAsString(json.encode(favoritesData.toJson()));
+    String jsonString = json.encode(favoritesData);
+    print("Storing data: $jsonString");
+    return file.writeAsString(jsonString);
   }
 }
 
@@ -54,9 +54,20 @@ class FavoritesData {
   FavoritesData({@required this.teams, @required this.players});
 
   factory FavoritesData.fromJson(Map<String, dynamic> json) {
+    Map<String, String> teams = Map<String, String>();
+    Map<String, String> players = Map<String, String>();
+
+    for (String team in json["teams"].keys.toList()) {
+      teams[team] = json["teams"][team];
+    }
+
+    for (String player in json["players"].keys.toList()) {
+      players[player] = json["players"][player];
+    }
+
     return FavoritesData(
-      teams: json["teams"],
-      players: json["players"],
+      teams: teams,
+      players: players,
     );
   }
 

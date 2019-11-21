@@ -28,23 +28,35 @@ class TeamsFragmentState extends State<TeamsFragment> {
     List<String> teamNameList = _teamIDMap.keys.toList();
     teamNameList.sort();
 
+    if (widget.year == null || _teamIDMap.keys.length == 0) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return Center(
-      child: widget.year == null || _teamIDMap.keys.length == 0
-          ? CircularProgressIndicator()
-          : ListView.separated(
-              itemCount: teamNameList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    teamNameList[index],
-                  ),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => TeamPage(
-                            id: _teamIDMap[teamNameList[index]],
-                          ))),
-                );
-              },
-              separatorBuilder: (context, index) => Divider()),
+      child: ListView.separated(
+        itemCount: teamNameList.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(
+              teamNameList[index],
+            ),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) {
+                  return TeamPage(
+                    id: _teamIDMap[teamNameList[index]],
+                  );
+                },
+              ));
+            },
+          );
+        },
+        separatorBuilder: (context, index) {
+          return Divider();
+        },
+      ),
     );
   }
 

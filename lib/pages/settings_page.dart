@@ -21,17 +21,18 @@ class SettingsPageState extends State<SettingsPage> {
       body: ListView(
         children: <Widget>[
           ListTile(
-              title: Text("Dark Mode"),
-              trailing: Switch(
-                activeColor: Theme.of(context).accentColor,
-                value: Theme.of(context).brightness == Brightness.dark,
-                onChanged: (bool value) {
-                  setState(() {
-                    darkModeSwitchChecked = value;
-                    DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark ? Brightness.light : Brightness.dark);
-                  });
-                },
-              ))
+            title: Text("Dark Mode"),
+            trailing: Switch(
+              activeColor: Theme.of(context).accentColor,
+              value: Theme.of(context).brightness == Brightness.dark,
+              onChanged: (bool value) {
+                setState(() {
+                  darkModeSwitchChecked = value;
+                  DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark ? Brightness.light : Brightness.dark);
+                });
+              },
+            ),
+          ),
         ],
       ),
     );

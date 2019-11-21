@@ -33,7 +33,11 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
                 return ListTile(
                   title: Text(_conferenceList[index]),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => DivisionPage(selectedConference: _conferenceList[index], year: widget.year)));
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return DivisionPage(selectedConference: _conferenceList[index], year: widget.year);
+                      },
+                    ));
                   },
                 );
               },
