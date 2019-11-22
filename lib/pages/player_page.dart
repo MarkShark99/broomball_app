@@ -123,7 +123,7 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   void _refresh() {
-    BroomballData().fetchPlayer(widget.id).then((Player player) {
+    BroomballAPI().fetchPlayer(widget.id).then((Player player) {
       this.setState(() {
         _player = player;
       });

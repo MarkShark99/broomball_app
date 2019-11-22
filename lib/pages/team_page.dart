@@ -169,7 +169,7 @@ class TeamPageState extends State<TeamPage> {
   }
 
   void _refresh() {
-    BroomballData().fetchTeam(widget.id).then((Team team) {
+    BroomballAPI().fetchTeam(widget.id).then((Team team) {
       _wins = 0;
       _losses = 0;
       _ties = 0;

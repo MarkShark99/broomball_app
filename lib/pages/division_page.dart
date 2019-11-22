@@ -6,7 +6,7 @@ class DivisionPage extends StatelessWidget {
   final String selectedConference;
   final String year;
 
-  final BroomballData broomballData = BroomballData();
+  final BroomballAPI _broomballAPI = BroomballAPI();
 
   DivisionPage({this.selectedConference, this.year});
 
@@ -45,7 +45,7 @@ class DivisionPage extends StatelessWidget {
   List<String> _getDivisionList() {
     List<String> divisionList = <String>[];
     
-    for (String division in broomballData.jsonData["years"][this.year]["conferences"][this.selectedConference]["divisions"].keys.toList()) {
+    for (String division in _broomballAPI.jsonData["years"][this.year]["conferences"][this.selectedConference]["divisions"].keys.toList()) {
       divisionList.add(division);
     }
 

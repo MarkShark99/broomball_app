@@ -57,7 +57,7 @@ class SearchPageState extends State<SearchPage> {
   }
 
   void _executeSearch(String search) {
-    BroomballData().fetchSearch(search).then((Player player) {
+    BroomballAPI().fetchSearch(search).then((Player player) {
       this.setState(() {
         _player = player;
       });

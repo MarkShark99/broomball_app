@@ -1,20 +1,101 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Element;
+import 'package:html/dom.dart';
+import 'package:html/parser.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
 class BroomballData {
+  String year;
+  Map<String, Conference> conferences;
+  Map<String, String> teams;
+
+  BroomballData()
+      : year = "",
+        conferences = Map<String, Conference>(),
+        teams = Map<String, String>();
+}
+
+class Conference {
+  Map<String, Division> divisions;
+  Conference() : this.divisions = Map<String, Division>();
+}
+
+class Division {
+  Set<String> teamIDs;
+  Division() : this.teamIDs = Set<String>();
+}
+
+class BroomballWebScraper {
+  final String broomballUrl = "https://broomball.mtu.edu/teams/view/";
+
+  Future<BroomballData> run(String year) async {
+    BroomballData broomballData = BroomballData();
+
+    final Response response = await get("$broomballUrl$year");
+    print("$broomballUrl$year");
+    if (response.statusCode == 200) {
+      // Success
+      Document document = parse(response.body);
+
+      List<Element> conferenceElements = document.querySelectorAll("#main_content_container > h1");
+      List<Element> divisionElements = document.querySelectorAll("#main_content_container > blockquote");
+
+      for (int i = 0; i < conferenceElements.length; i++) {
+        Conference conference = Conference();
+        String conferenceName = conferenceElements[i].text;
+        print(conferenceName);
+
+        List<Element> divisionHeaders = divisionElements[i].querySelectorAll("h1");
+        List<Element> divisionTables = divisionElements[i].querySelectorAll("table > tbody");
+
+        for (int j = 0; j < divisionHeaders.length; j++) {
+          Division division = Division();
+
+          String divisionName = divisionHeaders[j].text;
+
+          List<Element> tableRows = divisionTables[j].querySelectorAll("tr");
+
+          for (int k = 1; k < tableRows.length; k++) {
+            String teamID;
+            String teamName;
+
+            List<Element> cells = tableRows[k].querySelectorAll("td");
+            List<String> splitURL = cells[0].querySelector("a").attributes["href"].split("/");
+
+            teamID = splitURL.last;
+            teamName = cells[0].querySelector("a").text;
+
+            division.teamIDs.add(teamID);
+            broomballData.teams[teamID] = teamName;
+          }
+          conference.divisions[divisionName] = division;
+        }
+        broomballData.conferences[conferenceName] = conference;
+      }
+
+      broomballData.year = year;
+      
+      print("Finished!");
+      return broomballData;
+    } else {
+      throw Exception("Error connecting to broomball site.");
+    }
+  }
+}
+
+class BroomballAPI {
   final String scraperDataURL = "https://classdb.it.mtu.edu/cs3141/BroomballApp/output.json";
 
   Map jsonData;
 
-  static final BroomballData _instance = BroomballData._internal();
+  static final BroomballAPI _instance = BroomballAPI._internal();
 
-  factory BroomballData() {
+  factory BroomballAPI() {
     return _instance;
   }
 
-  BroomballData._internal();
+  BroomballAPI._internal();
 
   /// Fetches data for conferences, divisions, and a list of teams from our database.
   Future<void> fetchJsonData() async {

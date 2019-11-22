@@ -14,7 +14,7 @@ class TeamsFragment extends StatefulWidget {
 }
 
 class TeamsFragmentState extends State<TeamsFragment> {
-  final BroomballData broomballData = BroomballData();
+  final BroomballAPI _broomballAPI = BroomballAPI();
 
   Map<String, String> _teamIDMap = Map<String, String>();
 
@@ -62,10 +62,10 @@ class TeamsFragmentState extends State<TeamsFragment> {
 
   /// Builds a list of all teams for the current year
   void _fillTeamIDMap() {
-    for (String conference in broomballData.jsonData["years"][widget.year]["conferences"].keys.toList()) {
-      for (String division in broomballData.jsonData["years"][widget.year]["conferences"][conference]["divisions"].keys.toList()) {
-        for (String id in broomballData.jsonData["years"][widget.year]["conferences"][conference]["divisions"][division]["teamIDs"]) {
-          _teamIDMap[broomballData.jsonData["teams"][id]["teamName"]] = id;
+    for (String conference in _broomballAPI.jsonData["years"][widget.year]["conferences"].keys.toList()) {
+      for (String division in _broomballAPI.jsonData["years"][widget.year]["conferences"][conference]["divisions"].keys.toList()) {
+        for (String id in _broomballAPI.jsonData["years"][widget.year]["conferences"][conference]["divisions"][division]["teamIDs"]) {
+          _teamIDMap[_broomballAPI.jsonData["teams"][id]["teamName"]] = id;
         }
       }
     }

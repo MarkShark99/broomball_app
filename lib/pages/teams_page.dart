@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 
 class TeamsPage extends StatelessWidget {
-  final BroomballData broomballData = BroomballData();
+  final BroomballAPI _broomballAPI = BroomballAPI();
 
   final String year;
   final String selectedConference;
@@ -47,8 +47,8 @@ class TeamsPage extends StatelessWidget {
   Map<String, String> _fillIDTeamMap() {
     Map<String, String> teamIDMap = Map<String, String>();
 
-    for (String id in broomballData.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"]) {
-      teamIDMap[broomballData.jsonData["teams"][id]["teamName"]] = id;
+    for (String id in _broomballAPI.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"]) {
+      teamIDMap[_broomballAPI.jsonData["teams"][id]["teamName"]] = id;
     }
 
     return teamIDMap;
