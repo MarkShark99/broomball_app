@@ -33,7 +33,7 @@ class BroomballWebScraper {
     BroomballData broomballData = BroomballData();
 
     final Response response = await get("$broomballUrl$year");
-    print("$broomballUrl$year");
+    // print("$broomballUrl$year");
     if (response.statusCode == 200) {
       // Success
       Document document = parse(response.body);
@@ -44,7 +44,7 @@ class BroomballWebScraper {
       for (int i = 0; i < conferenceElements.length; i++) {
         Conference conference = Conference();
         String conferenceName = conferenceElements[i].text;
-        print(conferenceName);
+        // print(conferenceName);
 
         List<Element> divisionHeaders = divisionElements[i].querySelectorAll("h1");
         List<Element> divisionTables = divisionElements[i].querySelectorAll("table > tbody");
@@ -75,8 +75,8 @@ class BroomballWebScraper {
       }
 
       broomballData.year = year;
-      
-      print("Finished!");
+
+      // print("Finished!");
       return broomballData;
     } else {
       throw Exception("Error connecting to broomball site.");
@@ -85,10 +85,6 @@ class BroomballWebScraper {
 }
 
 class BroomballAPI {
-  final String scraperDataURL = "https://classdb.it.mtu.edu/cs3141/BroomballApp/output.json";
-
-  Map jsonData;
-
   static final BroomballAPI _instance = BroomballAPI._internal();
 
   factory BroomballAPI() {
@@ -96,17 +92,6 @@ class BroomballAPI {
   }
 
   BroomballAPI._internal();
-
-  /// Fetches data for conferences, divisions, and a list of teams from our database.
-  Future<void> fetchJsonData() async {
-    final Response response = await get(scraperDataURL);
-
-    if (response.statusCode == 200) {
-      jsonData = jsonDecode(response.body);
-    } else {
-      throw Exception("Error loading data");
-    }
-  }
 
   /// Fetches a player's data from broomball.mtu.edu/api/player/id/$id/key/0
   Future<Player> fetchPlayer(String id) async {

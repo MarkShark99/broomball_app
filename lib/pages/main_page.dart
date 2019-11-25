@@ -31,23 +31,20 @@ class MainPageState extends State<MainPage> {
 
   List<String> _yearList = <String>[];
 
-  BroomballAPI _broomballAPI = BroomballAPI();
   Map<String, dynamic> jsonData;
 
   @override
   void initState() {
     super.initState();
-    _broomballAPI.fetchJsonData().whenComplete(() {
-      int currentYear = DateTime.now().year;
-      this._yearList = <String>[];
 
-      for (int i = currentYear; i >= 2002; i--) {
-        this._yearList.add(i.toString());
-      }
+    int currentYear = DateTime.now().year;
+    this._yearList = <String>[];
 
-      this._currentYear = currentYear.toString();
-      _refresh();
-    });
+    for (int i = currentYear; i >= 2002; i--) {
+      this._yearList.add(i.toString());
+    }
+
+    this._currentYear = currentYear.toString();
   }
 
   Widget _getDrawerItemFragment(int index) {
@@ -70,11 +67,6 @@ class MainPageState extends State<MainPage> {
       _currentDrawerIndex = index;
     });
     Navigator.of(context).pop();
-  }
-
-  void _refresh() {
-    // Set current year and add items to dropdown list
-    jsonData = _broomballAPI.jsonData;
   }
 
   @override
@@ -158,9 +150,7 @@ class MainPageState extends State<MainPage> {
     scaffoldActions.add(IconButton(
       icon: Icon(Icons.refresh),
       onPressed: () {
-        _broomballAPI.fetchJsonData().whenComplete(() {
-          _refresh();
-        });
+        this.setState(() {});
       },
     ));
 

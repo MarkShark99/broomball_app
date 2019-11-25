@@ -3,36 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 
 class TeamsPage extends StatelessWidget {
-  final BroomballAPI _broomballAPI = BroomballAPI();
+  final Division division;
+  final BroomballData broomballData;
 
-  final String year;
-  final String selectedConference;
-  final String selectedDivision;
-
-  TeamsPage({
-    @required this.year,
-    @required this.selectedConference,
-    @required this.selectedDivision,
-  });
+  TeamsPage({@required this.division, @required this.broomballData});
 
   @override
   Widget build(BuildContext context) {
-    Map<String, String> teamIDMap = _fillIDTeamMap();
-    List<String> teamNameList = teamIDMap.keys.toList();
+    Map<String, String> teamIDMap = Map();
+    List<String> teamNameList = <String>[];
+
+    for (String teamID in division.teamIDs) {
+      teamIDMap[broomballData.teams[teamID]] = teamID;
+      teamNameList.add(broomballData.teams[teamID]);
+    }
     teamNameList.sort();
 
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: true, title: Text("Teams")),
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        title: Text("Teams"),
+      ),
       body: ListView.separated(
-        itemCount: teamNameList.length,
+        itemCount: teamIDMap.length,
         itemBuilder: (context, index) {
+          String teamName = teamNameList[index];
+          String teamID = teamIDMap[teamNameList[index]];
+
           return ListTile(
             title: Text(
-              teamNameList[index],
+              teamName,
             ),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return TeamPage(id: teamIDMap[teamNameList[index]]);
+               
+                return TeamPage(id: teamID);
               }));
             },
           );
@@ -42,15 +47,5 @@ class TeamsPage extends StatelessWidget {
         },
       ),
     );
-  }
-
-  Map<String, String> _fillIDTeamMap() {
-    Map<String, String> teamIDMap = Map<String, String>();
-
-    for (String id in _broomballAPI.jsonData["years"][year]["conferences"][selectedConference]["divisions"][selectedDivision]["teamIDs"]) {
-      teamIDMap[_broomballAPI.jsonData["teams"][id]["teamName"]] = id;
-    }
-
-    return teamIDMap;
   }
 }

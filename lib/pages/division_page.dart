@@ -3,32 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 
 class DivisionPage extends StatelessWidget {
-  final String selectedConference;
-  final String year;
+  final Conference conference;
+  final BroomballData broomballData;
 
-  final BroomballAPI _broomballAPI = BroomballAPI();
-
-  DivisionPage({this.selectedConference, this.year});
+  DivisionPage({@required this.conference, @required this.broomballData});
 
   @override
   Widget build(BuildContext context) {
-    List<String> divisionList = _getDivisionList();
-
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: true, title: Text("Divisions")),
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        title: Text("Divisions"),
+      ),
       body: ListView.separated(
-        itemCount: divisionList.length,
+        itemCount: conference.divisions.length,
         itemBuilder: (context, index) {
+          String text = conference.divisions.keys.toList()[index];
           return ListTile(
-            title: Text(divisionList[index]),
+            title: Text(text),
             onTap: () {
-              String selectedDivision = divisionList[index];
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) {
                   return TeamsPage(
-                    year: this.year,
-                    selectedConference: this.selectedConference,
-                    selectedDivision: selectedDivision,
+                    division: conference.divisions[text],
+                    broomballData: this.broomballData,
                   );
                 },
               ));
@@ -40,17 +38,5 @@ class DivisionPage extends StatelessWidget {
         },
       ),
     );
-  }
-
-  List<String> _getDivisionList() {
-    List<String> divisionList = <String>[];
-    
-    for (String division in _broomballAPI.jsonData["years"][this.year]["conferences"][this.selectedConference]["divisions"].keys.toList()) {
-      divisionList.add(division);
-    }
-
-    divisionList.sort();
-
-    return divisionList;
   }
 }
