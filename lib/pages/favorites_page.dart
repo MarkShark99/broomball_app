@@ -13,12 +13,11 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class FavoritesPageState extends State<FavoritesPage> {
-  FavoritesData _favoritesData;
+  Future<FavoritesData> _favoritesData;
 
   @override
   void initState() {
     super.initState();
-    _refresh();
   }
 
   @override
@@ -40,65 +39,70 @@ class FavoritesPageState extends State<FavoritesPage> {
             ],
           ),
         ),
-        body: _favoritesData == null
-            ? CircularProgressIndicator()
-            : TabBarView(
-                children: <Widget>[
-                  Center(
-                    child: ListView.separated(
-                      itemCount: _favoritesData.teams.length,
-                      itemBuilder: (context, index) {
-                        String name = _favoritesData.teams[_favoritesData.teams.keys.toList()[index]];
-                        String id = _favoritesData.teams.keys.toList()[index];
-                        return ListTile(
-                          title: Text(name),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) {
-                                return TeamPage(id: id);
-                              },
-                            ));
-                          },
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Divider();
-                      },
+        body: FutureBuilder(
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+              case ConnectionState.active:
+                return CircularProgressIndicator();
+              case ConnectionState.done:
+                FavoritesData favoritesData = snapshot.data;
+
+                return TabBarView(
+                  children: <Widget>[
+                    Center(
+                      child: ListView.separated(
+                        itemCount: favoritesData.teams.length,
+                        itemBuilder: (context, index) {
+                          String name = favoritesData.teams[favoritesData.teams.keys.toList()[index]];
+                          String id = favoritesData.teams.keys.toList()[index];
+                          return ListTile(
+                            title: Text(name),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) {
+                                  return TeamPage(id: id);
+                                },
+                              ));
+                            },
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Divider();
+                        },
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: ListView.separated(
-                      itemCount: _favoritesData.players.length,
-                      itemBuilder: (context, index) {
-                        String name = _favoritesData.players[_favoritesData.players.keys.toList()[index]];
-                        String id = _favoritesData.players.keys.toList()[index];
-                        return ListTile(
-                          title: Text(name),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) {
-                                return PlayerPage(id: id);
-                              },
-                            ));
-                          },
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Divider();
-                      },
+                    Center(
+                      child: ListView.separated(
+                        itemCount: favoritesData.players.length,
+                        itemBuilder: (context, index) {
+                          String name = favoritesData.players[favoritesData.players.keys.toList()[index]];
+                          String id = favoritesData.players.keys.toList()[index];
+                          return ListTile(
+                            title: Text(name),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) {
+                                  return PlayerPage(id: id);
+                                },
+                              ));
+                            },
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Divider();
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+            }
+            return null;
+          },
+          future: AppData().loadFavoritesData(),
+        ),
       ),
     );
-  }
-
-  void _refresh() {
-    AppData().loadFavoritesData().then((favoritesData) {
-      this.setState(() {
-        _favoritesData = favoritesData;
-      });
-    });
   }
 }

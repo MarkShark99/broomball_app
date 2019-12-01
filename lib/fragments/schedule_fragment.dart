@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:broomball_app/util/broomballdata.dart';
 
 class ScheduleFragment extends StatefulWidget {
   final String year;
@@ -12,6 +13,8 @@ class ScheduleFragment extends StatefulWidget {
 }
 
 class ScheduleFragmentState extends State<ScheduleFragment> {
+  BroomballWebScraper _broomballWebScraper = BroomballWebScraper();
+  
   @override
   void initState() {
     super.initState();
@@ -19,15 +22,20 @@ class ScheduleFragmentState extends State<ScheduleFragment> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.year != null) {
-      return DefaultTabController(
-        length: 3,
-        child: Center(),
-      );
-    } else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    return Center(
+      child: FutureBuilder(
+        builder: (context, snapshot) {
+          switch(snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              return CircularProgressIndicator();
+            case ConnectionState.done:
+              return Text("Loaded");
+          }
+        },
+        future: _broomballWebScraper.run(widget.year),
+      ),
+    );
   }
 }

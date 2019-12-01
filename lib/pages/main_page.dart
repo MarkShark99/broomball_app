@@ -1,10 +1,10 @@
 import 'package:broomball_app/fragments/conference_fragment.dart';
+import 'package:broomball_app/fragments/schedule_fragment.dart';
 import 'package:broomball_app/fragments/teams_fragment.dart';
 import 'package:broomball_app/pages/about_page.dart';
 import 'package:broomball_app/pages/favorites_page.dart';
 import 'package:broomball_app/pages/search_page.dart';
 import 'package:broomball_app/pages/settings_page.dart';
-import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +17,7 @@ class MainPage extends StatefulWidget {
   final drawerItems = <DrawerItem>[
     new DrawerItem(title: "Conferences", icon: Icons.assignment),
     new DrawerItem(title: "Teams", icon: Icons.people),
+    new DrawerItem(title: "Schedule", icon: Icons.calendar_today),
   ];
 
   @override
@@ -55,6 +56,10 @@ class MainPageState extends State<MainPage> {
         );
       case 1:
         return new TeamsFragment(
+          year: _currentYear,
+        );
+      case 2:
+        return new ScheduleFragment(
           year: _currentYear,
         );
       default:
@@ -127,7 +132,7 @@ class MainPageState extends State<MainPage> {
 
     List<Widget> scaffoldActions = [];
 
-    if (_currentDrawerIndex == 0 || _currentDrawerIndex == 1) {
+    if (_currentDrawerIndex != 3) {
       scaffoldActions.add(DropdownButtonHideUnderline(
         child: DropdownButton(
           value: _yearList.length > 0 ? _currentYear : null,

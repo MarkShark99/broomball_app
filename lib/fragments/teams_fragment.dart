@@ -15,6 +15,13 @@ class TeamsFragment extends StatefulWidget {
 
 class TeamsFragmentState extends State<TeamsFragment> {
   final BroomballWebScraper _broomballWebScraper = BroomballWebScraper();
+  Future<BroomballData> _broomballData;
+
+  @override
+  void initState() {
+    super.initState();
+    _broomballData = _broomballWebScraper.run(widget.year);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +70,7 @@ class TeamsFragmentState extends State<TeamsFragment> {
           }
           return null;
         },
-        future: _broomballWebScraper.run(widget.year),
+        future: _broomballData,
       ),
     );
   }

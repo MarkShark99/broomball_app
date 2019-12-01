@@ -17,7 +17,7 @@ class TeamsPage extends StatelessWidget {
       teamIDMap[broomballData.teams[teamID]] = teamID;
       teamNameList.add(broomballData.teams[teamID]);
     }
-    teamNameList.sort();
+    // teamNameList.sort();
 
     return Scaffold(
       appBar: AppBar(
@@ -25,18 +25,23 @@ class TeamsPage extends StatelessWidget {
         title: Text("Teams"),
       ),
       body: ListView.separated(
-        itemCount: teamIDMap.length,
+        itemCount: division.teamIDs.length,
         itemBuilder: (context, index) {
-          String teamName = teamNameList[index];
-          String teamID = teamIDMap[teamNameList[index]];
+          // String teamName = teamNameList[index];
+          // String teamID = teamIDMap[teamNameList[index]];
+
+          String teamID = division.teamIDs.toList()[index];
+          String teamName = broomballData.teams[teamID];
+          String rank = (index + 1).toString();
+
 
           return ListTile(
             title: Text(
               teamName,
             ),
+            subtitle: Text("Rank $rank/" + division.teamIDs.length.toString()),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-               
                 return TeamPage(id: teamID);
               }));
             },

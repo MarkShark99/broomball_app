@@ -137,7 +137,7 @@ class Player {
   final String displayAlias;
   final String email;
 
-  final List<PlayerMatch> stats;
+  final List<PlayerStatsMatch> stats;
 
   Player({
     @required this.id,
@@ -164,7 +164,52 @@ class Player {
 }
 
 /// Class representing a match in a player's schedule.
-class PlayerMatch {}
+class PlayerStatsMatch {
+  final String gameId;
+  final String playerId;
+  final String teamId;
+  final String present;
+  final String goals;
+  final String assists;
+  final String penaltyMinutes;
+  final String goalieMinutes;
+  final String saves;
+  final String goalsAllowed;
+  final String medical;
+  final String comment;
+
+  PlayerStatsMatch({
+    @required this.gameId,
+    @required this.playerId,
+    @required this.teamId,
+    @required this.present,
+    @required this.goals,
+    @required this.assists,
+    @required this.penaltyMinutes,
+    @required this.goalieMinutes,
+    @required this.saves,
+    @required this.goalsAllowed,
+    @required this.medical,
+    @required this.comment,
+  });
+
+  factory PlayerStatsMatch.fromJson(Map<String, dynamic> json) {
+    return PlayerStatsMatch(
+      gameId: json["game_id"],
+      playerId: json["player_id"],
+      teamId: json["team_id"],
+      present: json["present"],
+      goals: json["goals"],
+      assists: json["assists"],
+      penaltyMinutes: json["penalty_minutes"],
+      goalieMinutes: json["goalie_minutes"],
+      saves: json["saves"],
+      goalsAllowed: json["goals_allowed"],
+      medical: json["medical"],
+      comment: json["comment"],
+    );
+  }
+}
 
 /// Class representing a search fetched from the API.
 class Search {
@@ -272,7 +317,23 @@ class TeamRosterPlayer {
   final String active;
   final String meetingRep;
 
-  TeamRosterPlayer({@required this.teamId, @required this.playerId, @required this.id, @required this.firstName, @required this.lastName, @required this.displayName, @required this.mtuId, @required this.displayAlias, @required this.email, @required this.seasonId, @required this.classCrn, @required this.residency, @required this.isAdmin, @required this.active, @required this.meetingRep});
+  TeamRosterPlayer({
+    @required this.teamId,
+    @required this.playerId,
+    @required this.id,
+    @required this.firstName,
+    @required this.lastName,
+    @required this.displayName,
+    @required this.mtuId,
+    @required this.displayAlias,
+    @required this.email,
+    @required this.seasonId,
+    @required this.classCrn,
+    @required this.residency,
+    @required this.isAdmin,
+    @required this.active,
+    @required this.meetingRep,
+  });
 
   factory TeamRosterPlayer.fromJson(Map<String, dynamic> json) {
     return TeamRosterPlayer(
