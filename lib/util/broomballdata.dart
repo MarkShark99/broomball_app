@@ -31,11 +31,12 @@ class BroomballWebScraper {
 
   Future<BroomballData> run(String year) async {
     BroomballData broomballData = BroomballData();
-
+    
+    print("$broomballUrl$year");
     final Response response = await get("$broomballUrl$year");
-    // print("$broomballUrl$year");
     if (response.statusCode == 200) {
       // Success
+      print("Loaded page");
       Document document = parse(response.body);
 
       List<Element> conferenceElements = document.querySelectorAll("#main_content_container > h1");
@@ -44,7 +45,7 @@ class BroomballWebScraper {
       for (int i = 0; i < conferenceElements.length; i++) {
         Conference conference = Conference();
         String conferenceName = conferenceElements[i].text;
-        // print(conferenceName);
+        print(conferenceName);
 
         List<Element> divisionHeaders = divisionElements[i].querySelectorAll("h1");
         List<Element> divisionTables = divisionElements[i].querySelectorAll("table > tbody");
@@ -76,7 +77,7 @@ class BroomballWebScraper {
 
       broomballData.year = year;
 
-      // print("Finished!");
+      print("Finished!");
       return broomballData;
     } else {
       throw Exception("Error connecting to broomball site.");

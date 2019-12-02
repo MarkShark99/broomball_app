@@ -34,12 +34,11 @@ class TeamsPage extends StatelessWidget {
           String teamName = broomballData.teams[teamID];
           String rank = (index + 1).toString();
 
-
           return ListTile(
             title: Text(
               teamName,
             ),
-            subtitle: Text("Rank $rank/" + division.teamIDs.length.toString()),
+            trailing: Text("#$rank"),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return TeamPage(id: teamID);

@@ -13,8 +13,6 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class FavoritesPageState extends State<FavoritesPage> {
-  Future<FavoritesData> _favoritesData;
-
   @override
   void initState() {
     super.initState();

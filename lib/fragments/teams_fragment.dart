@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class TeamsFragment extends StatefulWidget {
   final String year;
+  final Future<BroomballData> broomballData;
 
-  TeamsFragment({@required this.year});
+  TeamsFragment({@required this.year, @required this.broomballData});
 
   @override
   State<StatefulWidget> createState() {
@@ -15,12 +16,10 @@ class TeamsFragment extends StatefulWidget {
 
 class TeamsFragmentState extends State<TeamsFragment> {
   final BroomballWebScraper _broomballWebScraper = BroomballWebScraper();
-  Future<BroomballData> _broomballData;
 
   @override
   void initState() {
     super.initState();
-    _broomballData = _broomballWebScraper.run(widget.year);
   }
 
   @override
@@ -70,7 +69,7 @@ class TeamsFragmentState extends State<TeamsFragment> {
           }
           return null;
         },
-        future: _broomballData,
+        future: widget.broomballData,
       ),
     );
   }

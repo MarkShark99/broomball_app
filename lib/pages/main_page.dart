@@ -5,6 +5,7 @@ import 'package:broomball_app/pages/about_page.dart';
 import 'package:broomball_app/pages/favorites_page.dart';
 import 'package:broomball_app/pages/search_page.dart';
 import 'package:broomball_app/pages/settings_page.dart';
+import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +28,13 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
+  final BroomballWebScraper _broomballWebScraper = BroomballWebScraper();
+  Future<BroomballData> _broomballData;
+
   int _currentDrawerIndex = 0;
   String _currentYear;
 
   List<String> _yearList = <String>[];
-
-  Map<String, dynamic> jsonData;
 
   @override
   void initState() {
@@ -53,10 +55,12 @@ class MainPageState extends State<MainPage> {
       case 0:
         return new ConferenceFragment(
           year: _currentYear,
+          broomballData: _broomballData,
         );
       case 1:
         return new TeamsFragment(
           year: _currentYear,
+          broomballData: _broomballData,
         );
       case 2:
         return new ScheduleFragment(
@@ -145,6 +149,7 @@ class MainPageState extends State<MainPage> {
           onChanged: (String year) {
             this.setState(() {
               this._currentYear = year;
+              _broomballData = _broomballWebScraper.run(year);
             });
           },
           iconEnabledColor: Colors.black,
@@ -155,7 +160,9 @@ class MainPageState extends State<MainPage> {
     scaffoldActions.add(IconButton(
       icon: Icon(Icons.refresh),
       onPressed: () {
-        this.setState(() {});
+        this.setState(() {
+          _broomballData = _broomballWebScraper.run(this._currentYear);
+        });
       },
     ));
 
@@ -178,8 +185,4 @@ class MainPageState extends State<MainPage> {
       body: _getDrawerItemFragment(_currentDrawerIndex),
     );
   }
-}
-
-class Fragment {
-  void updateYear() {}
 }
