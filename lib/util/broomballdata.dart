@@ -31,7 +31,7 @@ class BroomballWebScraper {
 
   Future<BroomballData> run(String year) async {
     BroomballData broomballData = BroomballData();
-    
+
     print("$broomballUrl$year");
     final Response response = await get("$broomballUrl$year");
     if (response.statusCode == 200) {
@@ -109,8 +109,12 @@ class BroomballAPI {
     final Response searchResponse = await get("https://www.broomball.mtu.edu/api/player/search/" + query + "/key/0");
     //final Response response = await get("https://www.broomball.mtu.edu/api/player/id/" + json.decode(searchResponse.body).id + "/key/0");
     if (searchResponse.statusCode == 200) {
-      String id = Search.fromJson(json.decode(searchResponse.body)).id;
-      return fetchPlayer(id);
+      try {
+        String id = Search.fromJson(json.decode(searchResponse.body)).id;
+        return fetchPlayer(id);
+      } on Exception {
+        return null;
+      }
     } else {
       throw Exception("Unable to load search data");
     }
