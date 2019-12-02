@@ -1,8 +1,8 @@
 import 'package:broomball_app/fragments/conference_fragment.dart';
-import 'package:broomball_app/fragments/schedule_fragment.dart';
 import 'package:broomball_app/fragments/teams_fragment.dart';
 import 'package:broomball_app/pages/about_page.dart';
 import 'package:broomball_app/pages/favorites_page.dart';
+import 'package:broomball_app/pages/schedule_page.dart';
 import 'package:broomball_app/pages/search_page.dart';
 import 'package:broomball_app/pages/settings_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
@@ -18,7 +18,6 @@ class MainPage extends StatefulWidget {
   final drawerItems = <DrawerItem>[
     new DrawerItem(title: "Conferences", icon: Icons.assignment),
     new DrawerItem(title: "Teams", icon: Icons.people),
-    new DrawerItem(title: "Schedule", icon: Icons.calendar_today),
   ];
 
   @override
@@ -62,10 +61,6 @@ class MainPageState extends State<MainPage> {
           year: _currentYear,
           broomballData: _broomballData,
         );
-      case 2:
-        return new ScheduleFragment(
-          year: _currentYear,
-        );
       default:
         return new Text("Error");
     }
@@ -94,6 +89,19 @@ class MainPageState extends State<MainPage> {
         },
       ));
     }
+
+    drawerListTiles.add(ListTile(
+      leading: Icon(Icons.calendar_today),
+      title: Text("Schedule"),
+      onTap: () {
+        Navigator.of(context).pop();
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) {
+            return SchedulePage();
+          },
+        ));
+      }
+    ));
 
     drawerListTiles.add(ListTile(
       leading: Icon(Icons.star_border),
