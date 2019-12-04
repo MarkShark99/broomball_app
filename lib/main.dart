@@ -1,14 +1,17 @@
 import 'package:broomball_app/pages/main_page.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:broomball_app/util/notifications.dart';
 
 main() => runApp(BroomballApp());
 
 class BroomballApp extends StatelessWidget {
   final String appTitle = "Broomball App";
-
+  
   @override
   Widget build(BuildContext context) {
+    BroomballNotification.init();
+
     return DynamicTheme(
       defaultBrightness: Brightness.light,
       data: (brightness) {
