@@ -17,7 +17,7 @@ class TeamPage extends StatefulWidget {
 class TeamPageState extends State<TeamPage> {
   Team _team;
 
-  String _captainDisplayName = "";
+  String _captainDisplayName = "N/A";
   int _wins = 0;
   int _losses = 0;
   int _ties = 0;

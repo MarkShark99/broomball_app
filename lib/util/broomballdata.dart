@@ -98,7 +98,11 @@ class BroomballAPI {
   Future<Player> fetchPlayer(String id) async {
     final Response response = await get("https://www.broomball.mtu.edu/api/player/id/" + id + "/key/0");
     if (response.statusCode == 200) {
-      return Player.fromJson(json.decode(response.body));
+      try {
+        return Player.fromJson(json.decode(response.body));
+      } on Exception {
+        return null;
+      }
     } else {
       throw Exception("Unable to load player data");
     }
@@ -125,7 +129,11 @@ class BroomballAPI {
     final Response response = await get("https://www.broomball.mtu.edu/api/team/id/" + id + "/key/0");
 
     if (response.statusCode == 200) {
-      return Team.fromJson(json.decode(response.body));
+      try {
+        return Team.fromJson(json.decode(response.body));
+      } on Exception {
+        return null;
+      }
     } else {
       throw Exception("Unable to load team data");
     }
@@ -156,6 +164,12 @@ class Player {
   });
 
   factory Player.fromJson(Map<String, dynamic> json) {
+    List<PlayerStatsMatch> stats = <PlayerStatsMatch>[];
+
+    for (Map<String, String> playerStatsMatch in json["stats"]) {
+      stats.add(PlayerStatsMatch.fromJson(playerStatsMatch));
+    }
+
     return Player(
       id: json["info"]["id"],
       firstName: json["info"]["first_name"],
@@ -164,6 +178,7 @@ class Player {
       mtuId: json["info"]["mtu_id"],
       displayAlias: json["info"]["display_alias"],
       email: json["info"]["email"],
+      stats: stats,
     );
   }
 }

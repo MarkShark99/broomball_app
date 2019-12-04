@@ -15,7 +15,6 @@ class ConferenceFragment extends StatefulWidget {
 }
 
 class ConferenceFragmentState extends State<ConferenceFragment> {
-  final BroomballWebScraper _broomballWebScraper = BroomballWebScraper();
 
   @override
   Widget build(BuildContext context) {
