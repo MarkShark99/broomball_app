@@ -19,6 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_datetime_picker: 1.2.5
   dynamic_theme: ^1.0.1
   http: ^0.12.0+2
   url_launcher: ^5.2.5

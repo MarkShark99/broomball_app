@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SchedulePage extends StatefulWidget {
   final String year;
@@ -12,6 +13,21 @@ class SchedulePage extends StatefulWidget {
 }
 
 class SchedulePageState extends State<SchedulePage> {
+  DateTime selectedDate = DateTime.now();
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2002, 1),
+        lastDate: DateTime(DateTime.now().year + 1),
+        );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -19,23 +35,27 @@ class SchedulePageState extends State<SchedulePage> {
 
   @override
   Widget build(BuildContext context) {
+    DateFormat dateFormat = new DateFormat("yyyy-MM-dd");
+    
     return Scaffold(
       appBar: AppBar(
-        title: Text("Schedule"),
+        title: Text("Schedule - " + DateFormat.yMMMd().format(selectedDate)),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: () {
+              _selectDate(context);
+            },
+          )
+        ],
       ),
       body: Center(
-        child: FutureBuilder(
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-              case ConnectionState.active:
-                return CircularProgressIndicator();
-              case ConnectionState.done:
-                return Text("Loaded");
-            }
-          },
-          future: null,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(dateFormat.format(selectedDate)),
+            SizedBox(height: 20.0,),
+          ],
         ),
       ),
     );
