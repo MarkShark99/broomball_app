@@ -138,6 +138,31 @@ class BroomballAPI {
       throw Exception("Unable to load team data");
     }
   }
+
+  /// Fetches the schedule for the given day in format YYYY-MM-DD
+  Future<ScheduleDay> fetchScheduleDay(String date) async {
+    final Response response = await get("https://www.broomball.mtu.edu/api/schedule/day/$date/key/0");
+    if (response.statusCode == 200) {
+      try {
+        var jsonData = json.decode(response.body);
+
+        if (jsonData is List<dynamic>) {
+          return ScheduleDay(
+            times: Map<String, ScheduleDayTime>(),
+          );
+        }
+
+        return ScheduleDay.fromJson(jsonData);
+      } on Exception {
+        print("Error loading data");
+        return ScheduleDay(
+          times: Map<String, ScheduleDayTime>(),
+        );
+      }
+    } else {
+      throw Exception("Unable to load schedule data");
+    }
+  }
 }
 
 /// Class representing a player fetched from the API.
@@ -166,7 +191,7 @@ class Player {
   factory Player.fromJson(Map<String, dynamic> json) {
     List<PlayerStatsMatch> stats = <PlayerStatsMatch>[];
 
-    for (Map<String, String> playerStatsMatch in json["stats"]) {
+    for (Map<String, dynamic> playerStatsMatch in json["stats"]) {
       stats.add(PlayerStatsMatch.fromJson(playerStatsMatch));
     }
 
@@ -431,6 +456,126 @@ class TeamScheduleMatch {
       rinkId: json["rink_id"],
       forfeited: json["forfeited"],
       startTime: dateFormat.format(DateTime.parse(json["start_time"])),
+    );
+  }
+}
+
+class ScheduleDay {
+  final Map<String, ScheduleDayTime> times;
+
+  ScheduleDay({
+    @required this.times,
+  });
+
+  factory ScheduleDay.fromJson(Map<String, dynamic> json) {
+    Map<String, ScheduleDayTime> times = Map();
+
+    String key = json.keys.toList()[0];
+
+    print(json);
+    for (String dayTime in json[key].keys.toList()) {
+      times[dayTime] = ScheduleDayTime.fromJson(json[key][dayTime]);
+    }
+
+    return ScheduleDay(
+      times: times,
+    );
+  }
+}
+
+class ScheduleDayTime {
+  final ScheduleMatch black;
+  final ScheduleMatch silver;
+  final ScheduleMatch gold;
+  final ScheduleMatch east;
+  final ScheduleMatch west;
+  final ScheduleMatch rink1;
+
+  ScheduleDayTime({
+    @required this.black,
+    @required this.silver,
+    @required this.gold,
+    @required this.east,
+    @required this.west,
+    @required this.rink1,
+  });
+
+  factory ScheduleDayTime.fromJson(Map<String, dynamic> json) {
+    return ScheduleDayTime(
+      black: json.containsKey("black") ? ScheduleMatch.fromJson(json["black"]) : null,
+      silver: json.containsKey("silver") ? ScheduleMatch.fromJson(json["silver"]) : null,
+      gold: json.containsKey("gold") ? ScheduleMatch.fromJson(json["gold"]) : null,
+      east: json.containsKey("east") ? ScheduleMatch.fromJson(json["east"]) : null,
+      west: json.containsKey("west") ? ScheduleMatch.fromJson(json["west"]) : null,
+      rink1: json.containsKey("rink1") ? ScheduleMatch.fromJson(json["rink1"]) : null,
+    );
+  }
+}
+
+class ScheduleMatch {
+  final String id;
+  final String seasonId;
+  final String rinkId;
+  final String cancelled;
+  final String startTime;
+  final String eventType;
+  final String eventId;
+  final String allowSeason;
+  final String allowPractice;
+  final String allowRescheduling;
+  final String convertToPractice;
+  final String homeTeamId;
+  final String awayTeamId;
+  final String videoUrl;
+  final String homeTeamName;
+  final String awayTeamName;
+  final String played;
+  final String homeGoals;
+  final String awayGoals;
+
+  ScheduleMatch({
+    @required this.id,
+    @required this.seasonId,
+    @required this.rinkId,
+    @required this.cancelled,
+    @required this.startTime,
+    @required this.eventType,
+    @required this.eventId,
+    @required this.allowSeason,
+    @required this.allowPractice,
+    @required this.allowRescheduling,
+    @required this.convertToPractice,
+    @required this.homeTeamId,
+    @required this.awayTeamId,
+    @required this.videoUrl,
+    @required this.homeTeamName,
+    @required this.awayTeamName,
+    @required this.played,
+    @required this.homeGoals,
+    @required this.awayGoals,
+  });
+
+  factory ScheduleMatch.fromJson(Map<String, dynamic> json) {
+    return ScheduleMatch(
+      id: json["id"],
+      seasonId: json["season_id"],
+      rinkId: json["rink_id"],
+      cancelled: json["canceled"],
+      startTime: json["start_time"],
+      eventType: json["event_type"],
+      eventId: json["event_id"],
+      allowSeason: json["allow_season"],
+      allowPractice: json["allow_practice"],
+      allowRescheduling: json["allow_rescheduling"],
+      convertToPractice: json["convertToPractice"],
+      homeTeamId: json["home_team_id"],
+      awayTeamId: json["away_team_id"],
+      videoUrl: json["video_url"],
+      homeTeamName: json["home_team_name"],
+      awayTeamName: json["away_team_name"],
+      played: json["played"],
+      homeGoals: json["home_goals"],
+      awayGoals: json["away_goals"],
     );
   }
 }

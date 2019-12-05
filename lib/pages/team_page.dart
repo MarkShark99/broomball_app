@@ -99,7 +99,11 @@ class TeamPageState extends State<TeamPage> {
                               subtitle: Text("Year played"),
                             ),
                             Divider(),
-                            ListTile(leading: Icon(Icons.person), title: Text(this._captainDisplayName), subtitle: Text("Captain")),
+                            ListTile(
+                              leading: Icon(Icons.person),
+                              title: Text(this._captainDisplayName),
+                              subtitle: Text("Captain"),
+                            ),
                             // Divider(),
                           ],
                         ),

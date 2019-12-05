@@ -16,7 +16,9 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
   Player _player;
+
   int _goals = 0;
+  int _assists = 0;
   int _saves = 0;
 
   bool _isFavorite = false;
@@ -108,7 +110,11 @@ class _PlayerPageState extends State<PlayerPage> {
                               title: Text("Statistics"),
                             ),
                             Divider(),
-                            ListTile(leading: Text("Goals"), title: Text("")),
+                            ListTile(leading: Text("Goals"), title: Text(_goals.toString())),
+                            Divider(),
+                            ListTile(leading: Text("Saves"), title: Text(_saves.toString())),
+                            Divider(),
+                            ListTile(leading: Text("Assists"), title: Text(_assists.toString())),
                             Divider(),
                           ],
                         ),
@@ -126,6 +132,11 @@ class _PlayerPageState extends State<PlayerPage> {
     BroomballAPI().fetchPlayer(widget.id).then((Player player) {
       this.setState(() {
         _player = player;
+        for (PlayerStatsMatch match in player.stats) {
+          _goals += int.parse(match.goals);
+          _saves += int.parse(match.saves);
+          _assists += int.parse(match.assists);
+        }
       });
     });
   }

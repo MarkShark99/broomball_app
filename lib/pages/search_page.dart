@@ -22,6 +22,8 @@ class SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
+  // TODO: Fix Paul's weird code
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
