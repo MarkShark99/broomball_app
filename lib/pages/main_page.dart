@@ -47,6 +47,7 @@ class MainPageState extends State<MainPage> {
     }
 
     this._currentYear = currentYear.toString();
+    this._broomballData = _broomballWebScraper.run(this._currentYear);
   }
 
   Widget _getDrawerItemFragment(int index) {
