@@ -10,7 +10,7 @@ class BroomballApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    BroomballNotification.init();
+    // BroomballNotification.init();
 
     return DynamicTheme(
       defaultBrightness: Brightness.light,

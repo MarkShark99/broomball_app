@@ -86,7 +86,7 @@ class SchedulePageState extends State<SchedulePage> {
           automaticallyImplyLeading: true,
           actions: <Widget>[
             IconButton(
-                icon: Icon(Icons.arrow_left),
+                icon: Icon(Icons.keyboard_arrow_left),
                 onPressed: () {
                   this.setState(() {
                     _selectedDate = _selectedDate.subtract(Duration(days: 1));
@@ -94,7 +94,7 @@ class SchedulePageState extends State<SchedulePage> {
                   });
                 }),
             IconButton(
-                icon: Icon(Icons.arrow_right),
+                icon: Icon(Icons.keyboard_arrow_right),
                 onPressed: () {
                   this.setState(() {
                     _selectedDate = _selectedDate.add(Duration(days: 1));
