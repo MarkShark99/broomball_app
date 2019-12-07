@@ -159,6 +159,17 @@ class TeamPageState extends State<TeamPage> {
                           title: Text(_team.schedule[index].homeTeamName + " vs. " + _team.schedule[index].awayTeamName),
                           subtitle: Text(_team.schedule[index].startTime + " - " + _team.schedule[index].rinkName),
                           trailing: Text(_team.schedule[index].homeGoals.toString() + " - " + _team.schedule[index].awayGoals.toString()),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return TeamPage(
+                                    id: _team.schedule[index].awayTeamId,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         );
                       },
                       separatorBuilder: (context, index) {

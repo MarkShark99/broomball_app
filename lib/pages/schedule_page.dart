@@ -147,12 +147,12 @@ class SchedulePageState extends State<SchedulePage> {
                       title: Text("${data.times[dayTime].rink1.homeTeamName} vs. ${data.times[dayTime].rink1.awayTeamName}"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: Text("${data.times[dayTime].rink1.homeGoals} - ${data.times[dayTime].rink1.awayGoals}"),
-                      onLongPress: () {
+                      onTap: () {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return SimpleDialog(
-                                title: Text("More options"),
+                                title: Text("Options"),
                                 children: <Widget>[
                                   SimpleDialogOption(
                                       child: Text("View Home Team"),
@@ -187,12 +187,12 @@ class SchedulePageState extends State<SchedulePage> {
                       title: Text("${data.times[dayTime].east.homeTeamName} vs. ${data.times[dayTime].east.awayTeamName}"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: Text("${data.times[dayTime].east.homeGoals} - ${data.times[dayTime].east.awayGoals}"),
-                      onLongPress: () {
+                      onTap: () {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return SimpleDialog(
-                                title: Text("More options"),
+                                title: Text("Options"),
                                 children: <Widget>[
                                   SimpleDialogOption(
                                       child: Text("View Home Team"),
@@ -227,12 +227,12 @@ class SchedulePageState extends State<SchedulePage> {
                       title: Text("${data.times[dayTime].west.homeTeamName} vs. ${data.times[dayTime].west.awayTeamName}"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: Text("${data.times[dayTime].west.homeGoals} - ${data.times[dayTime].west.awayGoals}"),
-                      onLongPress: () {
+                      onTap: () {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return SimpleDialog(
-                                title: Text("More options"),
+                                title: Text("Options"),
                                 children: <Widget>[
                                   SimpleDialogOption(
                                       child: ListTile(title: Text("View Home Team")),
@@ -267,12 +267,12 @@ class SchedulePageState extends State<SchedulePage> {
                       title: Text("${data.times[dayTime].black.homeTeamName} vs. ${data.times[dayTime].black.awayTeamName}"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: Text("${data.times[dayTime].black.homeGoals} - ${data.times[dayTime].black.awayGoals}"),
-                      onLongPress: () {
+                      onTap: () {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return SimpleDialog(
-                                title: Text("More options"),
+                                title: Text("Options"),
                                 children: <Widget>[
                                   SimpleDialogOption(
                                       child: ListTile(title: Text("View Home Team")),
@@ -307,12 +307,12 @@ class SchedulePageState extends State<SchedulePage> {
                       title: Text("${data.times[dayTime].silver.homeTeamName} vs. ${data.times[dayTime].silver.awayTeamName}"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: Text("${data.times[dayTime].silver.homeGoals} - ${data.times[dayTime].silver.awayGoals}"),
-                      onLongPress: () {
+                      onTap: () {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return SimpleDialog(
-                                title: Text("More options"),
+                                title: Text("Options"),
                                 children: <Widget>[
                                   SimpleDialogOption(
                                       child: ListTile(title: Text("View Home Team")),
@@ -347,12 +347,12 @@ class SchedulePageState extends State<SchedulePage> {
                       title: Text("${data.times[dayTime].gold.homeTeamName} vs. ${data.times[dayTime].gold.awayTeamName}"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: Text("${data.times[dayTime].gold.homeGoals} - ${data.times[dayTime].gold.awayGoals}"),
-                      onLongPress: () {
+                      onTap: () {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return SimpleDialog(
-                                title: Text("More options"),
+                                title: Text("Options"),
                                 children: <Widget>[
                                   SimpleDialogOption(
                                       child: ListTile(title: Text("View Home Team")),

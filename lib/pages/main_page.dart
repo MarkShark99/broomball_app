@@ -4,7 +4,6 @@ import 'package:broomball_app/pages/about_page.dart';
 import 'package:broomball_app/pages/favorites_page.dart';
 import 'package:broomball_app/pages/schedule_page.dart';
 import 'package:broomball_app/pages/search_page.dart';
-import 'package:broomball_app/pages/settings_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
@@ -32,6 +31,8 @@ class MainPageState extends State<MainPage> {
 
   int _currentDrawerIndex = 0;
   String _currentYear;
+
+  bool darkModeSwitchChecked = false;
 
   List<String> _yearList = <String>[];
 
@@ -92,17 +93,16 @@ class MainPageState extends State<MainPage> {
     }
 
     drawerListTiles.add(ListTile(
-      leading: Icon(Icons.calendar_today),
-      title: Text("Schedule"),
-      onTap: () {
-        Navigator.of(context).pop();
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) {
-            return SchedulePage();
-          },
-        ));
-      }
-    ));
+        leading: Icon(Icons.calendar_today),
+        title: Text("Schedule"),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) {
+              return SchedulePage();
+            },
+          ));
+        }));
 
     drawerListTiles.add(ListTile(
       leading: Icon(Icons.star_border),
@@ -118,18 +118,39 @@ class MainPageState extends State<MainPage> {
     ));
     drawerListTiles.add(Divider());
 
-    drawerListTiles.add(ListTile(
-      leading: Icon(Icons.settings),
-      title: Text("Settings"),
-      onTap: () {
-        Navigator.of(context).pop();
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) {
-            return SettingsPage();
+    // drawerListTiles.add(
+    //   ListTile(
+    //     leading: Icon(Icons.settings),
+    //     title: Text("Settings"),
+    //     onTap: () {
+    //       Navigator.of(context).pop();
+    //       Navigator.of(context).push(
+    //         MaterialPageRoute(
+    //           builder: (BuildContext context) {
+    //             return SettingsPage();
+    //           },
+    //         ),
+    //       );
+    //     },
+    //   ),
+    // );
+
+    drawerListTiles.add(
+      ListTile(
+        title: Text("Night mode"),
+        leading: Icon(Icons.brightness_4),
+        trailing: Switch(
+          activeColor: Theme.of(context).accentColor,
+          value: Theme.of(context).brightness == Brightness.dark,
+          onChanged: (bool value) {
+            setState(() {
+              darkModeSwitchChecked = value;
+              DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark ? Brightness.light : Brightness.dark);
+            });
           },
-        ));
-      },
-    ));
+        ),
+      ),
+    );
 
     drawerListTiles.add(ListTile(
         leading: Icon(Icons.info),

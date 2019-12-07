@@ -70,7 +70,7 @@ class _PlayerPageState extends State<PlayerPage> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Column(
+          : ListView(
               children: <Widget>[
                 Card(
                   child: Column(
