@@ -62,7 +62,7 @@ class TeamPageState extends State<TeamPage> {
                   });
                   AppData().loadFavoritesData().then((favoritesData) {
                     if (this._isFavorite) {
-                      favoritesData.teams[_team.id] = _team.name;
+                      favoritesData.teams[_team.id] = "${_team.name} (${_team.seasonId})";
                     } else {
                       favoritesData.teams.remove(_team.id);
                     }

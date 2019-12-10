@@ -40,7 +40,8 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
 
-    int currentYear = DateTime.now().year;
+    int yearOffset = DateTime.now().month == 12 ? 1 : 0;
+    int currentYear = DateTime.now().year + yearOffset;
     this._yearList = <String>[];
 
     for (int i = currentYear; i >= 2002; i--) {

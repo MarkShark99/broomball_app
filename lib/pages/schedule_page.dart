@@ -1,6 +1,7 @@
 import 'package:broomball_app/pages/team_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/material.dart';
+import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 
 class SchedulePage extends StatefulWidget {
@@ -20,11 +21,13 @@ class SchedulePageState extends State<SchedulePage> {
   DateTime _selectedDate = DateTime.now();
 
   Future<Null> _selectDate(BuildContext context) async {
+    int yearOffset = DateTime.now().month == 12 ? 2 : 1;
+    
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime(2002, 1),
-      lastDate: DateTime(DateTime.now().year + 1),
+      lastDate: DateTime(DateTime.now().year + yearOffset),
     );
     if (picked != null && picked != _selectedDate)
       setState(() {
@@ -263,8 +266,11 @@ class SchedulePageState extends State<SchedulePage> {
                   }
 
                   if (data.times[dayTime].black != null && data.times[dayTime].black.homeGoals != null && data.times[dayTime].black.awayGoals != null) {
+                    String homeTeamName = parse(parse(data.times[dayTime].black.homeTeamName).body.text).documentElement.text;
+                    String awayTeamName = parse(parse(data.times[dayTime].black.awayTeamName).body.text).documentElement.text;
+
                     blackRinkMatches.add(ListTile(
-                      title: Text("${data.times[dayTime].black.homeTeamName} vs. ${data.times[dayTime].black.awayTeamName}"),
+                      title: Text("$homeTeamName vs. $awayTeamName"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: data.times[dayTime].black.played == "1" ? Text("${data.times[dayTime].black.homeGoals} - ${data.times[dayTime].black.awayGoals}") : Text("Unplayed"),
                       onTap: () {
@@ -303,8 +309,11 @@ class SchedulePageState extends State<SchedulePage> {
                   }
 
                   if (data.times[dayTime].silver != null && data.times[dayTime].silver.homeGoals != null && data.times[dayTime].silver.awayGoals != null) {
+                    String homeTeamName = parse(parse(data.times[dayTime].silver.homeTeamName).body.text).documentElement.text;
+                    String awayTeamName = parse(parse(data.times[dayTime].silver.awayTeamName).body.text).documentElement.text;
+                    
                     silverRinkMatches.add(ListTile(
-                      title: Text("${data.times[dayTime].silver.homeTeamName} vs. ${data.times[dayTime].silver.awayTeamName}"),
+                      title: Text("$homeTeamName vs. $awayTeamName"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: data.times[dayTime].silver.played == "1" ? Text("${data.times[dayTime].silver.homeGoals} - ${data.times[dayTime].silver.awayGoals}") : Text("Unplayed"),
                       onTap: () {
@@ -343,8 +352,11 @@ class SchedulePageState extends State<SchedulePage> {
                   }
 
                   if (data.times[dayTime].gold != null && data.times[dayTime].gold.homeGoals != null && data.times[dayTime].gold.awayGoals != null) {
+                    String homeTeamName = parse(parse(data.times[dayTime].gold.homeTeamName).body.text).documentElement.text;
+                    String awayTeamName = parse(parse(data.times[dayTime].gold.awayTeamName).body.text).documentElement.text;
+                    
                     goldRinkMatches.add(ListTile(
-                      title: Text("${data.times[dayTime].gold.homeTeamName} vs. ${data.times[dayTime].gold.awayTeamName}"),
+                      title: Text("$homeTeamName vs. $awayTeamName"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: data.times[dayTime].gold.played == "1" ? Text("${data.times[dayTime].gold.homeGoals} - ${data.times[dayTime].gold.awayGoals}") : Text("Unplayed"),
                       onTap: () {
