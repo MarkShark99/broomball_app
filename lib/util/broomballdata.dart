@@ -314,8 +314,10 @@ class Team {
     List<TeamRosterPlayer> roster = <TeamRosterPlayer>[];
     List<TeamScheduleMatch> schedule = <TeamScheduleMatch>[];
 
-    for (Map<String, dynamic> teamRosterPlayer in json["roster"].values.toList()) {
-      roster.add(TeamRosterPlayer.fromJson(teamRosterPlayer));
+    if (json["roster"] is Map) {
+      for (Map<String, dynamic> teamRosterPlayer in json["roster"].values.toList()) {
+        roster.add(TeamRosterPlayer.fromJson(teamRosterPlayer));
+      }
     }
 
     for (Map<String, dynamic> teamScheduleMatch in json["schedule"]) {

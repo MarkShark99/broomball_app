@@ -158,7 +158,7 @@ class TeamPageState extends State<TeamPage> {
                         return ListTile(
                           title: Text(_team.schedule[index].homeTeamName + " vs. " + _team.schedule[index].awayTeamName),
                           subtitle: Text(_team.schedule[index].startTime + " - " + _team.schedule[index].rinkName),
-                          trailing: Text(_team.schedule[index].homeGoals.toString() + " - " + _team.schedule[index].awayGoals.toString()),
+                          trailing: _team.schedule[index].played == "1" ? Text(_team.schedule[index].homeGoals.toString() + " - " + _team.schedule[index].awayGoals.toString()) : Text("Unplayed"),
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -198,25 +198,27 @@ class TeamPageState extends State<TeamPage> {
       }
 
       for (TeamScheduleMatch teamScheduleMatch in team.schedule) {
-        if (teamScheduleMatch.homeGoals == teamScheduleMatch.awayGoals) {
-          _goals += int.parse(teamScheduleMatch.homeGoals);
-          _ties++;
-        } else if (widget.id == teamScheduleMatch.homeTeamId) {
-          _goals += int.parse(teamScheduleMatch.homeGoals);
+        if (teamScheduleMatch.played == "1") {
+          if (teamScheduleMatch.homeGoals == teamScheduleMatch.awayGoals) {
+            _goals += int.parse(teamScheduleMatch.homeGoals);
+            _ties++;
+          } else if (widget.id == teamScheduleMatch.homeTeamId) {
+            _goals += int.parse(teamScheduleMatch.homeGoals);
 
-          if (int.parse(teamScheduleMatch.homeGoals) > int.parse(teamScheduleMatch.awayGoals)) {
-            // One of the two teams must have a win
-            _wins++;
-          } else {
-            _losses++;
-          }
-        } else if (widget.id == teamScheduleMatch.awayTeamId) {
-          _goals += int.parse(teamScheduleMatch.awayGoals);
+            if (int.parse(teamScheduleMatch.homeGoals) > int.parse(teamScheduleMatch.awayGoals)) {
+              // One of the two teams must have a win
+              _wins++;
+            } else {
+              _losses++;
+            }
+          } else if (widget.id == teamScheduleMatch.awayTeamId) {
+            _goals += int.parse(teamScheduleMatch.awayGoals);
 
-          if (int.parse(teamScheduleMatch.awayGoals) > int.parse(teamScheduleMatch.homeGoals)) {
-            _wins++;
-          } else {
-            _losses++;
+            if (int.parse(teamScheduleMatch.awayGoals) > int.parse(teamScheduleMatch.homeGoals)) {
+              _wins++;
+            } else {
+              _losses++;
+            }
           }
         }
       }

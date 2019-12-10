@@ -262,11 +262,11 @@ class SchedulePageState extends State<SchedulePage> {
                     westRinkMatches.add(Divider());
                   }
 
-                  if (data.times[dayTime].black != null && data.times[dayTime].black.played == "1") {
+                  if (data.times[dayTime].black != null && data.times[dayTime].black.homeGoals != null && data.times[dayTime].black.awayGoals != null) {
                     blackRinkMatches.add(ListTile(
                       title: Text("${data.times[dayTime].black.homeTeamName} vs. ${data.times[dayTime].black.awayTeamName}"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
-                      trailing: Text("${data.times[dayTime].black.homeGoals} - ${data.times[dayTime].black.awayGoals}"),
+                      trailing: data.times[dayTime].black.played == "1" ? Text("${data.times[dayTime].black.homeGoals} - ${data.times[dayTime].black.awayGoals}") : Text("Unplayed"),
                       onTap: () {
                         showDialog(
                             context: context,
@@ -302,11 +302,11 @@ class SchedulePageState extends State<SchedulePage> {
                     blackRinkMatches.add(Divider());
                   }
 
-                  if (data.times[dayTime].silver != null && data.times[dayTime].silver.played == "1") {
+                  if (data.times[dayTime].silver != null && data.times[dayTime].silver.homeGoals != null && data.times[dayTime].silver.awayGoals != null) {
                     silverRinkMatches.add(ListTile(
                       title: Text("${data.times[dayTime].silver.homeTeamName} vs. ${data.times[dayTime].silver.awayTeamName}"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
-                      trailing: Text("${data.times[dayTime].silver.homeGoals} - ${data.times[dayTime].silver.awayGoals}"),
+                      trailing: data.times[dayTime].silver.played == "1" ? Text("${data.times[dayTime].silver.homeGoals} - ${data.times[dayTime].silver.awayGoals}") : Text("Unplayed"),
                       onTap: () {
                         showDialog(
                             context: context,
@@ -342,11 +342,11 @@ class SchedulePageState extends State<SchedulePage> {
                     silverRinkMatches.add(Divider());
                   }
 
-                  if (data.times[dayTime].gold != null && data.times[dayTime].gold.played == "1") {
+                  if (data.times[dayTime].gold != null && data.times[dayTime].gold.homeGoals != null && data.times[dayTime].gold.awayGoals != null) {
                     goldRinkMatches.add(ListTile(
                       title: Text("${data.times[dayTime].gold.homeTeamName} vs. ${data.times[dayTime].gold.awayTeamName}"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
-                      trailing: Text("${data.times[dayTime].gold.homeGoals} - ${data.times[dayTime].gold.awayGoals}"),
+                      trailing: data.times[dayTime].gold.played == "1" ? Text("${data.times[dayTime].gold.homeGoals} - ${data.times[dayTime].gold.awayGoals}") : Text("Unplayed"),
                       onTap: () {
                         showDialog(
                             context: context,

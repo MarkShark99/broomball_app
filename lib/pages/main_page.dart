@@ -164,49 +164,57 @@ class MainPageState extends State<MainPage> {
           ));
         }));
 
-    List<Widget> scaffoldActions = [];
-
-    if (_currentDrawerIndex != 3) {
-      scaffoldActions.add(DropdownButtonHideUnderline(
-        child: DropdownButton(
-          value: _yearList.length > 0 ? _currentYear : null,
-          items: _yearList.map((String year) {
-            return DropdownMenuItem(
-              child: Text(year, style: TextStyle(color: DynamicTheme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)),
-              value: year,
-            );
-          }).toList(),
-          onChanged: (String year) {
-            this.setState(() {
-              this._currentYear = year;
-              _broomballData = _broomballWebScraper.run(year);
-            });
-          },
-          iconEnabledColor: Colors.black,
-        ),
-      ));
-    }
-
-    scaffoldActions.add(IconButton(
-      icon: Icon(Icons.refresh),
-      onPressed: () {
-        this.setState(() {
-          _broomballData = _broomballWebScraper.run(this._currentYear);
-        });
-      },
-    ));
-
-    scaffoldActions.add(IconButton(
-      icon: Icon(Icons.search),
-      onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return SearchPage();
-        }));
-      },
-    ));
-
     return Scaffold(
-      appBar: AppBar(title: Text(widget.drawerItems[_currentDrawerIndex].title), actions: scaffoldActions),
+      appBar: AppBar(
+        title: Text("${widget.drawerItems[_currentDrawerIndex].title}"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.date_range),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return SimpleDialog(
+                    title: Text("Select a year"),
+                    children: _yearList.map((year) {
+                      return ListTile(
+                        title: Text(year),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          this.setState(() {
+                            this._currentYear = year;
+                            this._broomballData = this._broomballWebScraper.run(year);
+                          });
+                        },
+                      );
+                    }).toList(),
+                  );
+                },
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return SearchPage();
+                  },
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              this.setState(() {
+                _broomballData = _broomballWebScraper.run(this._currentYear);
+              });
+            },
+          ),
+        ],
+      ),
       drawer: Drawer(
         child: ListView(
           children: drawerListTiles,
