@@ -15,8 +15,8 @@ class BroomballApp extends StatelessWidget {
       defaultBrightness: Brightness.light,
       data: (brightness) {
         return ThemeData(
-          primaryColor: brightness == Brightness.light ? Color(0xFFFFCD00) : Color(0XFFA42277),
-          accentColor: brightness == Brightness.light ? Color(0xFFFFCD00) : Color(0XFFA42277),
+          primaryColor: Color(0xFFFFCD00),
+          accentColor: Color(0xFFFFCD00),
           brightness: brightness,
         );
       },

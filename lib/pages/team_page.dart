@@ -163,9 +163,15 @@ class TeamPageState extends State<TeamPage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return TeamPage(
-                                    id: _team.schedule[index].awayTeamId,
-                                  );
+                                  if (widget.id == _team.schedule[index].homeTeamId) {
+                                    return TeamPage(
+                                      id: _team.schedule[index].awayTeamId,
+                                    );
+                                  } else {
+                                    return TeamPage(
+                                      id: _team.schedule[index].homeTeamId,
+                                    );
+                                  }
                                 },
                               ),
                             );
