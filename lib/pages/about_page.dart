@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:broomball_app/pages/contributors_page.dart';
 
 class AboutPage extends StatelessWidget {
   @override
@@ -8,30 +7,53 @@ class AboutPage extends StatelessWidget {
       appBar: AppBar(automaticallyImplyLeading: true, title: Text("About")),
       body: Container(
         child: ListView(
-          children: ListTile.divideTiles(
-            context: context,
-            tiles: [
-              ListTile(
-                title: Text("About"),
-                subtitle: Text("Mobile application to view broomball info and stats based off the pre-existing MTU website."),
-              ),
-              ListTile(
-                title: Text("Contributors"),
-                subtitle: Text("Geoff Inc."),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) {
-                      return ContributorsPage();
-                    },
-                  ));
-                },
-              ),
-              ListTile(
-                title: Text("Developed using Flutter and Dart"),
-                subtitle: Text("Open Source Google UI Devkit"),
-              ),
-            ],
-          ).toList(),
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Image(image: AssetImage("assets/icon_foreground.png")),
+                  ),
+                ),
+                Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Image(image: AssetImage("assets/icon_foreground.png")),
+                  ),
+                ),
+              ],
+            ),
+            Divider(),
+            ListTile(
+              title: Text("Contributors"),
+            ),
+            ListTile(
+              title: Text("Mark Washington"),
+              subtitle: Text("Developer"),
+            ),
+            ListTile(
+              title: Text("Julien Thrum"),
+              subtitle: Text("Developer"),
+            ),
+            ListTile(
+              title: Text("Paul Rayment"),
+              subtitle: Text("Developer"),
+            ),
+            ListTile(
+              title: Text("Michael Thorburn"),
+              subtitle: Text("Developer"),
+            ),
+            Divider(),
+            ListTile(
+              title: Text("Open Source Licenses"),
+              onTap: () {},
+            ),
+            Divider(),
+            ListTile(
+              title: Text("Version 1.0.0-beta2"),
+            )
+          ],
         ),
       ),
     );

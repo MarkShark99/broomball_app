@@ -1,49 +1,30 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:broomball_app/pages/team_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class BroomballNotification {
-  static final BroomballNotification _instance = BroomballNotification._internal();
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  AndroidNotificationDetails androidPlatformChannelSpecifics;
-  NotificationDetails platformChannelSpecifics;
+class BroomballNotifications {
+  static final BroomballNotifications _instance = BroomballNotifications._internal();
+  BuildContext _context;
 
-  void initNotifications() {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    var initializationSettingsAndroid = new AndroidInitializationSettings('app_icon');
-    var initializationSettings = InitializationSettings(initializationSettingsAndroid, null);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
-  }
+  factory BroomballNotifications(BuildContext context) {
+    _instance._context = context;
+    
 
-  void initDisplay(){
-
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails('your channel id', 'your channel name', 'your channel description', importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
-    var platformChannelSpecifics = NotificationDetails(
-    androidPlatformChannelSpecifics, null);
-
-  }
-
-  factory BroomballNotification() {
     return _instance;
   }
 
-  BroomballNotification._internal();
+  BroomballNotifications._internal();
 
   Future onSelectNotification(String payload) async {
-    // {
-    // Navigator.of(context).push(MaterialPageRoute(
-    // builder: (context) {
-    // return PlayerPage(id: id);
-    //},
-    // ));
-    // }
-    print("Pressed");
+    Navigator.of(_context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return TeamPage(id: payload);
+        },
+      ),
+    );
   }
 
-  Future convertScheduleNotification(String matchTime) async {
-
-
-
-  }
 
 }

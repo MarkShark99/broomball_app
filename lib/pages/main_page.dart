@@ -80,6 +80,18 @@ class MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     List<Widget> drawerListTiles = [];
 
+    drawerListTiles.add(
+      DrawerHeader(
+        child: null,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/icon_foreground.png"),
+          ),
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
+    );
+
     for (int i = 0; i < widget.drawerItems.length; i++) {
       DrawerItem drawerItem = widget.drawerItems[i];
 
@@ -217,8 +229,16 @@ class MainPageState extends State<MainPage> {
         ],
       ),
       drawer: Drawer(
-        child: ListView(
-          children: drawerListTiles,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: ListView(
+                children: drawerListTiles,
+              ),
+            )
+          ],
         ),
       ),
       body: _getDrawerItemFragment(_currentDrawerIndex),

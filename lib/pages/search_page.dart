@@ -1,7 +1,6 @@
 import 'package:broomball_app/pages/player_page.dart';
 import 'package:broomball_app/pages/team_page.dart';
 import 'package:flutter/material.dart' hide Element;
-import 'package:flutter/material.dart' as prefix0;
 import 'package:html/dom.dart' hide Text;
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
