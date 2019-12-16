@@ -47,14 +47,20 @@ class FavoritesPageState extends State<FavoritesPage> {
               case ConnectionState.done:
                 FavoritesData favoritesData = snapshot.data;
 
+                List<String> teamNameList = favoritesData.teams.keys.toList();
+                teamNameList.sort();
+
+                List<String> playerNameList = favoritesData.players.keys.toList();
+                playerNameList.sort();
+
                 return TabBarView(
                   children: <Widget>[
                     Center(
                       child: ListView.separated(
                         itemCount: favoritesData.teams.length,
                         itemBuilder: (context, index) {
-                          String name = favoritesData.teams[favoritesData.teams.keys.toList()[index]];
-                          String id = favoritesData.teams.keys.toList()[index];
+                          String name = teamNameList[index];
+                          String id = favoritesData.teams[name];
                           return ListTile(
                             title: Text(name),
                             onTap: () {
@@ -75,10 +81,10 @@ class FavoritesPageState extends State<FavoritesPage> {
                       child: ListView.separated(
                         itemCount: favoritesData.players.length,
                         itemBuilder: (context, index) {
-                          String name = favoritesData.players[favoritesData.players.keys.toList()[index]];
-                          String id = favoritesData.players.keys.toList()[index];
+                          String name = playerNameList[index];
+                          String id = favoritesData.players[name];
                           return ListTile(
-                            title: Text(name),
+                            title: Text(name.split(";")[0]),
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) {

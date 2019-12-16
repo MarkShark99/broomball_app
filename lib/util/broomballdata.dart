@@ -420,27 +420,12 @@ class TeamScheduleMatch {
   final String rinkId;
   final String forfeited;
   final String startTime;
+  final DateTime startTimeDateTime;
 
-  TeamScheduleMatch({
-    @required this.gameId,
-    @required this.played,
-    @required this.otl,
-    @required this.videoUrl,
-    @required this.rinkName,
-    @required this.canceled,
-    @required this.homeTeamId,
-    @required this.homeTeamName,
-    @required this.homeGoals,
-    @required this.awayTeamId,
-    @required this.awayTeamName,
-    @required this.awayGoals,
-    @required this.rinkId,
-    @required this.forfeited,
-    @required this.startTime,
-  });
+  TeamScheduleMatch({@required this.gameId, @required this.played, @required this.otl, @required this.videoUrl, @required this.rinkName, @required this.canceled, @required this.homeTeamId, @required this.homeTeamName, @required this.homeGoals, @required this.awayTeamId, @required this.awayTeamName, @required this.awayGoals, @required this.rinkId, @required this.forfeited, @required this.startTime, @required this.startTimeDateTime});
 
   factory TeamScheduleMatch.fromJson(Map<String, dynamic> json) {
-    DateFormat dateFormat = new DateFormat("EEE. MMM d, yyyy");
+    DateFormat dateFormat = new DateFormat("EEE. MMM d, yyyy - h:mm a");
 
     return TeamScheduleMatch(
       gameId: json["game_id"],
@@ -458,6 +443,7 @@ class TeamScheduleMatch {
       rinkId: json["rink_id"],
       forfeited: json["forfeited"],
       startTime: dateFormat.format(DateTime.parse(json["start_time"])),
+      startTimeDateTime: DateTime.parse(json["start_time"]),
     );
   }
 }

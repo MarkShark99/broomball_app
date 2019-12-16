@@ -31,7 +31,7 @@ class AppData {
     try {
       final File file = await _localFile;
       String contents = await file.readAsString();
-      print("Loaded data: $contents");
+      // print("Loaded data: $contents");
       return FavoritesData.fromJson(json.decode(contents));
     } catch (e) {
       writeFavoritesData(FavoritesData(players: {}, teams: {}));

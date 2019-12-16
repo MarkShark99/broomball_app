@@ -5,6 +5,7 @@ import 'package:broomball_app/pages/favorites_page.dart';
 import 'package:broomball_app/pages/schedule_page.dart';
 import 'package:broomball_app/pages/search_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
+import 'package:broomball_app/util/notifications.dart';
 import 'package:broomball_app/util/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
@@ -130,23 +131,6 @@ class MainPageState extends State<MainPage> {
       },
     ));
     drawerListTiles.add(Divider());
-
-    // drawerListTiles.add(
-    //   ListTile(
-    //     leading: Icon(Icons.settings),
-    //     title: Text("Settings"),
-    //     onTap: () {
-    //       Navigator.of(context).pop();
-    //       Navigator.of(context).push(
-    //         MaterialPageRoute(
-    //           builder: (BuildContext context) {
-    //             return SettingsPage();
-    //           },
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // );
 
     drawerListTiles.add(
       ListTile(

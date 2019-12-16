@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:broomball_app/util/app_data.dart';
 import 'package:flutter/widgets.dart';
 
+//TODO: Change to use a FutureBuilder, fix bug with favorites lookup
+
 class PlayerPage extends StatefulWidget {
   final id;
 
@@ -50,7 +52,7 @@ class _PlayerPageState extends State<PlayerPage> {
               });
               AppData().loadFavoritesData().then((favoritesData) {
                 if (this._isFavorite) {
-                  favoritesData.players[_player.id] = _player.displayName;
+                  favoritesData.players["${_player.displayName};${_player.mtuId}"] = _player.id;
                 } else {
                   favoritesData.players.remove(_player.id);
                 }
