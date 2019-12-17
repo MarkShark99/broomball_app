@@ -12,14 +12,14 @@ class AboutPage extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Image(image: AssetImage("assets/icon_foreground.png")),
+                    fit: BoxFit.fill,
+                    child: Theme.of(context).brightness == Brightness.light ? Image(image: AssetImage("assets/icon_foreground_black.png")) : Image(image: AssetImage("assets/icon_foreground_white.png")),
                   ),
                 ),
                 Expanded(
                   child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Image(image: AssetImage("assets/icon_foreground.png")),
+                    fit: BoxFit.fill,
+                    child: Theme.of(context).brightness == Brightness.light ? Image(image: AssetImage("assets/irhc_new_logo_black.png")) : Image(image: AssetImage("assets/irhc_new_logo_white.png")),
                   ),
                 ),
               ],

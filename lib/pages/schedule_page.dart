@@ -146,8 +146,11 @@ class SchedulePageState extends State<SchedulePage> {
                   String dayTime = dayTimes[i];
 
                   if (data.times[dayTime].rink1 != null && data.times[dayTime].rink1.played == "1") {
+                    String homeTeamName = parse(parse(data.times[dayTime].rink1.homeTeamName).body.text).documentElement.text;
+                    String awayTeamName = parse(parse(data.times[dayTime].rink1.awayTeamName).body.text).documentElement.text;
+                    
                     rink1Matches.add(ListTile(
-                      title: Text("${data.times[dayTime].rink1.homeTeamName} vs. ${data.times[dayTime].rink1.awayTeamName}"),
+                      title: Text("$homeTeamName vs. $awayTeamName"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: Text("${data.times[dayTime].rink1.homeGoals} - ${data.times[dayTime].rink1.awayGoals}"),
                       onTap: () {
@@ -186,8 +189,11 @@ class SchedulePageState extends State<SchedulePage> {
                   }
 
                   if (data.times[dayTime].east != null && data.times[dayTime].east.played == "1") {
+                    String homeTeamName = parse(parse(data.times[dayTime].east.homeTeamName).body.text).documentElement.text;
+                    String awayTeamName = parse(parse(data.times[dayTime].east.awayTeamName).body.text).documentElement.text;
+                    
                     eastRinkMatches.add(ListTile(
-                      title: Text("${data.times[dayTime].east.homeTeamName} vs. ${data.times[dayTime].east.awayTeamName}"),
+                      title: Text("$homeTeamName vs. $awayTeamName"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: Text("${data.times[dayTime].east.homeGoals} - ${data.times[dayTime].east.awayGoals}"),
                       onTap: () {
@@ -226,8 +232,11 @@ class SchedulePageState extends State<SchedulePage> {
                   }
 
                   if (data.times[dayTime].west != null && data.times[dayTime].west.played == "1") {
+                    String homeTeamName = parse(parse(data.times[dayTime].west.homeTeamName).body.text).documentElement.text;
+                    String awayTeamName = parse(parse(data.times[dayTime].west.awayTeamName).body.text).documentElement.text;
+                    
                     westRinkMatches.add(ListTile(
-                      title: Text("${data.times[dayTime].west.homeTeamName} vs. ${data.times[dayTime].west.awayTeamName}"),
+                      title: Text("$homeTeamName vs. $awayTeamName"),
                       subtitle: Text(dateFormat.format(DateTime.parse(dayTime))),
                       trailing: Text("${data.times[dayTime].west.homeGoals} - ${data.times[dayTime].west.awayGoals}"),
                       onTap: () {

@@ -2,6 +2,7 @@ import 'package:broomball_app/pages/player_page.dart';
 import 'package:broomball_app/pages/team_page.dart';
 import 'package:flutter/material.dart';
 import 'package:broomball_app/util/app_data.dart';
+import 'package:html/parser.dart';
 
 class FavoritesPage extends StatefulWidget {
   FavoritesPage();
@@ -56,48 +57,54 @@ class FavoritesPageState extends State<FavoritesPage> {
                 return TabBarView(
                   children: <Widget>[
                     Center(
-                      child: ListView.separated(
-                        itemCount: favoritesData.teams.length,
-                        itemBuilder: (context, index) {
-                          String name = teamNameList[index];
-                          String id = favoritesData.teams[name];
-                          return ListTile(
-                            title: Text(name),
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) {
-                                  return TeamPage(id: id);
-                                },
-                              ));
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return Divider();
-                        },
-                      ),
+                      child: favoritesData.teams.isEmpty
+                          ? Center(
+                              child: Text("No favorite teams found"),
+                            )
+                          : ListView.separated(
+                              itemCount: favoritesData.teams.length,
+                              itemBuilder: (context, index) {
+                                String name = parse(parse(teamNameList[index]).body.text).documentElement.text;
+                                String id = favoritesData.teams[name];
+                                return ListTile(
+                                  title: Text(name),
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) {
+                                        return TeamPage(id: id);
+                                      },
+                                    ));
+                                  },
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return Divider();
+                              },
+                            ),
                     ),
                     Center(
-                      child: ListView.separated(
-                        itemCount: favoritesData.players.length,
-                        itemBuilder: (context, index) {
-                          String name = playerNameList[index];
-                          String id = favoritesData.players[name];
-                          return ListTile(
-                            title: Text(name.split(";")[0]),
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) {
-                                  return PlayerPage(id: id);
-                                },
-                              ));
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return Divider();
-                        },
-                      ),
+                      child: favoritesData.players.isEmpty
+                          ? Center(child: Text("No favorite players found"))
+                          : ListView.separated(
+                              itemCount: favoritesData.players.length,
+                              itemBuilder: (context, index) {
+                                String name = playerNameList[index];
+                                String id = favoritesData.players[name];
+                                return ListTile(
+                                  title: Text(name.split(";")[0]),
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) {
+                                        return PlayerPage(id: id);
+                                      },
+                                    ));
+                                  },
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return Divider();
+                              },
+                            ),
                     ),
                   ],
                 );

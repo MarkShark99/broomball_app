@@ -9,13 +9,7 @@ class BroomballNotifications {
 
   BuildContext _context;
 
-  factory BroomballNotifications({BuildContext context}) {
-    _instance._context = context;
-
-    if (context != null) {
-      print("Changing notification BuildContext");
-    }
-
+  factory BroomballNotifications() {
     return _instance;
   }
 

@@ -3,8 +3,8 @@ import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/app_data.dart';
 import 'package:broomball_app/util/notifications.dart';
 import 'package:flutter/material.dart';
-
-// TODO: Fix bug with favorites lookup
+import 'package:html/parser.dart';
+import 'package:intl/intl.dart';
 
 class TeamPage extends StatefulWidget {
   final String id;
@@ -20,6 +20,8 @@ class TeamPage extends StatefulWidget {
 class TeamPageState extends State<TeamPage> {
   Future<Team> _team;
 
+  FavoritesData _favoritesData;
+
   BroomballNotifications _broomballNotifications;
 
   String _captainDisplayName = "N/A";
@@ -32,11 +34,12 @@ class TeamPageState extends State<TeamPage> {
   @override
   void initState() {
     AppData().loadFavoritesData().then((favoritesData) {
-      _isFavorite = favoritesData.teams.containsKey(widget.id);
+      this._favoritesData = favoritesData;
     });
     super.initState();
 
-    _broomballNotifications = BroomballNotifications(context: context);
+    _broomballNotifications = BroomballNotifications();
+
     _refresh();
   }
 
@@ -59,6 +62,9 @@ class TeamPageState extends State<TeamPage> {
 
           case ConnectionState.done:
             Team team = snapshot.data;
+            String name = parse(parse(team.name).body.text).documentElement.text;
+
+            this._isFavorite = this._favoritesData.teams.containsKey("${team.name} (${team.seasonId})");
 
             if (team == null) {
               return Scaffold(
@@ -114,7 +120,7 @@ class TeamPageState extends State<TeamPage> {
               length: 3,
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text(team.name),
+                  title: Text(name),
                   bottom: TabBar(
                     tabs: <Widget>[
                       Tab(
@@ -135,25 +141,22 @@ class TeamPageState extends State<TeamPage> {
                           this.setState(() {
                             this._isFavorite = !this._isFavorite;
                           });
-                          AppData().loadFavoritesData().then((favoritesData) {
-                            if (this._isFavorite) {
-                              favoritesData.teams["${team.name} (${team.seasonId})"] = team.id;
+                          if (this._isFavorite) {
+                            _favoritesData.teams["${team.name} (${team.seasonId})"] = team.id;
 
-                              // Schedule match notifications
-                              for (int i = 0; i < team.schedule.length; i++) {
-                                _broomballNotifications.scheduleNotification(team.id, team.schedule[i].startTimeDateTime.subtract(Duration(minutes: 30)), "${team.schedule[i].homeTeamName} vs. ${team.schedule[i].awayTeamName} - ${team.schedule[i].startTime} - ${team.schedule[i].rinkName}");
-                                // print("Scheduled match: $i");
+                            DateFormat notificationDateFormat = DateFormat.jm();
+                            // Schedule match notifications
+                            for (int i = 0; i < team.schedule.length; i++) {
+                              if (DateTime.now().difference(team.schedule[i].startTimeDateTime.subtract(Duration(minutes: 30))).inMinutes < 0) {
+                                _broomballNotifications.scheduleNotification(team.id, team.schedule[i].startTimeDateTime.subtract(Duration(minutes: 30)), "${team.schedule[i].homeTeamName} vs. ${team.schedule[i].awayTeamName} - ${notificationDateFormat.format(team.schedule[i].startTimeDateTime)} - ${team.schedule[i].rinkName}");
                               }
-
-                              // _broomballNotifications.scheduleNotification(team.id, DateTime.now().add(Duration(seconds: 3)), "X vs. Y");
-                              // print("Scheduling notification");
-                            } else {
-                              favoritesData.teams.remove(team.id);
-
-                              _broomballNotifications.cancelNotificationsById(team.id);
                             }
-                            AppData().writeFavoritesData(favoritesData);
-                          });
+                          } else {
+                            _favoritesData.teams.remove("${team.name} (${team.seasonId})");
+
+                            _broomballNotifications.cancelNotificationsById(team.id);
+                          }
+                          AppData().writeFavoritesData(_favoritesData);
                         }),
                     IconButton(
                       icon: Icon(Icons.refresh),
@@ -165,7 +168,7 @@ class TeamPageState extends State<TeamPage> {
                 ),
                 body: TabBarView(
                   children: <Widget>[
-                    Column(
+                    ListView(
                       children: <Widget>[
                         Card(
                           child: Column(
@@ -173,7 +176,7 @@ class TeamPageState extends State<TeamPage> {
                             children: <Widget>[
                               ListTile(
                                 leading: Icon(Icons.people),
-                                title: Text(team.name),
+                                title: Text(name),
                                 subtitle: Text("Name"),
                               ),
                               Divider(),
@@ -192,26 +195,37 @@ class TeamPageState extends State<TeamPage> {
                             ],
                           ),
                         ),
-                        Card(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                title: Text("Statistics"),
+                        GridView.count(
+                          crossAxisCount: 2,
+                          physics: ScrollPhysics(),
+                          shrinkWrap: true,
+                          children: <Widget>[
+                            Card(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("$_wins - $_losses - $_ties", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "Win - Loss - Tie",
+                                  ),
+                                ],
                               ),
-                              Divider(),
-                              ListTile(
-                                leading: Text("Record"),
-                                title: Text(_wins.toString() + " - " + _losses.toString() + " - " + _ties.toString()),
+                            ),
+                            Card(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("$_goals", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "Goals",
+                                  ),
+                                ],
                               ),
-                              Divider(),
-                              ListTile(
-                                leading: Text("Goals"),
-                                title: Text(_goals.toString()),
-                              )
-                            ],
-                          ),
-                        ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                     Center(
@@ -278,6 +292,6 @@ class TeamPageState extends State<TeamPage> {
   }
 
   void _refresh() {
-    _team = BroomballAPI().fetchTeam(widget.id);
+    this._team = BroomballAPI().fetchTeam(widget.id);
   }
 }

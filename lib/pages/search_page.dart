@@ -24,8 +24,6 @@ class SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
-  // TODO: Fix Paul's weird code
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +64,7 @@ class SearchPageState extends State<SearchPage> {
                 return CircularProgressIndicator();
               case ConnectionState.done:
                 List<SearchItem> searchItems = snapshot.data;
+                searchItems.sort((a, b) => a.name.compareTo(b.name));
 
                 return searchItems.isEmpty
                     ? Center(
@@ -75,7 +74,7 @@ class SearchPageState extends State<SearchPage> {
                         itemCount: searchItems.length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: Text(searchItems[index].name),
+                            title: Text(parse(parse(searchItems[index].name).body.text).documentElement.text),
                             subtitle: Text(searchItems[index].type),
                             onTap: () {
                               if (searchItems[index].type == "Player") {

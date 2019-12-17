@@ -96,7 +96,7 @@ class BroomballAPI {
 
   /// Fetches a player's data from broomball.mtu.edu/api/player/id/$id/key/0
   Future<Player> fetchPlayer(String id) async {
-    final Response response = await get("https://www.broomball.mtu.edu/api/player/id/" + id + "/key/0");
+    final Response response = await get("https://www.broomball.mtu.edu/api/player/id/$id/key/0");
     if (response.statusCode == 200) {
       try {
         return Player.fromJson(json.decode(response.body));
@@ -110,8 +110,7 @@ class BroomballAPI {
 
   /// Fetches search data from broomball.mtu.edu/api/player/search/$query/key/0
   Future<Player> fetchSearch(String query) async {
-    final Response searchResponse = await get("https://www.broomball.mtu.edu/api/player/search/" + query + "/key/0");
-    //final Response response = await get("https://www.broomball.mtu.edu/api/player/id/" + json.decode(searchResponse.body).id + "/key/0");
+    final Response searchResponse = await get("https://www.broomball.mtu.edu/api/player/search/$query/key/0");
     if (searchResponse.statusCode == 200) {
       try {
         String id = Search.fromJson(json.decode(searchResponse.body)).id;
@@ -126,7 +125,7 @@ class BroomballAPI {
 
   /// Fetches a team's data from broomball.mtu.edu/api/team/id/$id/key/0
   Future<Team> fetchTeam(String id) async {
-    final Response response = await get("https://www.broomball.mtu.edu/api/team/id/" + id + "/key/0");
+    final Response response = await get("https://www.broomball.mtu.edu/api/team/id/$id/key/0");
 
     if (response.statusCode == 200) {
       try {

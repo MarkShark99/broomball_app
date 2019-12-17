@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:broomball_app/util/app_data.dart';
 import 'package:flutter/widgets.dart';
 
-//TODO: Change to use a FutureBuilder, fix bug with favorites lookup
-
 class PlayerPage extends StatefulWidget {
   final id;
 
@@ -17,134 +15,234 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  Player _player;
+  Future<Player> _player;
+
+  FavoritesData _favoritesData;
 
   int _goals = 0;
   int _assists = 0;
   int _saves = 0;
   int _penaltyMinutes = 0;
   int _goalieMinutes = 0;
+  int _gamesPlayed = 0;
 
   bool _isFavorite = false;
 
   @override
   void initState() {
     AppData().loadFavoritesData().then((favoritesData) {
-      _isFavorite = favoritesData.players.containsKey(widget.id);
+      this._favoritesData = favoritesData;
     });
 
     super.initState();
+
     _refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title: Text(_player == null ? "" : _player.displayName),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
-            onPressed: () {
-              this.setState(() {
-                this._isFavorite = !this._isFavorite;
-              });
-              AppData().loadFavoritesData().then((favoritesData) {
-                if (this._isFavorite) {
-                  favoritesData.players["${_player.displayName};${_player.mtuId}"] = _player.id;
-                } else {
-                  favoritesData.players.remove(_player.id);
-                }
-                AppData().writeFavoritesData(favoritesData);
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {
-              _refresh();
-            },
-          ),
-        ],
-      ),
-      body: _player == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView(
-              children: <Widget>[
-                Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+    return FutureBuilder(
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+          case ConnectionState.active:
+            return Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: true,
+              ),
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          case ConnectionState.done:
+            Player player = snapshot.data;
+            this._isFavorite = this._favoritesData.players.containsKey("${player.displayName};${player.mtuId}");
+
+            if (player == null) {
+              return Scaffold(
+                appBar: AppBar(
+                  automaticallyImplyLeading: true,
+                ),
+                body: Center(
+                  child: Text("Unable to load player information"),
+                ),
+              );
+            }
+
+            // Calculate stats
+            _goals = 0;
+            _assists = 0;
+            _saves = 0;
+            _penaltyMinutes = 0;
+            _goalieMinutes = 0;
+            _gamesPlayed = 0;
+
+            for (PlayerStatsMatch match in player.stats) {
+              _goals += int.parse(match.goals);
+              _saves += int.parse(match.saves);
+              _assists += int.parse(match.assists);
+              _penaltyMinutes += int.parse(match.penaltyMinutes);
+              _goalieMinutes += int.parse(match.goalieMinutes);
+              _gamesPlayed += match.present == "1" ? 1 : 0;
+            }
+
+            return Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: true,
+                title: Text(player.displayName),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
+                    onPressed: () {
+                      this.setState(() {
+                        this._isFavorite = !this._isFavorite;
+                      });
+
+                      if (this._isFavorite) {
+                        _favoritesData.players["${player.displayName};${player.mtuId}"] = player.id;
+                      } else {
+                        _favoritesData.players.remove("${player.displayName};${player.mtuId}");
+                      }
+                      AppData().writeFavoritesData(_favoritesData);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.refresh),
+                    onPressed: () {
+                      _refresh();
+                    },
+                  ),
+                ],
+              ),
+              body: ListView(
+                children: <Widget>[
+                  GridView.count(
+                    crossAxisCount: 2,
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
                     children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.person),
-                        title: Text(_player.displayName),
-                        subtitle: Text("Name"),
+                      Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("$_goals", style: Theme.of(context).textTheme.headline),
+                            Text(
+                              "Goals",
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("$_saves", style: Theme.of(context).textTheme.headline),
+                            Text(
+                              "Saves",
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("$_assists", style: Theme.of(context).textTheme.headline),
+                            Text(
+                              "Assists",
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("$_goalieMinutes", style: Theme.of(context).textTheme.headline),
+                            Text(
+                              "${_goalieMinutes == 1 ? "Goalie Minute" : "Goalie Minutes"}",
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("$_penaltyMinutes", style: Theme.of(context).textTheme.headline),
+                            Text(
+                              "Penalty Minutes",
+                            ),
+                          ],
+                        ),
+                      ),
+                      Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("$_gamesPlayed", style: Theme.of(context).textTheme.headline),
+                            Text(
+                              "Matches Played",
+                            ),
+                          ],
+                        ),
                       ),
                     ],
-                  ),
-                ),
-                Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        title: Text("Statistics"),
-                      ),
-                      Divider(),
-                      ListTile(
-                        title: Text(_goals.toString()),
-                        subtitle: Text(_goals == 1 ? "Goal" : "Goals"),
-                      ),
-                      Divider(),
-                      ListTile(
-                        title: Text(_saves.toString()),
-                        subtitle: Text(_saves == 1 ? "Save" : "Saves"),
-                      ),
-                      Divider(),
-                      ListTile(
-                        title: Text(_assists.toString()),
-                        subtitle: Text(_assists == 1 ? "Assist" : "Assists"),
-                      ),
-                      Divider(),
-                      ListTile(
-                        title: Text(_goalieMinutes.toString()),
-                        subtitle: Text(_goalieMinutes == 1 ? "Goalie Minute" : "Goalie Minutes"),
-                      ),
-                      Divider(),
-                      ListTile(
-                        title: Text(_penaltyMinutes.toString()),
-                        subtitle: Text(_penaltyMinutes == 1 ? "Penalty Minute" : "Penalty Minutes"),
-                      ),
-                    ],
-                  ),
-                ),
-                Column(),
-              ],
-            ),
+                  )
+
+                  // Card(
+                  //   child: Column(
+                  //     mainAxisSize: MainAxisSize.min,
+                  //     children: <Widget>[
+                  //       ListTile(
+                  //         title: Text("Statistics"),
+                  //       ),
+                  //       Divider(),
+                  //       ListTile(
+                  //         title: Text(_goals.toString()),
+                  //         subtitle: Text(_goals == 1 ? "Goal" : "Goals"),
+                  //       ),
+                  //       Divider(),
+                  //       ListTile(
+                  //         title: Text(_saves.toString()),
+                  //         subtitle: Text(_saves == 1 ? "Save" : "Saves"),
+                  //       ),
+                  //       Divider(),
+                  //       ListTile(
+                  //         title: Text(_assists.toString()),
+                  //         subtitle: Text(_assists == 1 ? "Assist" : "Assists"),
+                  //       ),
+                  //       Divider(),
+                  //       ListTile(
+                  //         title: Text(_goalieMinutes.toString()),
+                  //         subtitle: Text(_goalieMinutes == 1 ? "Goalie Minute" : "Goalie Minutes"),
+                  //       ),
+                  //       Divider(),
+                  //       ListTile(
+                  //         title: Text(_penaltyMinutes.toString()),
+                  //         subtitle: Text(_penaltyMinutes == 1 ? "Penalty Minute" : "Penalty Minutes"),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Column(),
+                ],
+              ),
+            );
+        }
+      },
+      future: _player,
     );
   }
 
   void _refresh() {
-    BroomballAPI().fetchPlayer(widget.id).then((Player player) {
-      this.setState(() {
-        _player = player;
-        _goals = 0;
-        _assists = 0;
-        _saves = 0;
-        _penaltyMinutes = 0;
-        _goalieMinutes = 0;
-
-        for (PlayerStatsMatch match in player.stats) {
-          _goals += int.parse(match.goals);
-          _saves += int.parse(match.saves);
-          _assists += int.parse(match.assists);
-          _penaltyMinutes += int.parse(match.penaltyMinutes);
-          _goalieMinutes += int.parse(match.goalieMinutes);
-        }
-      });
-    });
+    this._player = BroomballAPI().fetchPlayer(widget.id);
   }
 }
