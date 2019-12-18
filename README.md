@@ -9,7 +9,4 @@ An application for viewing broomball player, team, and match data for Michigan T
   * View player stats
   * Favorite players for quick access
   * Access match schedule for a given day
-
-### Upcoming Features
   * Notifications for upcoming matches
-  * A better looking player info page
