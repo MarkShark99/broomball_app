@@ -196,43 +196,6 @@ class _PlayerPageState extends State<PlayerPage> {
                       ),
                     ],
                   )
-
-                  // Card(
-                  //   child: Column(
-                  //     mainAxisSize: MainAxisSize.min,
-                  //     children: <Widget>[
-                  //       ListTile(
-                  //         title: Text("Statistics"),
-                  //       ),
-                  //       Divider(),
-                  //       ListTile(
-                  //         title: Text(_goals.toString()),
-                  //         subtitle: Text(_goals == 1 ? "Goal" : "Goals"),
-                  //       ),
-                  //       Divider(),
-                  //       ListTile(
-                  //         title: Text(_saves.toString()),
-                  //         subtitle: Text(_saves == 1 ? "Save" : "Saves"),
-                  //       ),
-                  //       Divider(),
-                  //       ListTile(
-                  //         title: Text(_assists.toString()),
-                  //         subtitle: Text(_assists == 1 ? "Assist" : "Assists"),
-                  //       ),
-                  //       Divider(),
-                  //       ListTile(
-                  //         title: Text(_goalieMinutes.toString()),
-                  //         subtitle: Text(_goalieMinutes == 1 ? "Goalie Minute" : "Goalie Minutes"),
-                  //       ),
-                  //       Divider(),
-                  //       ListTile(
-                  //         title: Text(_penaltyMinutes.toString()),
-                  //         subtitle: Text(_penaltyMinutes == 1 ? "Penalty Minute" : "Penalty Minutes"),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // Column(),
                 ],
               ),
             );

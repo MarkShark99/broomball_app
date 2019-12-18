@@ -1,6 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
 class AboutPage extends StatelessWidget {
+   String _appName;
+   String _packageName;
+   String _version;
+   String _buildNumber;
+  
+  AboutPage() {
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      this._appName = packageInfo.appName;
+      this._packageName = packageInfo.packageName;
+      this._version = packageInfo.version;
+      this._buildNumber = packageInfo.buildNumber;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,21 +53,16 @@ class AboutPage extends StatelessWidget {
             ),
             ListTile(
               title: Text("Paul Rayment"),
-              subtitle: Text("Developer"),
-            ),
-            ListTile(
-              title: Text("Michael Thorburn"),
-              subtitle: Text("Developer"),
+              subtitle: Text("Icon Designer"),
             ),
             Divider(),
-            ListTile(
-              title: Text("Open Source Licenses"),
-              onTap: () {},
+            AboutListTile(
+              icon: Icon(Icons.info),
+              applicationIcon: FlutterLogo(),
+              applicationName: "Broomball",
+              applicationVersion: _version,
+              applicationLegalese: "© 2019 Geoff Inc.",
             ),
-            Divider(),
-            ListTile(
-              title: Text("Version 1.0.0-beta2"),
-            )
           ],
         ),
       ),
