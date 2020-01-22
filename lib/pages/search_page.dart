@@ -64,7 +64,7 @@ class SearchPageState extends State<SearchPage> {
                 return CircularProgressIndicator();
               case ConnectionState.done:
                 List<SearchItem> searchItems = snapshot.data;
-                searchItems.sort((a, b) => a.name.compareTo(b.name));
+                // searchItems.sort((a, b) => a.name.compareTo(b.name));
 
                 return searchItems.isEmpty
                     ? Center(

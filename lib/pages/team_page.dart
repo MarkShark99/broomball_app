@@ -147,8 +147,9 @@ class TeamPageState extends State<TeamPage> {
                             DateFormat notificationDateFormat = DateFormat.jm();
                             // Schedule match notifications
                             for (int i = 0; i < team.schedule.length; i++) {
-                              if (DateTime.now().difference(team.schedule[i].startTimeDateTime.subtract(Duration(minutes: 30))).inMinutes < 0) {
+                              if (team.schedule[i].startTimeDateTime.difference(DateTime.now()).inMinutes >= 0) {
                                 _broomballNotifications.scheduleNotification(team.id, team.schedule[i].startTimeDateTime.subtract(Duration(minutes: 30)), "${team.schedule[i].homeTeamName} vs. ${team.schedule[i].awayTeamName} - ${notificationDateFormat.format(team.schedule[i].startTimeDateTime)} - ${team.schedule[i].rinkName}");
+                                print("Registered notification ${DateTime.now()} at ${team.schedule[i].startTimeDateTime.subtract(Duration(minutes: 30))}");
                               }
                             }
                           } else {
@@ -171,6 +172,9 @@ class TeamPageState extends State<TeamPage> {
                     ListView(
                       children: <Widget>[
                         Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -201,6 +205,9 @@ class TeamPageState extends State<TeamPage> {
                           shrinkWrap: true,
                           children: <Widget>[
                             Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -213,6 +220,9 @@ class TeamPageState extends State<TeamPage> {
                               ),
                             ),
                             Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,

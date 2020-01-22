@@ -44,7 +44,7 @@ class BroomballNotifications {
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails("Broomball", "Broomball", "Broomball");
 
     NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, null);
-    await _flutterLocalNotificationsPlugin.schedule(int.parse(id), "A broomball match is starting soon!", teamVsTeam, dateTime.subtract(Duration(minutes: 0)), notificationDetails, androidAllowWhileIdle: true);
+    await _flutterLocalNotificationsPlugin.schedule(int.parse(id), "A broomball match is starting soon!", teamVsTeam, dateTime, notificationDetails, androidAllowWhileIdle: true);
 
     // print("Notification scheduled");
   }

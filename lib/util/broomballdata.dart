@@ -138,6 +138,20 @@ class BroomballAPI {
     }
   }
 
+  Future<News> fetchNews() async {
+    final Response response = await get("https://www.broomball.mtu.edu/api/news/key/0");
+
+    if (response.statusCode == 200) {
+      try {
+        return News.fromJson(json.decode(response.body));
+      } on Exception {
+        return null;
+      }
+    } else {
+      throw Exception("Unable to load team data");
+    }
+  }
+
   /// Fetches the schedule for the given day in format YYYY-MM-DD
   Future<ScheduleDay> fetchScheduleDay(String date) async {
     final Response response = await get("https://www.broomball.mtu.edu/api/schedule/day/$date/key/0");
@@ -421,7 +435,24 @@ class TeamScheduleMatch {
   final String startTime;
   final DateTime startTimeDateTime;
 
-  TeamScheduleMatch({@required this.gameId, @required this.played, @required this.otl, @required this.videoUrl, @required this.rinkName, @required this.canceled, @required this.homeTeamId, @required this.homeTeamName, @required this.homeGoals, @required this.awayTeamId, @required this.awayTeamName, @required this.awayGoals, @required this.rinkId, @required this.forfeited, @required this.startTime, @required this.startTimeDateTime});
+  TeamScheduleMatch({
+    @required this.gameId,
+    @required this.played,
+    @required this.otl,
+    @required this.videoUrl,
+    @required this.rinkName,
+    @required this.canceled,
+    @required this.homeTeamId,
+    @required this.homeTeamName,
+    @required this.homeGoals,
+    @required this.awayTeamId,
+    @required this.awayTeamName,
+    @required this.awayGoals,
+    @required this.rinkId,
+    @required this.forfeited,
+    @required this.startTime,
+    @required this.startTimeDateTime,
+  });
 
   factory TeamScheduleMatch.fromJson(Map<String, dynamic> json) {
     DateFormat dateFormat = new DateFormat("EEE. MMM d, yyyy - h:mm a");
@@ -434,10 +465,10 @@ class TeamScheduleMatch {
       rinkName: json["rink_name"],
       canceled: json["canceled"],
       homeTeamId: json["home_team_id"],
-      homeTeamName: json["home_team_name"],
+      homeTeamName: parse(parse(json["home_team_name"]).body.text).documentElement.text,
       homeGoals: json["home_goals"],
       awayTeamId: json["away_team_id"],
-      awayTeamName: json["away_team_name"],
+      awayTeamName: parse(parse(json["away_team_name"]).body.text).documentElement.text,
       awayGoals: json["away_goals"],
       rinkId: json["rink_id"],
       forfeited: json["forfeited"],
@@ -563,6 +594,86 @@ class ScheduleMatch {
       played: json["played"],
       homeGoals: json["home_goals"],
       awayGoals: json["away_goals"],
+    );
+  }
+}
+
+class News {
+  final List<NewsEntry> entries;
+
+  News({@required this.entries});
+
+  factory News.fromJson(List<dynamic> json) {
+    List<NewsEntry> entries = <NewsEntry>[];
+
+    for (Map<String, dynamic> newsEntry in json) {
+      entries.add(NewsEntry.fromJson(newsEntry));
+    }
+
+    return News(
+      entries: entries,
+    );
+  }
+}
+
+class NewsEntry {
+  final String id;
+  final String firstName;
+  final String lastName;
+  final String displayName;
+  final String mtuId;
+  final String displayAlias;
+  final String email;
+  final String type;
+  final String referenceType;
+  final String referenceId;
+  final String datePosted;
+  final String authorPlayerId;
+  final String subject;
+  final String body;
+  final String published;
+  final String priority;
+  final String author;
+
+  NewsEntry({
+    @required this.id,
+    @required this.firstName,
+    @required this.lastName,
+    @required this.displayName,
+    @required this.mtuId,
+    @required this.displayAlias,
+    @required this.email,
+    @required this.type,
+    @required this.referenceType,
+    @required this.referenceId,
+    @required this.datePosted,
+    @required this.authorPlayerId,
+    @required this.subject,
+    @required this.body,
+    @required this.published,
+    @required this.priority,
+    @required this.author,
+  });
+
+  factory NewsEntry.fromJson(Map<String, dynamic> json) {
+    return NewsEntry(
+      id: json["id"],
+      firstName: json["first_name"],
+      lastName: json["last_name"],
+      displayName: json["display_name"],
+      mtuId: json["mtu_id"],
+      displayAlias: json["display_alias"],
+      email: json["email"],
+      type: json["type"],
+      referenceType: json["reference_type"],
+      referenceId: json["reference_id"],
+      datePosted: json["date_posted"],
+      authorPlayerId: json["author_player_id"],
+      subject: json["subject"],
+      body: json["body"],
+      published: json["published"],
+      priority: json["priority"],
+      author: json["author"],
     );
   }
 }
