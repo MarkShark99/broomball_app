@@ -29,6 +29,9 @@ class TeamPageState extends State<TeamPage> {
   int _losses = 0;
   int _ties = 0;
   int _goals = 0;
+  double _winPercentage = 0;
+  double _averageGoals = 0;
+  int _matchesPlayed = 0;
   bool _isFavorite = false;
 
   @override
@@ -82,6 +85,9 @@ class TeamPageState extends State<TeamPage> {
             _losses = 0;
             _ties = 0;
             _goals = 0;
+            _winPercentage = 0;
+            _averageGoals = 0;
+            _matchesPlayed = 0;
 
             for (TeamRosterPlayer teamRosterPlayer in team.roster) {
               if (teamRosterPlayer.id == team.captainPlayerId) {
@@ -92,6 +98,8 @@ class TeamPageState extends State<TeamPage> {
 
             for (TeamScheduleMatch teamScheduleMatch in team.schedule) {
               if (teamScheduleMatch.played == "1") {
+                _matchesPlayed++;
+
                 if (teamScheduleMatch.homeGoals == teamScheduleMatch.awayGoals) {
                   _goals += int.parse(teamScheduleMatch.homeGoals);
                   _ties++;
@@ -115,6 +123,9 @@ class TeamPageState extends State<TeamPage> {
                 }
               }
             }
+
+            _winPercentage = _wins / _matchesPlayed * 100;
+            _averageGoals = _goals / _matchesPlayed;
 
             return DefaultTabController(
               length: 3,
@@ -212,7 +223,10 @@ class TeamPageState extends State<TeamPage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text("$_wins - $_losses - $_ties", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "$_wins - $_losses - $_ties",
+                                    style: Theme.of(context).textTheme.headline,
+                                  ),
                                   Text(
                                     "Win - Loss - Tie",
                                   ),
@@ -230,6 +244,36 @@ class TeamPageState extends State<TeamPage> {
                                   Text("$_goals", style: Theme.of(context).textTheme.headline),
                                   Text(
                                     "Goals",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("${_winPercentage.toInt()}%", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "Win Percentage",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("${_averageGoals.toStringAsFixed(2)}", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "Average Goals/Game",
                                   ),
                                 ],
                               ),
@@ -263,7 +307,10 @@ class TeamPageState extends State<TeamPage> {
                       child: ListView.separated(
                         itemCount: team.schedule.length,
                         itemBuilder: (context, index) {
+                          String win = ((team.schedule[index].homeTeamName == team.name && int.parse(team.schedule[index].homeGoals) > int.parse(team.schedule[index].awayGoals)) || (team.schedule[index].awayTeamName == team.name && int.parse(team.schedule[index].awayGoals) > int.parse(team.schedule[index].homeGoals))) ? "W" : "L";
+                          
                           return ListTile(
+                            // leading: Text(team.schedule[index].played == "1" ? win : "U"),
                             title: Text("${team.schedule[index].homeTeamName} vs. ${team.schedule[index].awayTeamName}"),
                             subtitle: Text("${team.schedule[index].startTime} - ${team.schedule[index].rinkName}"),
                             trailing: team.schedule[index].played == "1" ? Text("${team.schedule[index].homeGoals.toString()} - ${team.schedule[index].awayGoals.toString()}") : Text("Unplayed"),

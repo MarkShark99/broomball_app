@@ -117,6 +117,12 @@ class _PlayerPageState extends State<PlayerPage> {
               ),
               body: ListView(
                 children: <Widget>[
+                  Center(
+                    child: Container(
+                      child: Text("Career Totals", style: Theme.of(context).textTheme.title),
+                      padding: EdgeInsets.all(8.0),
+                    ),
+                  ),
                   GridView.count(
                     crossAxisCount: 2,
                     physics: ScrollPhysics(),

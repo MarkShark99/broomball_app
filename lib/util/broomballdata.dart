@@ -490,7 +490,7 @@ class ScheduleDay {
 
     String key = json.keys.toList()[0];
 
-    print(json);
+    // print(json);
     for (String dayTime in json[key].keys.toList()) {
       times[dayTime] = ScheduleDayTime.fromJson(json[key][dayTime]);
     }

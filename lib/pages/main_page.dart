@@ -118,7 +118,7 @@ class MainPageState extends State<MainPage> {
             },
           ));
         }));
-    
+
     // drawerListTiles.add(ListTile(
     //   leading: Icon(Icons.description),
     //   title: Text("News"),
@@ -179,6 +179,34 @@ class MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text("${widget.drawerItems[_currentDrawerIndex].title}"),
         actions: <Widget>[
+          // FlatButton(
+          //   onPressed: () {
+          //     showDialog(
+          //       context: context,
+          //       builder: (context) {
+          //         return SimpleDialog(
+          //           title: Text("Select a year"),
+          //           children: _yearList.map((year) {
+          //             return ListTile(
+          //               title: Text(year),
+          //               onTap: () {
+          //                 Navigator.of(context).pop();
+          //                 this.setState(() {
+          //                   this._currentYear = year;
+          //                   this._broomballData = this._broomballWebScraper.run(year);
+          //                 });
+          //               },
+          //             );
+          //           }).toList(),
+          //         );
+          //       },
+          //     );
+          //   },
+          //   child: Text(_currentYear),
+          // ),
+          Center(
+            child: Text("$_currentYear"),
+          ),
           IconButton(
             icon: Icon(Icons.date_range),
             onPressed: () {
