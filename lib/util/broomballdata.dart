@@ -60,14 +60,16 @@ class BroomballWebScraper {
           for (int k = 1; k < tableRows.length; k++) {
             String teamID;
             String teamName;
+            String points;
 
             List<Element> cells = tableRows[k].querySelectorAll("td");
             List<String> splitURL = cells[0].querySelector("a").attributes["href"].split("/");
 
             teamID = splitURL.last;
             teamName = cells[0].querySelector("a").text;
+            points = cells[4].text;
 
-            division.teamIDs.add(teamID);
+            division.teamIDs.add("$teamID;$points");
             broomballData.teams[teamID] = teamName;
           }
           conference.divisions[divisionName] = division;

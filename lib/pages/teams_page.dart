@@ -19,6 +19,9 @@ class TeamsPage extends StatelessWidget {
     }
     // teamNameList.sort();
 
+    int rank = 0;
+    int previousPoints;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -30,14 +33,22 @@ class TeamsPage extends StatelessWidget {
           // String teamName = teamNameList[index];
           // String teamID = teamIDMap[teamNameList[index]];
 
-          String teamID = division.teamIDs.toList()[index];
+          String teamID = division.teamIDs.toList()[index].split(";")[0];
           String teamName = broomballData.teams[teamID];
-          String rank = (index + 1).toString();
+          int points = int.parse(division.teamIDs.toList()[index].split(";")[1]);
+
+          if (points != previousPoints )
+          {
+            rank++;
+          }
+
+          previousPoints = points;
 
           return ListTile(
             title: Text(
               teamName,
             ),
+            subtitle: Text("$points points"),
             trailing: Text("#$rank"),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
