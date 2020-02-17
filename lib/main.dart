@@ -18,6 +18,12 @@ class BroomballApp extends StatelessWidget {
           primaryColor: brightness == Brightness.light ? Color(0xFFFFCD00) : Color(0xFF008197),
           accentColor: brightness == Brightness.light ? Color(0xFFFFCD00) : Color(0xFF008197),
           brightness: brightness,
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            },
+          ),
         );
       },
       themedWidgetBuilder: (context, theme) {
