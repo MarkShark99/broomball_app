@@ -4,7 +4,7 @@ import 'package:broomball_app/util/broomballdata.dart';
 
 class TeamsPage extends StatelessWidget {
   final Division division;
-  final BroomballData broomballData;
+  final BroomballMainPageData broomballData;
 
   TeamsPage({@required this.division, @required this.broomballData});
 

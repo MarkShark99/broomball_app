@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class ConferenceFragment extends StatefulWidget {
   final String year;
-  final Future<BroomballData> broomballData;
+  final Future<BroomballMainPageData> broomballData;
 
   ConferenceFragment({@required this.year, @required this.broomballData});
 
@@ -27,7 +27,7 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
             case ConnectionState.active:
               return CircularProgressIndicator();
             case ConnectionState.done:
-              BroomballData broomballData = snapshot.data;
+              BroomballMainPageData broomballData = snapshot.data;
 
               return ListView.separated(
                 itemCount: broomballData.conferences.length,

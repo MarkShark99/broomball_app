@@ -29,7 +29,7 @@ class MainPage extends StatefulWidget {
 
 class MainPageState extends State<MainPage> {
   final BroomballWebScraper _broomballWebScraper = BroomballWebScraper();
-  Future<BroomballData> _broomballData;
+  Future<BroomballMainPageData> _broomballData;
 
   int _currentDrawerIndex = 0;
   String _currentYear;

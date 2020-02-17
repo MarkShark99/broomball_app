@@ -5,12 +5,12 @@ import 'package:html/parser.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
-class BroomballData {
+class BroomballMainPageData {
   String year;
   Map<String, Conference> conferences;
   Map<String, String> teams;
 
-  BroomballData()
+  BroomballMainPageData()
       : year = "",
         conferences = Map<String, Conference>(),
         teams = Map<String, String>();
@@ -27,10 +27,11 @@ class Division {
 }
 
 class BroomballWebScraper {
-  final String broomballUrl = "https://broomball.mtu.edu/teams/view/";
+  static final String broomballUrl = "https://broomball.mtu.edu/teams/view/";
+  static final String broomballPlayerUrl = "https://www.broomball.mtu.edu/player/view/";
 
-  Future<BroomballData> run(String year) async {
-    BroomballData broomballData = BroomballData();
+  Future<BroomballMainPageData> run(String year) async {
+    BroomballMainPageData broomballData = BroomballMainPageData();
 
     print("$broomballUrl$year");
     final Response response = await get("$broomballUrl$year");
@@ -85,6 +86,31 @@ class BroomballWebScraper {
       throw Exception("Error connecting to broomball site.");
     }
   }
+
+  static Future<Map<String, Map<String, String>>> scrapePlayerTeams(String id) async {
+    Map<String, Map<String, String>> playerTeams = {};
+
+    final Response response = await get("$broomballPlayerUrl$id");
+    if (response.statusCode == 200) {
+      Document document = parse(response.body);
+
+      List<Element> years = document.querySelectorAll("#main_content_container > h1");
+      List<Element> teamsPerYear = document.querySelectorAll("#main_content_container > blockquote");
+      
+      for (int i = 0; i < years.length; i++) {
+        // print("Year: ${years[i].text}");
+        Map<String, String> currentYearMap = {};
+        List<Element> teams = teamsPerYear[i].querySelectorAll("h1 > a");
+        for (Element team in teams) {
+          // print("Team: ${team.text}");
+          currentYearMap[team.text] = team.attributes["href"].split("/").last;
+        }
+
+        playerTeams[years[i].text] = currentYearMap;
+      }
+      return playerTeams;
+    }
+  }
 }
 
 class BroomballAPI {
@@ -101,7 +127,9 @@ class BroomballAPI {
     final Response response = await get("https://www.broomball.mtu.edu/api/player/id/$id/key/0");
     if (response.statusCode == 200) {
       try {
-        return Player.fromJson(json.decode(response.body));
+        Player player = Player.fromJson(json.decode(response.body));
+
+        return player;
       } on Exception {
         return null;
       }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class TeamsFragment extends StatefulWidget {
   final String year;
-  final Future<BroomballData> broomballData;
+  final Future<BroomballMainPageData> broomballData;
 
   TeamsFragment({@required this.year, @required this.broomballData});
 
@@ -33,7 +33,7 @@ class TeamsFragmentState extends State<TeamsFragment> {
             case ConnectionState.active:
               return CircularProgressIndicator();
             case ConnectionState.done:
-              BroomballData broomballData = snapshot.data;
+              BroomballMainPageData broomballData = snapshot.data;
 
               Map<String, String> teamIDMap = Map();
               List<String> teamNameList = <String>[];

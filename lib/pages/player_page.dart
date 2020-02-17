@@ -1,3 +1,4 @@
+import 'package:broomball_app/pages/team_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/material.dart';
 import 'package:broomball_app/util/app_data.dart';
@@ -16,6 +17,7 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
   Future<Player> _player;
+  Future<Map<String, Map<String, String>>> _teamMap;
 
   FavoritesData _favoritesData;
 
@@ -87,140 +89,188 @@ class _PlayerPageState extends State<PlayerPage> {
               _gamesPlayed += match.present == "1" ? 1 : 0;
             }
 
-            return Scaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: true,
-                title: Text(player.displayName),
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
-                    onPressed: () {
-                      this.setState(() {
-                        this._isFavorite = !this._isFavorite;
-                      });
+            return DefaultTabController(
+              length: 2,
+              child: Scaffold(
+                appBar: AppBar(
+                    automaticallyImplyLeading: true,
+                    title: Text(player.displayName),
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(this._isFavorite ? Icons.star : Icons.star_border),
+                        onPressed: () {
+                          this.setState(() {
+                            this._isFavorite = !this._isFavorite;
+                          });
 
-                      if (this._isFavorite) {
-                        _favoritesData.players["${player.displayName};${player.mtuId}"] = player.id;
-                      } else {
-                        _favoritesData.players.remove("${player.displayName};${player.mtuId}");
-                      }
-                      AppData().writeFavoritesData(_favoritesData);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.refresh),
-                    onPressed: () {
-                      _refresh();
-                    },
-                  ),
-                ],
-              ),
-              body: ListView(
-                children: <Widget>[
-                  Center(
-                    child: Container(
-                      child: Text("Career Totals", style: Theme.of(context).textTheme.title),
-                      padding: EdgeInsets.all(8.0),
-                    ),
-                  ),
-                  GridView.count(
-                    crossAxisCount: 2,
-                    physics: ScrollPhysics(),
-                    shrinkWrap: true,
-                    children: <Widget>[
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("$_goals", style: Theme.of(context).textTheme.headline),
-                            Text(
-                              "Goals",
-                            ),
-                          ],
-                        ),
+                          if (this._isFavorite) {
+                            _favoritesData.players["${player.displayName};${player.mtuId}"] = player.id;
+                          } else {
+                            _favoritesData.players.remove("${player.displayName};${player.mtuId}");
+                          }
+                          AppData().writeFavoritesData(_favoritesData);
+                        },
                       ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("$_saves", style: Theme.of(context).textTheme.headline),
-                            Text(
-                              "Saves",
-                            ),
-                          ],
-                        ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("$_assists", style: Theme.of(context).textTheme.headline),
-                            Text(
-                              "Assists",
-                            ),
-                          ],
-                        ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("$_goalieMinutes", style: Theme.of(context).textTheme.headline),
-                            Text(
-                              "${_goalieMinutes == 1 ? "Goalie Minute" : "Goalie Minutes"}",
-                            ),
-                          ],
-                        ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("$_penaltyMinutes", style: Theme.of(context).textTheme.headline),
-                            Text(
-                              "Penalty Minutes",
-                            ),
-                          ],
-                        ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("$_gamesPlayed", style: Theme.of(context).textTheme.headline),
-                            Text(
-                              "Matches Played",
-                            ),
-                          ],
-                        ),
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () {
+                          _refresh();
+                        },
                       ),
                     ],
-                  )
-                ],
+                    bottom: TabBar(
+                      tabs: <Widget>[
+                        Tab(text: "Career Totals"),
+                        Tab(text: "Teams")
+                      ],
+                    )),
+                body: TabBarView(
+                  children: <Widget>[
+                    ListView(
+                      children: <Widget>[
+                        GridView.count(
+                          crossAxisCount: 2,
+                          physics: ScrollPhysics(),
+                          shrinkWrap: true,
+                          children: <Widget>[
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("$_goals", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "Goals",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("$_saves", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "Saves",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("$_assists", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "Assists",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("$_goalieMinutes", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "${_goalieMinutes == 1 ? "Goalie Minute" : "Goalie Minutes"}",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("$_penaltyMinutes", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "Penalty Minutes",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("$_gamesPlayed", style: Theme.of(context).textTheme.headline),
+                                  Text(
+                                    "Matches Played",
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    FutureBuilder(
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                          case ConnectionState.waiting:
+                          case ConnectionState.active:
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          case ConnectionState.done:
+                            Map<String, Map<String, String>> data = snapshot.data;
+
+                            List<ListTile> listTiles = <ListTile>[];
+
+                            print(data);
+                            List<String> keyList = data.keys.toList();
+                            for (String k in keyList) {
+                              List<String> teamNameList = data[k].keys.toList();
+                              for (int i = 0; i < teamNameList.length; i++) {
+                                listTiles.add(ListTile(
+                                  title: Text("${teamNameList[i]} ($k)"),
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) {
+                                        return TeamPage(
+                                          id: data[k][teamNameList[i]],
+                                        );
+                                      },
+                                    ));
+                                  },
+                                ));
+                              }
+                            }
+                            return ListView(
+                              children: ListTile.divideTiles(tiles: listTiles, context: context).toList(),
+                            );
+                        }
+
+                        return null;
+                      },
+                      future: _teamMap,
+                    ),
+                  ],
+                ),
               ),
             );
         }
@@ -231,5 +281,6 @@ class _PlayerPageState extends State<PlayerPage> {
 
   void _refresh() {
     this._player = BroomballAPI().fetchPlayer(widget.id);
+    this._teamMap = BroomballWebScraper.scrapePlayerTeams(widget.id);
   }
 }
