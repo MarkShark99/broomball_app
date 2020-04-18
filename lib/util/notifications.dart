@@ -21,6 +21,9 @@ class BroomballNotifications {
     InitializationSettings initializationSettings = InitializationSettings(androidInitializationSettings, null);
 
     _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: null);
+    
+    // Cancels all scheduled notifications
+    _flutterLocalNotificationsPlugin.cancelAll();
   }
 
   Future onSelectNotification(String payload) async {
