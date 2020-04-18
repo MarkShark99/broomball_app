@@ -7,12 +7,6 @@ class AboutPage extends StatelessWidget {
   String _version;
   String _buildNumber;
 
-  Image lightBroomballIcon;
-  Image darkBroomballIcon;
-
-  Image lightIRHCIcon;
-  Image darkIRHCIcon;
-
   AboutPage() {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
       this._appName = packageInfo.appName;
