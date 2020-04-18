@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
 class AboutPage extends StatelessWidget {
-   String _appName;
-   String _packageName;
-   String _version;
-   String _buildNumber;
-  
+  String _appName;
+  String _packageName;
+  String _version;
+  String _buildNumber;
+
+  Image lightBroomballIcon;
+  Image darkBroomballIcon;
+
+  Image lightIRHCIcon;
+  Image darkIRHCIcon;
+
   AboutPage() {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
       this._appName = packageInfo.appName;
@@ -18,6 +24,8 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: true, title: Text("About")),
       body: Container(
@@ -28,13 +36,17 @@ class AboutPage extends StatelessWidget {
                 Expanded(
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: Theme.of(context).brightness == Brightness.light ? Image(image: AssetImage("assets/icon_foreground_black.png")) : Image(image: AssetImage("assets/icon_foreground_white.png")),
+                    child: Theme.of(context).brightness == Brightness.light
+                        ? Image.asset("assets/icon_foreground_black.png", width: 100, height: 100)
+                        : Image.asset("assets/icon_foreground_white.png", width: 100, height: 100),
                   ),
                 ),
                 Expanded(
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: Theme.of(context).brightness == Brightness.light ? Image(image: AssetImage("assets/irhc_new_logo_black.png")) : Image(image: AssetImage("assets/irhc_new_logo_white.png")),
+                    child: Theme.of(context).brightness == Brightness.light
+                        ? Image.asset("assets/irhc_new_logo_black.png", width: 100, height: 100)
+                        : Image.asset("assets/irhc_new_logo_white.png", width: 100, height: 100),
                   ),
                 ),
               ],
