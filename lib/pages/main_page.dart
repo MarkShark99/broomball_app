@@ -1,5 +1,5 @@
-import 'package:broomball_app/fragments/android/conference_fragment.dart';
-import 'package:broomball_app/fragments/android/teams_fragment.dart';
+import 'package:broomball_app/fragments/android/conference_fragment_android.dart';
+import 'package:broomball_app/fragments/android/teams_fragment_android.dart';
 import 'package:broomball_app/pages/about_page.dart';
 import 'package:broomball_app/pages/favorites_page.dart';
 import 'package:broomball_app/pages/schedule_page.dart';
@@ -9,8 +9,6 @@ import 'package:broomball_app/util/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'news_page.dart';
 
 /// Class that contains fragments for Conferences, Teams, and Players
 /// as well as a navigation drawer
@@ -80,6 +78,7 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    
     List<Widget> drawerListTiles = [];
 
     drawerListTiles.add(

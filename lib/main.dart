@@ -1,3 +1,4 @@
+import 'package:broomball_app/pages/android/main_page_android.dart';
 import 'package:broomball_app/pages/main_page.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class BroomballApp extends StatelessWidget {
         return new MaterialApp(
           title: appTitle,
           theme: theme,
-          home: new MainPage(),
+          home: new MainPageAndroid(),
           debugShowCheckedModeBanner: false,
         );
       },
