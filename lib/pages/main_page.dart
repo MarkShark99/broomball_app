@@ -1,5 +1,5 @@
-import 'package:broomball_app/fragments/conference_fragment.dart';
-import 'package:broomball_app/fragments/teams_fragment.dart';
+import 'package:broomball_app/fragments/android/conference_fragment.dart';
+import 'package:broomball_app/fragments/android/teams_fragment.dart';
 import 'package:broomball_app/pages/about_page.dart';
 import 'package:broomball_app/pages/favorites_page.dart';
 import 'package:broomball_app/pages/schedule_page.dart';
