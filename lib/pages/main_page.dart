@@ -3,7 +3,6 @@ import 'package:broomball_app/fragments/android/teams_fragment_android.dart';
 import 'package:broomball_app/pages/about_page.dart';
 import 'package:broomball_app/pages/favorites_page.dart';
 import 'package:broomball_app/pages/schedule_page.dart';
-import 'package:broomball_app/pages/search_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:broomball_app/util/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
@@ -56,13 +55,11 @@ class MainPageState extends State<MainPage> {
     switch (index) {
       case 0:
         return new ConferenceFragment(
-          year: _currentYear,
-          broomballData: _broomballData,
+         
         );
       case 1:
         return new TeamsFragment(
-          year: _currentYear,
-          broomballData: _broomballData,
+
         );
       default:
         return new Text("Error");
@@ -228,18 +225,6 @@ class MainPageState extends State<MainPage> {
                     }).toList(),
                   );
                 },
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return SearchPage();
-                  },
-                ),
               );
             },
           ),

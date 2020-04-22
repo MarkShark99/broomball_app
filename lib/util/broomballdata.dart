@@ -5,6 +5,7 @@ import 'package:html/parser.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
+/// Represents data scraped from the main page of broomball.mtu.edu
 class BroomballMainPageData {
   String year;
   Map<String, Conference> conferences;

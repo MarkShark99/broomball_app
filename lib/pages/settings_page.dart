@@ -1,3 +1,4 @@
+import 'package:broomball_app/pages/about_page.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,8 @@ class SettingsPageState extends State<SettingsPage> {
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Text("Dark Mode"),
+            leading: Icon(Icons.brightness_4),
+            title: Text("Night Mode"),
             trailing: Switch(
               activeColor: Theme.of(context).accentColor,
               value: Theme.of(context).brightness == Brightness.dark,
@@ -33,6 +35,18 @@ class SettingsPageState extends State<SettingsPage> {
               },
             ),
           ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text("About"),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return AboutPage();
+                })
+              );
+            },
+          )
         ],
       ),
     );

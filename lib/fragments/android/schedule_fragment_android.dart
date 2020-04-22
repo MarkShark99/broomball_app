@@ -88,7 +88,7 @@ class ScheduleFragmentState extends State<ScheduleFragment> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(DateFormat.yMMMd().format(_selectedDate)),
-          automaticallyImplyLeading: true,
+          // automaticallyImplyLeading: true,
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.keyboard_arrow_left),

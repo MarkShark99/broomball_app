@@ -5,14 +5,14 @@ import 'package:html/dom.dart' hide Text;
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchFragmentAndroid extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return SearchPageState();
+    return SearchFragmentAndroidState();
   }
 }
 
-class SearchPageState extends State<SearchPage> {
+class SearchFragmentAndroidState extends State<SearchFragmentAndroid> {
   Future<List<SearchItem>> _searchResults;
 
   final TextEditingController searchController = TextEditingController();
@@ -135,7 +135,7 @@ class SearchPageState extends State<SearchPage> {
     );
 
     if (response.statusCode == 200) {
-      print("Loaded page");
+      // print("Loaded page");
       Document document = parse(response.body);
       List<Element> searchResults = document.querySelectorAll("#main_content_container > a");
 

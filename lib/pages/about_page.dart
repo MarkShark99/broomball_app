@@ -18,8 +18,6 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-    
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: true, title: Text("About")),
       body: Container(
@@ -65,7 +63,7 @@ class AboutPage extends StatelessWidget {
             AboutListTile(
               icon: Icon(Icons.info),
               applicationIcon: FlutterLogo(),
-              applicationName: "Broomball",
+              applicationName: "IRHC Broomball",
               applicationVersion: _version,
               applicationLegalese: "© 2019 Geoff Inc.",
             ),

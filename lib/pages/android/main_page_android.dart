@@ -1,11 +1,13 @@
 import 'package:broomball_app/fragments/android/conference_fragment_android.dart';
 import 'package:broomball_app/fragments/android/schedule_fragment_android.dart';
+import 'package:broomball_app/fragments/android/search_fragment_android.dart';
 import 'package:broomball_app/fragments/android/teams_fragment_android.dart';
+import 'package:broomball_app/pages/favorites_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../search_page.dart';
+
 
 class MainPageAndroid extends StatefulWidget {
   @override
@@ -15,14 +17,14 @@ class MainPageAndroid extends StatefulWidget {
 }
 
 class MainPageAndroidState extends State<MainPageAndroid> {
-  final BroomballWebScraper _broomballWebScraper = BroomballWebScraper();
-  Future<BroomballMainPageData> _broomballData;
+  
 
   ConferenceFragment _conferenceFragment;
   TeamsFragment _teamsFragment;
   ScheduleFragment _scheduleFragment;
+  SearchFragmentAndroid _searchFragment;
+  FavoritesPage _favoritesPage;
 
-  AppBar _appBar;
   int _selectedIndex = 0;
   String _currentYear;
 
@@ -48,106 +50,53 @@ class MainPageAndroidState extends State<MainPageAndroid> {
     }
 
     _currentYear = currentYear.toString();
-    _broomballData = _broomballWebScraper.run(_currentYear);
 
-    _conferenceFragment = ConferenceFragment(
-        year: _currentYear,
-        broomballData: _broomballData,
-      );
+    _conferenceFragment = ConferenceFragment();
 
-    _teamsFragment = TeamsFragment(
-        year: _currentYear,
-        broomballData: _broomballData,
-      );
+    _teamsFragment = TeamsFragment();
 
     _scheduleFragment = ScheduleFragment(
         year: _currentYear,
       );
 
+    _searchFragment = SearchFragmentAndroid();    
+    _favoritesPage = FavoritesPage();
+
     _fragments = <Widget> [
       _conferenceFragment,
       _teamsFragment,
       _scheduleFragment,
+      // _searchFragment,
+      _favoritesPage,
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_selectedIndex == 0 || _selectedIndex == 1) {
-      _appBar = AppBar(
-          title: Text(_selectedIndex == 0 ? "Conferences" : "Teams"),
-          actions: <Widget>[
-            Center(
-              child: Text("$_currentYear"),
-            ),
-            IconButton(
-              icon: Icon(Icons.date_range),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SimpleDialog(
-                      title: Text("Select a year"),
-                      children: _yearList.map((year) {
-                        return ListTile(
-                          title: Text(year),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            this.setState(() {
-                              this._currentYear = year;
-                              this._broomballData = this._broomballWebScraper.run(year);
-                            });
-                          },
-                        );
-                      }).toList(),
-                    );
-                  },
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return SearchPage();
-                    },
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                this.setState(() {
-                  _broomballData = _broomballWebScraper.run(this._currentYear);
-                });
-              },
-            ),
-          ],
-        );
-    }
-    else {
-      _appBar = null;
-    }
-
     return Scaffold(
-      appBar: _appBar,
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        selectedIconTheme: Theme.of(context).iconTheme,
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            title: Text("Conferences"),
+            icon: Icon(Icons.assignment, color: Theme.of(context).iconTheme.color),
+            title: Text("Conferences", style: Theme.of(context).textTheme.body1),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            title: Text("Teams"),
+            icon: Icon(Icons.people, color: Theme.of(context).iconTheme.color),
+            title: Text("Teams", style: Theme.of(context).textTheme.body1),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            title: Text("Schedule"),
-          )
+            icon: Icon(Icons.calendar_today, color: Theme.of(context).iconTheme.color),
+            title: Text("Schedule", style: Theme.of(context).textTheme.body1),
+          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.search, color: Theme.of(context).iconTheme.color),
+          //   title: Text("Search", style: Theme.of(context).textTheme.body1),
+          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star_border, color: Theme.of(context).iconTheme.color),
+            title: Text("Favorites", style: Theme.of(context).textTheme.body1),
+          ),
         ],
         onTap: _onItemTapped,
         currentIndex: _selectedIndex,

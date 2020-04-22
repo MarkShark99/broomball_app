@@ -1,4 +1,6 @@
+import 'package:broomball_app/fragments/android/search_fragment_android.dart';
 import 'package:broomball_app/pages/player_page.dart';
+import 'package:broomball_app/pages/settings_page.dart';
 import 'package:broomball_app/pages/team_page.dart';
 import 'package:flutter/material.dart';
 import 'package:broomball_app/util/app_data.dart';
@@ -25,8 +27,32 @@ class FavoritesPageState extends State<FavoritesPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: true,
+          // automaticallyImplyLeading: true,
           title: Text("Favorites"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return SearchFragmentAndroid();
+                    },
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return SettingsPage();
+                  })
+                );
+              }
+            )
+          ],
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
@@ -51,7 +77,8 @@ class FavoritesPageState extends State<FavoritesPage> {
                 List<String> teamNameList = favoritesData.teams.keys.toList();
                 teamNameList.sort();
 
-                List<String> playerNameList = favoritesData.players.keys.toList();
+                List<String> playerNameList =
+                    favoritesData.players.keys.toList();
                 playerNameList.sort();
 
                 return TabBarView(
@@ -64,12 +91,16 @@ class FavoritesPageState extends State<FavoritesPage> {
                           : ListView.separated(
                               itemCount: favoritesData.teams.length,
                               itemBuilder: (context, index) {
-                                String name = parse(parse(teamNameList[index]).body.text).documentElement.text;
+                                String name =
+                                    parse(parse(teamNameList[index]).body.text)
+                                        .documentElement
+                                        .text;
                                 String id = favoritesData.teams[name];
                                 return ListTile(
                                   title: Text(name),
                                   onTap: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
                                       builder: (context) {
                                         return TeamPage(id: id);
                                       },
@@ -93,7 +124,8 @@ class FavoritesPageState extends State<FavoritesPage> {
                                 return ListTile(
                                   title: Text(name.split(";")[0]),
                                   onTap: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
                                       builder: (context) {
                                         return PlayerPage(id: id);
                                       },
