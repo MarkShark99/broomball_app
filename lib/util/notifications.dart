@@ -14,16 +14,16 @@ class BroomballNotifications {
   }
 
   BroomballNotifications._internal() {
-    print("Initializing notifications");
-    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    // print("Initializing notifications");
+    // _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-    AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("@drawable/ic_notification_icon");
-    InitializationSettings initializationSettings = InitializationSettings(androidInitializationSettings, null);
+    // AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("@drawable/ic_notification_icon");
+    // InitializationSettings initializationSettings = InitializationSettings(androidInitializationSettings, null);
 
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: null);
+    // _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: null);
     
-    // Cancels all scheduled notifications
-    _flutterLocalNotificationsPlugin.cancelAll();
+    // // Cancels all scheduled notifications
+    // _flutterLocalNotificationsPlugin.cancelAll();
   }
 
   Future onSelectNotification(String payload) async {

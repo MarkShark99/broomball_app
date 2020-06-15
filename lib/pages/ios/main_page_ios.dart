@@ -1,25 +1,31 @@
 import 'package:broomball_app/fragments/ios/conference_fragment_ios.dart';
 import 'package:flutter/cupertino.dart';
 
-class MainPageIOS extends StatefulWidget {
+class MainPageiOS extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return MainPageIOSState();
+    return MainPageiOSState();
   }
 }
 
-class MainPageIOSState extends State<MainPageIOS> {
+class MainPageiOSState extends State<MainPageiOS> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.bookmark),
+            icon: Icon(CupertinoIcons.collections),
+            title: Text("Conferences")
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.group),
+            title: Text("Teams")
           ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.clock),
+            title: Text("Schedule")
+          )
         ],
       ),
       tabBuilder: (BuildContext context, int index) {
@@ -28,7 +34,7 @@ class MainPageIOSState extends State<MainPageIOS> {
             return ConferenceFragmentIOS();
             break;
           case 1:
-          break;
+            break;
           case 2:
           break;
           case 3:
