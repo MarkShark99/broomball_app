@@ -5,14 +5,14 @@ import 'package:html/dom.dart' hide Text;
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
-class SearchFragmentAndroid extends StatefulWidget {
+class SearchFragment extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return SearchFragmentAndroidState();
+    return SearchFragmentState();
   }
 }
 
-class SearchFragmentAndroidState extends State<SearchFragmentAndroid> {
+class SearchFragmentState extends State<SearchFragment> {
   Future<List<SearchItem>> _searchResults;
 
   final TextEditingController searchController = TextEditingController();

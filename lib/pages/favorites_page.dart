@@ -1,5 +1,5 @@
-import 'package:broomball_app/fragments/android/search_fragment_android.dart';
 import 'package:broomball_app/pages/player_page.dart';
+import 'package:broomball_app/pages/search_fragment.dart';
 import 'package:broomball_app/pages/settings_page.dart';
 import 'package:broomball_app/pages/team_page.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class FavoritesPageState extends State<FavoritesPage> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      return SearchFragmentAndroid();
+                      return SearchFragment();
                     },
                   ),
                 );

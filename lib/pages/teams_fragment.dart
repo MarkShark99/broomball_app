@@ -1,28 +1,30 @@
-import 'package:broomball_app/fragments/android/search_fragment_android.dart';
-import 'package:broomball_app/pages/division_page.dart';
+import 'package:broomball_app/pages/search_fragment.dart';
+import 'package:broomball_app/pages/team_page.dart';
 import 'package:broomball_app/util/broomballdata.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-class ConferenceFragment extends StatefulWidget {
-  
+class TeamsFragment extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() {
-    return ConferenceFragmentState();
+    return TeamsFragmentState();
   }
 }
 
-class ConferenceFragmentState extends State<ConferenceFragment> {
+class TeamsFragmentState extends State<TeamsFragment> {
   
   final BroomballWebScraper _broomballWebScraper = BroomballWebScraper();
   Future<BroomballMainPageData> _broomballData;
 
   String _currentYear;
 
-  List<String> _yearList = <String>[];  
-  
+  List<String> _yearList = <String>[]; 
+
   @override
   void initState() {
     super.initState();
+
     int yearOffset = DateTime.now().month == 12 ? 1 : 0;
     int currentYear = DateTime.now().year + yearOffset;
     _yearList = <String>[];
@@ -34,17 +36,17 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
     _currentYear = currentYear.toString();
     _broomballData = _broomballWebScraper.run(_currentYear);
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Conferences"),
-        actions: <Widget>[
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text("Teams"),
+        trailingActions: <Widget>[
           Center(
             child: Text("$_currentYear"),
           ),
-          IconButton(
+          PlatformIconButton(
             icon: Icon(Icons.date_range),
             onPressed: () {
               showDialog(
@@ -70,19 +72,19 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
               );
             },
           ),
-          IconButton(
+          PlatformIconButton(
             icon: Icon(Icons.search),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    return SearchFragmentAndroid();
+                    return SearchFragment();
                   },
                 ),
               );
             },
           ),
-          IconButton(
+          PlatformIconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
               this.setState(() {
@@ -103,19 +105,27 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
             case ConnectionState.done:
               BroomballMainPageData broomballData = snapshot.data;
 
-              return ListView.separated(
-                itemCount: broomballData.conferences.length,
-                itemBuilder: (context, index) {
-                  String text = broomballData.conferences.keys.toList()[index];
+              Map<String, String> teamIDMap = Map();
+              List<String> teamNameList = <String>[];
 
+              for (String teamID in broomballData.teams.keys.toList()) {
+                teamIDMap[broomballData.teams[teamID]] = teamID;
+                teamNameList.add(broomballData.teams[teamID]);
+              }
+              teamNameList.sort();
+
+              return ListView.separated(
+                itemCount: broomballData.teams.length,
+                itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(text),
+                    title: Text(
+                      teamNameList[index],
+                    ),
                     onTap: () {
-                      Navigator.of(this.context).push(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) {
-                          return DivisionPage(
-                            conference: broomballData.conferences[text],
-                            broomballData: broomballData,
+                          return TeamPage(
+                            id: teamIDMap[teamNameList[index]],
                           );
                         },
                       ));
@@ -133,6 +143,5 @@ class ConferenceFragmentState extends State<ConferenceFragment> {
       ),
     )
     );
-    
   }
 }
